@@ -1,0 +1,10 @@
+{signal: [
+  ['ready & valid',
+    {name: 'clk'    , wave: 'P.............|..|........'},
+    {name: 'ready'  , wave: 'lh...l...hl.hl|..|....hl..'},
+    {name: 'valid'  , wave: 'l..hl.h......l|..|...h.l..'},
+    {name: 'data'   , wave: '0x2.xx3...5..x|..|...4.x..', data: ['D[0,0]', 'D[0,1]', 'D[0,2]', 'D[0,n]']},
+    {name: 'last'   , wave: 'l.............|..|...h.l..'},   
+    {name: 'user'   , wave: 'l.............|..|........'},  
+],
+]}
