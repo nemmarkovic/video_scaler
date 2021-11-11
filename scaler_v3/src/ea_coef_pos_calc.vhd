@@ -20,7 +20,7 @@ library ieee_proposed;
 library common_lib;
     use common_lib.p_common.all;
 
-entity coef_pos_calc is
+entity cf_indx_calc is
    generic(
       G_IN_SIZE       : integer               :=  446;
       G_OUT_SIZE      : integer               := 2048;
@@ -31,11 +31,14 @@ entity coef_pos_calc is
       i_clk     : in  std_logic;
       -- input reset
       i_rst     : in  std_logic;
-      -- ready to filter new data pair
-      o_ready   : out std_logic;
+      -- input row/comlmun position valid
       i_valid   : in  std_logic;
       -- input row/comlmun pair
       i_pos      : in  std_logic_vector(11 -1 downto 0);
+      i_start_pos: in  std_logic_vector(11 -1 downto 0);
+      o_pos_ready: out std_logic;
+      o_start_pos_ready: out std_logic;
+      o_start_pos : out std_logic_vector(integer(ceil(log2(real(G_PHASE_NUM)))) -1 downto 0);
       -- next module ready to accept filter outputs
       i_ready    : in  std_logic_vector(0 to G_PHASE_NUM -1);
       o_valid    : out std_logic_vector(0 to G_PHASE_NUM -1);
@@ -43,10 +46,10 @@ entity coef_pos_calc is
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 
       -- eof   : std_logic;
-      o_coef_num  : out t_coef_num);
-   end coef_pos_calc;
+      o_coef_indx : out t_coef_num);
+   end cf_indx_calc;
 
-architecture Behavioral of coef_pos_calc is
+architecture Behavioral of cf_indx_calc is
    constant c_phase_width : positive := integer(ceil(log2(real(G_PHASE_NUM))));
    constant c_phase_num   : positive := 2**c_phase_width;
 
@@ -70,6 +73,8 @@ architecture Behavioral of coef_pos_calc is
    signal w_next_start_pix :  t_pix_pos;
    signal l_mux_data       :  t_pix_pos;
    signal w_expected_pos   :  t_pix_pos;
+   
+   signal l_cf_num_valid_xor : std_logic_vector(0 to c_phase_num-1);
 begin
 
 reg_in_pos : entity work.reg
@@ -92,9 +97,9 @@ reg_next_out_start_pos : entity work.reg
       i_clk   => i_clk,
       i_rst   => i_rst,
       i_data  => l_start_opix_pos,
-      i_valid => '0',
+      i_valid => or(l_cf_num_valid_xor),
       o_ready => open,
-      i_ready => '0',
+      i_ready => l_cf_num_ready,
       o_valid => open,
       o_data  => r_start_opix_pos);
 
@@ -116,51 +121,47 @@ cf_calc_cell_gen: for cell_num in 0 to c_phase_num -1 generate
  
       --                                             is equal to i_pos
       l_ipos_as_expected(cell_num) <= w_ipos_valid and nor(w_expected_pos(cell_num) xor i_pos);
+   end generate;
 
+   --candidate for next pos
+   l_mux_data(c_phase_num -1) <= std_logic_vector(unsigned(r_start_opix_pos) + to_unsigned(c_phase_num,11));
+cf_start_pos_mux_gen: for cell_num in 1 to c_phase_num -1 generate
+   l_cf_num_valid_xor(cell_num-1) <= l_ipos_as_expected(cell_num) xor l_ipos_as_expected(cell_num -1);
+   l_mux_data(cell_num-1)         <= w_next_start_pix(cell_num);
+   end generate;
+
+cf_start_pos_mux_reg_gen: for cell_num in 0 to c_phase_num -1 generate
+   process(i_clk)
+   begin
+      if rising_edge(i_clk) then
+          if l_cf_num_valid_xor(cell_num) then
+             l_start_opix_pos <= l_mux_data(cell_num) ;
+          elsif cell_num = c_phase_num -1 and l_ipos_as_expected(cell_num) = '1' then
+             l_start_opix_pos <= l_mux_data(cell_num) ;
+          end if;
+      end if;
+      end process;
+   end generate;
+
+   l_cf_num_ready <= and(w_cf_num_ready);
+
+cf_reg_cf_num_gen: for cell_num in 0 to c_phase_num -1 generate
+      -----------------------------------------
+      -- register coef index
+      -----------------------------------------
       reg_coef_num_i : entity work.reg
          generic map(
-            G_DWIDTH => 2)
+            G_DWIDTH => c_phase_width)
          port map(
             i_clk   => i_clk,
             i_rst   => i_rst,
             i_data  => l_coef_num(cell_num),
             i_valid => l_ipos_as_expected(cell_num),
             o_ready => w_cf_num_ready(cell_num),
-            i_ready => '0',
-            o_valid => open,
-            o_data  => r_coef_num(cell_num));
-
---        if cell_numm /= c_phase_num -1 then      
---        end if;
+            i_ready => i_ready(cell_num),
+            o_valid => o_valid(cell_num),
+            o_data  => o_coef_indx(cell_num)); -- r_coef_num(cell_num));
 
    end generate;
-
-   --candidate for next pos
-   l_mux_data(c_phase_num) <= std_logic_vector(unsigned(r_start_opix_pos) + to_unsigned(c_phase_num,11));
-cf_start_next_pix_gen: for cell_num in 1 to c_phase_num -1 generate
-   signal l_cf_num_valid_xor : std_logic_vector(0 to c_phase_num-1);
-begin
-   l_cf_num_valid_xor(cell_num-1) <= l_ipos_as_expected(cell_num) xor l_ipos_as_expected(cell_num -1);
-   l_mux_data(cell_num-1)         <= w_next_start_pix(cell_num);
-
-   process(i_clk)
-   begin
-      if rising_edge(i_clk) then
-          if l_cf_num_valid_xor(cell_num) then
-             l_start_opix_pos <= w_next_start_pix(cell_num) ;
-          elsif cell_num = c_phase_num -1 and l_ipos_as_expected(cell_num) = '1' then
-             l_start_opix_pos <= w_next_start_pix(cell_num) ;
-          end if;
-      end if;
-      end process;
-   end generate;
-
-
-
-cf_gen: for cell_num in 0 to c_phase_num -2 generate
-      l_cf_num_ready <= and(w_cf_num_ready);
-   end generate;
-
-   l_cf_num_ready <= and(w_cf_num_ready);
 
 end Behavioral;

@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="49" Path="D:/video_scaler_repo/video_scaler/scaler_v3/proj/bilinear_filter.xpr">
+<Project Version="7" Minor="49" Path="E:/video_scaler_repo/video_scaler/scaler_v3/proj/bilinear_filter.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="dbc8e89c7a244c189a1b8403a1d218f9"/>
@@ -124,7 +124,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="coef_pos_calc"/>
+        <Option Name="TopModule" Val="cf_indx_calc"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
@@ -138,7 +138,7 @@
       <Filter Type="Srcs"/>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="coef_pos_calc"/>
+        <Option Name="TopModule" Val="cf_indx_calc"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
