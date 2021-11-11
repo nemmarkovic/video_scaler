@@ -135,10 +135,13 @@ cf_calc_cell_gen: for cell_num in 0 to c_phase_num -1 generate
 
    end generate;
 
+   --candidate for next pos
+   l_mux_data(c_phase_num) <= std_logic_vector(unsigned(r_start_opix_pos) + to_unsigned(c_phase_num,11));
 cf_start_next_pix_gen: for cell_num in 1 to c_phase_num -1 generate
    signal l_cf_num_valid_xor : std_logic_vector(0 to c_phase_num-1);
 begin
    l_cf_num_valid_xor(cell_num-1) <= l_ipos_as_expected(cell_num) xor l_ipos_as_expected(cell_num -1);
+   l_mux_data(cell_num-1)         <= w_next_start_pix(cell_num);
 
    process(i_clk)
    begin
