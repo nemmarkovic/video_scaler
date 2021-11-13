@@ -32,7 +32,7 @@ entity cf_calc_cell is
       --! Possition of first output pixel por the cycle
       i_start_pos  : in  std_logic_vector(11 -1 downto 0);
       --! cell number, takes values 0-G_PHASE_NUM -1
-      i_cell_num   : in  std_logic_vector(0 to clog2(G_PHASE_NUM) -1);
+      i_cell_num   : in  std_logic_vector(0 to clog2(G_PHASE_NUM));
       --! Valid coeficient number (used to select one of
       --! G_PHASE_NUM coeficients) in next step module
       o_expected_pos: out std_logic_vector(11 -1 downto 0);
