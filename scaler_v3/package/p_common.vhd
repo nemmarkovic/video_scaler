@@ -18,14 +18,14 @@ package p_common is
       sof   : std_logic;
    end record t_in_pix;
 
-   type t_coef_num is array (0 to C_MAX_PHASE_NUM) of std_logic_vector(integer(ceil(log2(real(4))))-1 downto 0);
+   type t_coef_num is array (0 to 4 -1) of std_logic_vector(integer(ceil(log2(real(4))))-1 downto 0);
 
-   type t_byte_array is array (0 to C_MAX_PHASE_NUM) of std_logic_vector(8 -1 downto 0);
+   type t_byte_array is array (0 to 4 -1) of std_logic_vector(8 -1 downto 0);
 
    type t_dinfo is record
       data  : t_byte_array;
-      last  : std_logic_vector(0 to C_MAX_PHASE_NUM -1); 
-      sof   : std_logic_vector(0 to C_MAX_PHASE_NUM -1);
+      last  : std_logic_vector(0 to 4 -1); 
+      sof   : std_logic_vector(0 to 4 -1);
    end record t_dinfo;
 
 --   type t_dinfo_array is array (natural range <>) of t_dinfo(data(open)(open));
