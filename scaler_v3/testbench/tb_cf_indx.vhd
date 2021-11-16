@@ -10,8 +10,8 @@ library common_lib;
 
 entity tb_cf_indx is
      generic(
-        G_IN_SIZE       : integer               :=  2;
-        G_OUT_SIZE      : integer               := 7;
+        G_IN_SIZE       : integer               :=  4;
+        G_OUT_SIZE      : integer               := 16;
         G_PHASE_NUM     : integer range 2 to 64 :=    4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
 end;
@@ -83,7 +83,7 @@ rst_proc: process
          else
             i_ready_indx     <= (others => '1');
             if (i_valid  and   o_ready) = '1' then
-               i_valid <= '0';
+              -- i_valid <= '0';
             elsif(o_ready = '1') then
                i_valid <= '1';         
             else
