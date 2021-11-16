@@ -11,7 +11,7 @@ library common_lib;
 entity tb_cf_indx is
      generic(
         G_IN_SIZE       : integer               :=  4;
-        G_OUT_SIZE      : integer               := 16;
+        G_OUT_SIZE      : integer               := 19;
         G_PHASE_NUM     : integer range 2 to 64 :=    4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
 end;
@@ -31,7 +31,7 @@ architecture bench of tb_cf_indx is
   signal o_valid_indx     : std_logic_vector(0 to G_PHASE_NUM -1);
   signal o_coef_indx      : t_coef_num;
 
-   constant clk_period : time := 10 ns;
+   constant clk_period : time := 50 ns;
 begin
 
   -- Insert values for generic parameters !!
@@ -83,7 +83,7 @@ rst_proc: process
          else
             i_ready_indx     <= (others => '1');
             if (i_valid  and   o_ready) = '1' then
-              -- i_valid <= '0';
+               i_valid <= '0';
             elsif(o_ready = '1') then
                i_valid <= '1';         
             else

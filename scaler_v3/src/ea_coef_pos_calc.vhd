@@ -58,7 +58,8 @@ architecture Behavioral of cf_indx_calc is
    constant c_phase_num   : positive := 2**c_phase_width;
 
    -- cf index calc cell signals
-   signal w_ready            : std_logic;
+   signal w_ipos_ready       : std_logic;
+   signal w_start_pos_ready  : std_logic;
    signal w_valid_ipos       : std_logic;
    signal w_valid_start_pos  : std_logic;
    signal w_ipos             : std_logic_vector(11 -1 downto 0);
@@ -82,9 +83,9 @@ architecture Behavioral of cf_indx_calc is
 begin
 
 -----------------------------------------
--- register coef index
+-- register in pos index
 -----------------------------------------
-reg_coef_num_i : entity work.reg
+reg_ipos_i : entity work.reg
    generic map(
       G_DWIDTH => 11)
    port map(
@@ -92,12 +93,14 @@ reg_coef_num_i : entity work.reg
       i_rst   => i_rst,
       i_data  => i_pos,
       i_valid => i_valid,
-      o_ready => w_ready,
+      o_ready => w_ipos_ready,
       i_ready => and(w_cf_num_ready),
       o_valid => w_valid_ipos,
       o_data  => w_ipos);
 
-
+-----------------------------------------
+-- register start position
+-----------------------------------------
 reg_next_st_pos_num_i : entity work.reg
    generic map(
       G_DWIDTH => 11)
@@ -106,16 +109,16 @@ reg_next_st_pos_num_i : entity work.reg
       i_rst   => i_rst,
       i_data  => i_start_pos,
       i_valid => i_valid,
-      o_ready => open, --w_ready,
+      o_ready => w_start_pos_ready,
       i_ready => and(w_cf_num_ready),
       o_valid => w_valid_start_pos,
       o_data  => w_start_pos);
 
 
-
-
 cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
-
+   -----------------------------------------
+   -- coef calculate cell
+   -----------------------------------------
    coef_pos_calc_cell_i: entity work.cf_calc_cell
       generic map(
          G_IN_SIZE        => G_IN_SIZE,
@@ -136,13 +139,15 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
 
 
    process(all)
+      variable vl_mux_sel : std_logic_vector(c_phase_num -1 downto 0);
    begin
-      l_mux_sel <= (others => '0');
+      vl_mux_sel := (others => '0');
       cf_xor_gen: for gen_cell_num in 1 to c_phase_num loop
          if (l_ipos_as_expected(gen_cell_num) xor l_ipos_as_expected(gen_cell_num -1)) = '1' then
-            l_mux_sel(gen_cell_num -1) <= '1';
+            vl_mux_sel(gen_cell_num -1) := '1';
          end if;
-      end loop; 
+      end loop;
+      l_mux_sel <= vl_mux_sel;
    end process;
 
 
@@ -169,9 +174,9 @@ cf_reg_cf_num_gen: for gen_cell_num in 0 to c_phase_num -1 generate
 -----------------------------------------
 -- outputs assignment
 -----------------------------------------
-   o_ready           <= w_ready;
+   o_ready           <= w_ipos_ready and w_start_pos_ready;
    o_pos_ready       <= or(l_mux_sel(c_phase_num -1 downto 0));
-   o_start_pos_ready <= w_valid_ipos and l_ipos_as_expected(c_phase_num);
+   o_start_pos_ready <= or(l_mux_sel(c_phase_num -1 downto 0)) or (w_valid_ipos and l_ipos_as_expected(c_phase_num));
 
    process(all)
    begin
@@ -184,7 +189,6 @@ cf_reg_cf_num_gen: for gen_cell_num in 0 to c_phase_num -1 generate
          end loop;
       --end if;
    end process;
-
 
    o_valid_indx      <= w_valid_indx;
    o_coef_indx       <= w_coef_indx;
