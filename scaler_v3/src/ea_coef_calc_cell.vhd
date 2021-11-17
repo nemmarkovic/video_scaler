@@ -49,13 +49,21 @@ architecture Behavioral of cf_calc_cell is
    -- number of bits required to represent all phases
    constant c_precision : positive := clog2(G_PHASE_NUM);
    -- scale factor SF = G_IN_SIZE* c_phase_num / G_OUT_SIZE
-   constant c_sf : ufixed(C_SF_WIDTH -1 downto -c_precision) := 
+   constant c_sf_up : ufixed(C_SF_WIDTH -1 downto -c_precision) := 
                    resize(((to_ufixed(G_IN_SIZE* c_phase_num, 18, -1)) /
                           ( to_ufixed(G_OUT_SIZE -1, 12, -1))), C_SF_WIDTH -1, -c_precision);
 
+   constant c_sf_down : ufixed(C_SF_WIDTH -1 downto -c_precision) := 
+                   resize(((to_ufixed(G_IN_SIZE* c_phase_num, 18, -1)) /
+                          ( to_ufixed(G_OUT_SIZE, 12, -1))), C_SF_WIDTH -1, -c_precision);
+
    function f_mul_round(start_pos : std_logic_vector) return std_logic_vector is
    begin
-      return std_logic_vector(resize((to_ufixed(to_integer(unsigned(start_pos)),11, -c_precision)* c_sf), 11 + c_precision -1, -0));
+      if (G_OUT_SIZE >= G_IN_SIZE) then
+         return std_logic_vector(resize((to_ufixed(to_integer(unsigned(start_pos)),11, -c_precision)*   c_sf_up), 11 + c_precision -1, -0));
+      else
+         return std_logic_vector(resize((to_ufixed(to_integer(unsigned(start_pos)),11, -c_precision)* c_sf_down), 11 + c_precision -1, -0));      
+      end if;
    end function;
 
 

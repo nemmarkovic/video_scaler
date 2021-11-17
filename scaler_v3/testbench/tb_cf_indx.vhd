@@ -10,8 +10,8 @@ library common_lib;
 
 entity tb_cf_indx is
      generic(
-        G_IN_SIZE       : integer               :=  4;
-        G_OUT_SIZE      : integer               := 19;
+        G_IN_SIZE       : integer               :=   4;
+        G_OUT_SIZE      : integer               :=  16;
         G_PHASE_NUM     : integer range 2 to 64 :=    4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
 end;
@@ -71,31 +71,43 @@ rst_proc: process
       wait;  
    end process;
 
-
+  stimulus1: process(i_clk)
+     begin
+      if rising_edge(i_clk) then
+        if i_rst = '1' then
+           i_start_pos <= (others => '0');
+        else
+           if o_start_pos_ready = '1' and to_integer(unsigned(o_start_pos)) < G_OUT_SIZE then
+               i_start_pos <= o_start_pos;
+           end if;
+        end if;
+        end if;
+   end process;
+   
   stimulus: process(i_clk)
+      variable vr_start : std_logic;
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
             i_valid          <= '0';
             i_pos            <= (others => '0');--: std_logic_vector(11 -1 downto 0);
-            i_start_pos      <= (others => '0');--: std_logic_vector(11 -1 downto 0);
+            --i_start_pos      <= (others => '0');--: std_logic_vector(11 -1 downto 0);
             i_ready_indx     <= (others => '0');--: std_logic_vector(0 to G_PHASE_NUM -1);        
+            vr_start         := '1';
          else
             i_ready_indx     <= (others => '1');
+
             if (i_valid  and   o_ready) = '1' then
-               i_valid <= '0';
+               --i_valid <= '0';
             elsif(o_ready = '1') then
                i_valid <= '1';         
             else
                i_valid <= i_valid;            
             end if;
-            
-            if o_pos_ready = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE then
-               i_pos <= std_logic_vector(unsigned(i_pos) +1);
-            end if;
 
-            if o_start_pos_ready = '1' and to_integer(unsigned(o_start_pos)) < G_OUT_SIZE then
-               i_start_pos <= o_start_pos;
+            if i_valid = '1' and o_ready = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1 then
+               i_pos <= std_logic_vector(unsigned(i_pos) +1);
+              -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
             end if;
 
          end if;

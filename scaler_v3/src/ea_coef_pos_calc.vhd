@@ -62,7 +62,7 @@ architecture Behavioral of cf_indx_calc is
    signal w_start_pos_ready  : std_logic;
    signal w_valid_ipos       : std_logic;
    signal w_valid_start_pos  : std_logic;
-   signal w_ipos             : std_logic_vector(11 -1 downto 0);
+   signal r_ipos             : std_logic_vector(11 -1 downto 0);
    signal w_start_pos        : std_logic_vector(11 -1 downto 0);
 
    signal l_mux_sel          : std_logic_vector(c_phase_num -1 downto 0);
@@ -96,7 +96,7 @@ reg_ipos_i : entity work.reg
       o_ready => w_ipos_ready,
       i_ready => and(w_cf_num_ready),
       o_valid => w_valid_ipos,
-      o_data  => w_ipos);
+      o_data  => r_ipos);
 
 -----------------------------------------
 -- register start position
@@ -114,11 +114,18 @@ reg_next_st_pos_num_i : entity work.reg
       o_valid => w_valid_start_pos,
       o_data  => w_start_pos);
 
+-----------------------------------------
+-- combinational logic between two reg stages
+-----------------------------------------
 
 cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
+      type t_cell_num_array is array (0 to c_phase_num) of std_logic_vector(c_phase_width downto 0);
+      signal l_cell_num        : t_cell_num_array;
+   begin
    -----------------------------------------
    -- coef calculate cell
    -----------------------------------------
+   l_cell_num(gen_cell_num) <= std_logic_vector(to_unsigned(gen_cell_num, c_phase_width +1));
    coef_pos_calc_cell_i: entity work.cf_calc_cell
       generic map(
          G_IN_SIZE        => G_IN_SIZE,
@@ -127,14 +134,14 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
          G_DWIDTH         => G_DWIDTH)
       port map( 
          i_start_pos       => w_start_pos,
-         i_cell_num        => std_logic_vector(to_unsigned(gen_cell_num, c_phase_width +1)),
+         i_cell_num        => l_cell_num(gen_cell_num),
          --output pixel data 
          o_expected_pos    => w_expected_pos(gen_cell_num),
          o_start_pos       => w_next_start_pix(gen_cell_num),
          o_cf_num          => l_cf_indx(gen_cell_num));
 
       --                                             is equal to i_pos
-      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor w_ipos) and w_valid_ipos;
+      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipos) and w_valid_ipos;
    end generate;
 
 
@@ -148,6 +155,7 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
          end if;
       end loop;
       l_mux_sel <= vl_mux_sel;
+
    end process;
 
 
@@ -175,19 +183,24 @@ cf_reg_cf_num_gen: for gen_cell_num in 0 to c_phase_num -1 generate
 -- outputs assignment
 -----------------------------------------
    o_ready           <= w_ipos_ready and w_start_pos_ready;
-   o_pos_ready       <= or(l_mux_sel(c_phase_num -1 downto 0));
-   o_start_pos_ready <= or(l_mux_sel(c_phase_num -1 downto 0)) or (w_valid_ipos and l_ipos_as_expected(c_phase_num));
+   o_pos_ready       <= or(l_mux_sel(c_phase_num -1 downto 0)) or (nor(l_ipos_as_expected) and w_valid_ipos);
+   o_start_pos_ready <= or(l_mux_sel(c_phase_num -1 downto 0)) or (l_ipos_as_expected(c_phase_num) and w_valid_ipos);
 
+--   process(w_next_start_pix, i_rst, l_mux_sel)
    process(all)
    begin
-      --if rising_edge(i_clk) then
-         o_start_pos       <= (others => '0');
-         for cell_num_gen in 0 to c_phase_num -1 loop
-            if l_mux_sel(cell_num_gen) = '1' then
-               o_start_pos       <= w_next_start_pix(cell_num_gen+1);
-            end if;
-         end loop;
-      --end if;
+--      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            o_start_pos       <= (others => '0');
+         else
+            o_start_pos       <= (others => '0');
+            for cell_num_gen in 0 to c_phase_num -1 loop
+               if l_mux_sel(cell_num_gen) = '1' then
+                  o_start_pos       <= w_next_start_pix(cell_num_gen+1);
+               end if;
+            end loop;
+         end if;
+--      end if;
    end process;
 
    o_valid_indx      <= w_valid_indx;
