@@ -10,8 +10,8 @@ library common_lib;
 
 entity tb_cf_indx is
      generic(
-        G_IN_SIZE       : integer               :=   4;
-        G_OUT_SIZE      : integer               :=  16;
+        G_IN_SIZE       : integer               :=  4;
+        G_OUT_SIZE      : integer               :=  21;
         G_PHASE_NUM     : integer range 2 to 64 :=    4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
 end;
@@ -29,8 +29,7 @@ architecture bench of tb_cf_indx is
   signal o_start_pos      : std_logic_vector(11 -1 downto 0);
   signal i_ready_indx     : std_logic_vector(0 to G_PHASE_NUM -1);
   signal o_valid_indx     : std_logic_vector(0 to G_PHASE_NUM -1);
-  signal o_coef_indx      : t_coef_num;
-
+  signal o_cf             : t_cf_indx_array;
    constant clk_period : time := 50 ns;
 begin
 
@@ -52,8 +51,7 @@ uut: entity work.cf_indx_calc
       o_start_pos_ready => o_start_pos_ready,
       o_start_pos       => o_start_pos,
       i_ready_indx      => i_ready_indx,
-      o_valid_indx      => o_valid_indx,
-      o_coef_indx       => o_coef_indx );
+      o_cf              => o_cf );
 
 clk_proc: process
   begin
@@ -105,7 +103,7 @@ rst_proc: process
                i_valid <= i_valid;            
             end if;
 
-            if i_valid = '1' and o_ready = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1 then
+            if i_valid = '1' and o_pos_ready = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1 then
                i_pos <= std_logic_vector(unsigned(i_pos) +1);
               -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
             end if;

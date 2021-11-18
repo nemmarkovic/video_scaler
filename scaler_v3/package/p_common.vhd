@@ -18,7 +18,12 @@ package p_common is
       sof   : std_logic;
    end record t_in_pix;
 
-   type t_coef_num is array (0 to 4 -1) of std_logic_vector(integer(ceil(log2(real(4))))-1 downto 0);
+   type t_cf_indx is record
+      cf_indx        : std_logic_vector(integer(ceil(log2(real(4))))-1 downto 0);
+      cf_indx_valid  : std_logic; 
+   end record t_cf_indx;
+
+   type t_cf_indx_array is array (0 to 4 -1) of t_cf_indx;
 
    type t_byte_array is array (0 to 4 -1) of std_logic_vector(8 -1 downto 0);
 
