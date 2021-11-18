@@ -27,7 +27,7 @@ architecture bench of tb_cf_indx is
   signal o_pos_ready      : std_logic;
   signal o_start_pos_ready: std_logic;
   signal o_start_pos      : std_logic_vector(11 -1 downto 0);
-  signal i_ready_indx     : std_logic_vector(0 to G_PHASE_NUM -1);
+  signal i_ready_indx     : std_logic;
   signal o_valid_indx     : std_logic_vector(0 to G_PHASE_NUM -1);
   signal o_cf             : t_cf_indx_array;
    constant clk_period : time := 50 ns;
@@ -50,7 +50,7 @@ uut: entity work.cf_indx_calc
       o_pos_ready       => o_pos_ready,
       o_start_pos_ready => o_start_pos_ready,
       o_start_pos       => o_start_pos,
-      i_ready_indx      => i_ready_indx,
+      i_ready           => i_ready_indx,
       o_cf              => o_cf );
 
 clk_proc: process
@@ -90,10 +90,10 @@ rst_proc: process
             i_valid          <= '0';
             i_pos            <= (others => '0');--: std_logic_vector(11 -1 downto 0);
             --i_start_pos      <= (others => '0');--: std_logic_vector(11 -1 downto 0);
-            i_ready_indx     <= (others => '0');--: std_logic_vector(0 to G_PHASE_NUM -1);        
+            i_ready_indx     <= '0';--: std_logic_vector(0 to G_PHASE_NUM -1);        
             vr_start         := '1';
          else
-            i_ready_indx     <= (others => '1');
+            i_ready_indx     <= '1';
 
             if (i_valid  and   o_ready) = '1' then
                --i_valid <= '0';
