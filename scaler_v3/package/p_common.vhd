@@ -12,11 +12,21 @@ package p_common is
    constant C_MAX_PHASE_NUM : positive := 64;
 
    type t_in_pix is record
-      pix0  : std_logic_vector(8-1 downto 0);
-      pix1  : std_logic_vector(8-1 downto 0);
+      valid : std_logic;
+      pix0  : std_logic_vector( 8-1 downto 0);
+      pix1  : std_logic_vector( 8-1 downto 0);
+      pos   : std_logic_vector(11-1 downto 0);
       last  : std_logic; 
       sof   : std_logic;
    end record t_in_pix;
+
+   constant t_in_pix_rst : t_in_pix :=(
+      valid => '0',
+      pix0  => (others => '0'),
+      pix1  => (others => '0'),
+      pos   => (others => '0'),
+      last  => '0',
+      sof   => '0');
 
    type t_cf_indx is record
       cf_indx        : std_logic_vector(integer(ceil(log2(real(4))))-1 downto 0);
@@ -27,11 +37,24 @@ package p_common is
 
    type t_byte_array is array (0 to 4 -1) of std_logic_vector(8 -1 downto 0);
 
-   type t_dinfo is record
-      data  : t_byte_array;
-      last  : std_logic_vector(0 to 4 -1); 
-      sof   : std_logic_vector(0 to 4 -1);
-   end record t_dinfo;
+--   type t_dinfo is record
+--      data  : t_byte_array;
+--      last  : std_logic_vector(0 to 4 -1); 
+--      sof   : std_logic_vector(0 to 4 -1);
+--   end record t_dinfo;
+
+   type t_out_pix is record
+      valid : std_logic_vector( 0 to 4-1);
+      pix0  : t_byte_array;
+      last  : std_logic_vector( 0 to 4-1); 
+      sof   : std_logic_vector( 0 to 4-1);
+   end record t_out_pix;
+
+   constant t_out_pix_rst : t_out_pix :=(
+      valid => (others => '0'),
+      pix0  => (others => ( others => '0')),
+      last  => (others => '0'),
+      sof   => (others => '0'));
 
 --   type t_dinfo_array is array (natural range <>) of t_dinfo(data(open)(open));
 

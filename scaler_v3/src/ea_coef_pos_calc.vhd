@@ -44,7 +44,7 @@ entity cf_indx_calc is
       o_start_pos_ready: out std_logic;
       o_start_pos : out std_logic_vector(11 -1 downto 0);
       -- next module ready to accept filter outputs
-      i_ready_indx : in  std_logic_vector(0 to G_PHASE_NUM -1);
+      i_ready      : in  std_logic;
       o_cf         : out t_cf_indx_array);
    end cf_indx_calc;
 
@@ -112,7 +112,7 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
 -----------------------------------------
 -- outputs assignment
 -----------------------------------------
-   o_ready           <= and(i_ready_indx);
+   o_ready           <= i_ready;
    o_pos_ready       <= or(l_mux_sel(c_phase_num -1 downto 0)) or (nor(l_ipos_as_expected) and i_valid);
    o_start_pos_ready <= or(l_mux_sel(c_phase_num -1 downto 0)) or (l_ipos_as_expected(c_phase_num) and i_valid);
 
