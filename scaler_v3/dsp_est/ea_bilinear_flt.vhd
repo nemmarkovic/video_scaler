@@ -84,8 +84,8 @@ gen_phase_dsp:
                i_clk    => i_clk,
                i_rst    => i_rst,
                i_B      => i_pix0,
-               i_A      => coeff0(0, s_coeff_num(i)),
-               i_D      => coeff0(0, s_coeff_num(i +1)),
+               i_A      => "00000010", --coeff0(0, s_coeff_num(i)),
+               i_D      => "00000100", --coeff0(0, s_coeff_num(i +1)),
                i_C      => (others => '0'),
                o_mul1   => w_dummy0(i),
                o_mul2   => w_dummy1(i) );
@@ -97,9 +97,9 @@ gen_phase_dsp:
                i_clk    => i_clk,
                i_rst    => i_rst,
                i_B      => i_pix1,
-               i_A      => coeff0(1, s_coeff_num(i)),
-               i_D      => coeff0(1, s_coeff_num(i +1)),
-               i_C      => "000000000" & w_dummy1(i) & "0000000" & w_dummy0(i),
+               i_A      => "00000001", --coeff0(1, s_coeff_num(i)),
+               i_D      => "00000011", --coeff0(1, s_coeff_num(i +1)),
+               i_C      => "000000000000" & w_dummy1(i) & "0000" & w_dummy0(i),
                o_mul1   => w_dummy2(i),
                o_mul2   => w_dummy3(i) );
 

@@ -45,7 +45,7 @@ architecture Behavioral of mul_cell is
 
    -- pack A and D inside P wia pre-adder
    signal l_dsp_post_adder : unsigned(27 -1 downto 0);
-   signal r_xxxx              : unsigned(48 -1 downto 0);
+   signal l_mac            : unsigned(48 -1 downto 0);
    signal r_C              : unsigned(48 -1 downto 0);
 
    signal w_A              : unsigned(27 -1  downto 0);
@@ -88,13 +88,15 @@ reg_in : if G_REG_IN = 1 generate
    l_dsp_post_adder      <= w_A + w_D;
 
 del_ic_proc: process(i_clk)
-      begin
-        if i_rst = '1' then
-           r_C      <= (others => '0');
-        else
-           r_C      <= unsigned(i_C);
-        end if;
-      end process;
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_C      <= (others => '0');
+         else
+            r_C      <= unsigned(i_C);
+         end if;
+      end if;
+   end process;
 
 dsp_mul_p: process(i_clk)
    begin
@@ -107,9 +109,9 @@ dsp_mul_p: process(i_clk)
       end if;   
    end process;
 
-r_xxxx <= r_result + r_C;
+   l_mac   <= r_result + r_C;
 
-  o_mul1 <= std_logic_vector(r_result(15 downto 0));
-  o_mul2 <= std_logic_vector(r_result(34 downto 19));
+   o_mul1 <= std_logic_vector(l_mac(15 downto 0));
+   o_mul2 <= std_logic_vector(l_mac(34 downto 19));
 
 end Behavioral;

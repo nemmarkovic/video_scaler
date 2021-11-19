@@ -40,13 +40,13 @@ entity bilinear_flt is
       -- eof   : std_logic;
       i_pix      : in  t_in_pix;
       -- next module ready to accept filter outputs
-      i_ready    : in  std_logic;
-      o_valid    : out std_logic_vector(G_PHASE_NUM -1 downto 0);
+      i_ready    : in  std_logic_vector(0 to G_PHASE_NUM -1);
+      o_valid    : out std_logic_vector(0 to G_PHASE_NUM -1);
       -- output pixel data
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 
       -- eof   : std_logic;
-      o_pix      : out t_out_pix);
+      o_pix      : out t_out_pix_array);
    end bilinear_flt;
 
 
@@ -77,7 +77,7 @@ architecture Behavioral of bilinear_flt is
    signal w_res_pix_calc_pix_i             : t_in_pix;
    signal w_res_pix_calc_ready_o           : std_logic;
    signal w_res_pix_calc_pix_valid_i       : std_logic;
-   signal w_res_pix_calc_pix_o             : t_out_pix;
+   signal w_res_pix_calc_pix_o             : t_out_pix_array;
 
 
 begin
@@ -86,7 +86,7 @@ begin
 -- coeficient index calculation module
 -----------------------------------------
    w_strt_reg_data_i  <= w_cf_calc_indx_start_pos_o;
-   w_strt_reg_ready_i <= '1';
+   w_strt_reg_ready_i <= and(i_ready);
    w_strt_reg_valid_i <= w_cf_calc_indx_start_pos_valid_o;
 reg_start_pos: entity work.reg
    generic map(
@@ -107,7 +107,7 @@ reg_start_pos: entity work.reg
    w_cf_calc_indx_pos_i        <= i_pix.pos;
    w_cf_calc_indx_valid_i      <= i_pix.valid;
    w_cf_calc_indx_start_pos_i  <= w_strt_reg_data_o;
-   w_cf_calc_indx_indx_ready_i <= '1';--w_res_pix_calc_ready_o;
+   w_cf_calc_indx_indx_ready_i <= w_res_pix_calc_ready_o;
 
 cf_indx_calc_i: entity work.cf_indx_calc
    generic map(
@@ -149,6 +149,7 @@ res_pix_calc_i: entity work.res_pix_calc
       o_ready     => w_res_pix_calc_ready_o,
       i_pix       => w_res_pix_calc_pix_i,
       i_cf        => w_res_pix_calc_cf_i,
+      i_ready     => i_ready,
       o_pix       => w_res_pix_calc_pix_o);
       
 ------------------------------------------------------------------------------------
@@ -156,10 +157,10 @@ res_pix_calc_i: entity work.res_pix_calc
 ------------------------------------------------------------------------------------
    o_pix   <= w_res_pix_calc_pix_o;
    o_ready <= w_cf_calc_indx_ipos_ready_o;
-gen_out_unused_pix: for i in 0 to G_PHASE_NUM -1 generate
-      o_pix.last(i) <= '0';
-      o_pix.sof(i)  <= '0';
-   end generate;
+--gen_out_unused_pix: for i in 0 to G_PHASE_NUM -1 generate
+--      o_pix(i).last <= '0';
+--      o_pix(i).sof  <= '0';
+--   end generate;
 
 end Behavioral;
 

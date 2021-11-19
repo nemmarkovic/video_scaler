@@ -66,10 +66,24 @@ rst_proc: process
     i_c <= (others => '0');
     i_d <= (others => '0');
     wait until i_rst = '0';
-    i_a <= std_logic_vector(to_unsigned(255,8));
-    i_b <= std_logic_vector(to_unsigned(255,8));
-    i_d <= std_logic_vector(to_unsigned(255,8));
-    i_c <= "000000000000011111110000000010001111111000000001";
+ --      i_a <= std_logic_vector(to_unsigned(255,8));
+ --      i_b <= std_logic_vector(to_unsigned(255,8));
+ --      i_d <= std_logic_vector(to_unsigned(255,8));
+ --      i_c <= "000000000000000000000000000010000000000000000001";
+       i_c <= (others => '0');
+    wait for clk_period;
+       i_a <= std_logic_vector(to_unsigned(2,8));
+       i_b <= std_logic_vector(to_unsigned(2,8));
+       i_d <= std_logic_vector(to_unsigned(2,8));
+       i_c <= (others => '0');
+       i_c <= "000000000000000000000000000010000000000000000001";
+ --      i_c <= "000000000000011111110000000010001111111000000001";
+    wait for clk_period;
+       i_a <= std_logic_vector(to_unsigned(0,8));
+       i_b <= std_logic_vector(to_unsigned(0,8));
+       i_d <= std_logic_vector(to_unsigned(0,8));
+--       i_c <= "000000000000011111110000000010001111111000000001";
+       i_c <= (others => '0');
     wait;
   end process;
 

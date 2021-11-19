@@ -88,13 +88,15 @@ reg_in : if G_REG_IN = 1 generate
    l_dsp_post_adder      <= w_A + w_D;
 
 del_ic_proc: process(i_clk)
-      begin
-        if i_rst = '1' then
-           r_C      <= (others => '0');
-        else
-           r_C      <= unsigned(i_C);
-        end if;
-      end process;
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_C      <= (others => '0');
+         else
+            r_C      <= unsigned(i_C);
+         end if;
+      end if;
+   end process;
 
 dsp_mul_p: process(i_clk)
    begin
@@ -112,5 +114,5 @@ r_xxxx <= r_result + r_C;
 --  o_mul1 <= std_logic_vector(r_result(15 downto 0));
 --  o_mul2 <= std_logic_vector(r_result(34 downto 19));
   o_mul1 <= std_logic_vector(r_xxxx(15 downto 0));
-  o_mul2 <= std_logic_vector(r_xxxx(35 downto 20));
+  o_mul2 <= std_logic_vector(r_xxxx(34 downto 19));
 end Behavioral;

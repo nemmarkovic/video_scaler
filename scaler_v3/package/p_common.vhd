@@ -44,19 +44,19 @@ package p_common is
 --   end record t_dinfo;
 
    type t_out_pix is record
-      valid : std_logic_vector( 0 to 4-1);
-      pix0  : t_byte_array;
-      last  : std_logic_vector( 0 to 4-1); 
-      sof   : std_logic_vector( 0 to 4-1);
+      valid : std_logic;
+      pix   : std_logic_vector(8 -1 downto 0);
+      last  : std_logic; 
+      sof   : std_logic;
    end record t_out_pix;
 
    constant t_out_pix_rst : t_out_pix :=(
-      valid => (others => '0'),
-      pix0  => (others => ( others => '0')),
-      last  => (others => '0'),
-      sof   => (others => '0'));
+      valid =>  '0',
+      pix   => (others => '0'),
+      last  =>  '0',
+      sof   =>  '0');
 
---   type t_dinfo_array is array (natural range <>) of t_dinfo(data(open)(open));
+   type t_out_pix_array is array (0 to 4 -1) of t_out_pix;
 
 end package p_common;
 

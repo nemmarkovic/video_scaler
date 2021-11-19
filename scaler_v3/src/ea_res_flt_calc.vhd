@@ -63,7 +63,8 @@ entity res_pix_calc is
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 
       -- eof   : std_logic;
-      o_pix      : out t_out_pix);
+      i_ready    : in  std_logic_vector(0 to G_PHASE_NUM -1);
+      o_pix      : out t_out_pix_array);
    end res_pix_calc;
 
 architecture Behavioral of res_pix_calc is
@@ -74,6 +75,8 @@ architecture Behavioral of res_pix_calc is
    signal w_dummy2 : t_dummy;
    signal w_dummy3 : t_dummy;
 
+   signal w_pix    : t_out_pix_array;
+
    attribute use_dsp : string;
 --   attribute use_dsp of l_p : signal is "yes";
 --   attribute use_dsp of o_pix0    : signal is "no";
@@ -82,29 +85,27 @@ architecture Behavioral of res_pix_calc is
    signal r_out_possition : unsigned(integer(ceil(log2(real(2048)))) -1 downto 0);
  
    type t_cf is array (0 to G_PHASE_NUM -1) of natural range 0 to G_PHASE_NUM -1;
-   signal s_coeff_num : t_cf;
+   signal s_iA_cf_indx : t_cf;
+   signal s_iB_cf_indx : t_cf;
+   
+   signal r_pix_valid  : std_logic_vector(0 to G_PHASE_NUM -1);
 begin
 
 --------------------------------------------------------
 ---- Gen valid process 
 --------------------------------------------------------
-
---out_pos_proc: process(i_clk)
---   begin
---      if rising_edge(i_clk) then
---         if i_rst = '1' then
---            r_out_possition <= (others => '0');
---         else
---            for i in 0 to G_PHASE_NUM -1 loop
---               s_coeff_num(i) <= (((to_integer(r_out_possition +i)) * (G_IN_WIDTH -1) * G_PHASE_NUM) / G_OUT_WIDTH) mod G_PHASE_NUM;
---            end loop;
---            r_out_possition <= r_out_possition + G_PHASE_NUM;
---            if r_out_possition >= G_OUT_WIDTH then
---               r_out_possition <= (others => '0');
---            end if;
---         end if;
---      end if;
---   end process;
+cf_indx_gen: for i in 0 to (G_PHASE_NUM -1) generate
+   process(all)
+   begin
+      if i_cf(i).cf_indx_valid = '1' then
+         s_iA_cf_indx(i) <= (to_integer(unsigned(    i_cf(i).cf_indx )));
+         s_iB_cf_indx(i) <= (to_integer(unsigned(not(i_cf(i).cf_indx))));
+      else
+         s_iA_cf_indx(i) <= 0;
+         s_iB_cf_indx(i) <= 0;
+      end if;
+   end process;
+end generate;
 
 gen_phase_dsp:
    for i in 0 to ((G_PHASE_NUM/2 -1) + (G_PHASE_NUM mod 2)) generate
@@ -115,8 +116,8 @@ gen_phase_dsp:
                i_clk    => i_clk,
                i_rst    => i_rst,
                i_B      => i_pix.pix0,
-               i_A      => coeff0(s_coeff_num(i)),
-               i_D      => coeff0(s_coeff_num(i +1)),
+               i_A      => coeff0(s_iA_cf_indx(2*i   )),
+               i_D      => coeff0(s_iA_cf_indx(2*i +1)),
                i_C      => (others => '0'),
                o_mul1   => w_dummy0(i),
                o_mul2   => w_dummy1(i) );
@@ -128,15 +129,47 @@ gen_phase_dsp:
                i_clk    => i_clk,
                i_rst    => i_rst,
                i_B      => i_pix.pix1,
-               i_A      => not(coeff0(s_coeff_num(i))),
-               i_D      => not(coeff0(s_coeff_num(i +1))),
-               i_C      => "000000000" & w_dummy1(i) & "0000000" & w_dummy0(i),
+               i_A      => coeff0(s_iB_cf_indx(2*i)),
+               i_D      => coeff0(s_iB_cf_indx(2*i +1)),
+               i_C      => "0000000000000" & w_dummy1(i) & "000" & w_dummy0(i),
                o_mul1   => w_dummy2(i),
                o_mul2   => w_dummy3(i) );
 
+       w_pix(2*i   ).pix <= w_dummy2(i)(7 downto 0);
+       w_pix(2*i +1).pix <= w_dummy3(i)(7 downto 0);
+
    end generate;
 
-----o_pix0 <= std_logic_vector(unsigned(w_dummy0) + unsigned(w_dummy2));
-----o_pix1 <=  std_logic_vector(unsigned(w_dummy1) + unsigned(w_dummy3));
+
+reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
+      process(i_clk)
+      begin
+         if rising_edge(i_clk) then
+            if i_rst = '1' then
+               r_pix_valid(i) <= '0';
+            else
+               if i_cf(i).cf_indx_valid = '1' then
+                  r_pix_valid(i) <= '1';
+               else
+                  r_pix_valid(i) <= '0';
+               end if;
+            end if;
+         end if;
+      end process;
+
+reg_res_pix_i: entity work.reg
+   generic map(
+      G_DWIDTH => G_DWIDTH)
+   port map(
+      i_clk   => i_clk,--: in  std_logic;
+      i_rst   => i_rst,--: in  std_logic;
+      i_data  => w_pix(i).pix,--: in  std_logic_vector(G_DWIDTH -1 downto 0);
+      i_valid => r_pix_valid(i),--: in  std_logic;
+      o_ready => open,--: out std_logic;
+      i_ready => i_ready(i),--: in  std_logic;
+      o_valid => o_pix(i).valid,--: out std_logic;
+      o_data  => o_pix(i).pix);--: out std_logic_vector(G_DWIDTH -1 downto 0));
+
+   end generate;
 
 end Behavioral;

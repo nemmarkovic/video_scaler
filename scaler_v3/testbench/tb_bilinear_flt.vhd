@@ -28,7 +28,7 @@ architecture bench of tb_bilinear_flt is
         i_pix      : in  t_in_pix;
         i_ready    : in  std_logic;
         o_valid    : out std_logic_vector(G_PHASE_NUM -1 downto 0);
-        o_pix      : out t_out_pix);
+        o_pix      : out t_out_pix_array);
      end component;
 
    signal i_clk  : std_logic;
@@ -37,7 +37,7 @@ architecture bench of tb_bilinear_flt is
    signal i_pix  : t_in_pix;
    signal i_ready: std_logic;
    signal o_valid: std_logic_vector(G_PHASE_NUM -1 downto 0);
-   signal o_pix  : t_out_pix;
+   signal o_pix  : t_out_pix_array;
 
    constant clk_period : time := 50 ns;
 begin
