@@ -27,7 +27,6 @@ architecture bench of tb_bilinear_flt is
         o_ready   : out std_logic;
         i_pix      : in  t_in_pix;
         i_ready    : in  std_logic;
-        o_valid    : out std_logic_vector(G_PHASE_NUM -1 downto 0);
         o_pix      : out t_out_pix_array);
      end component;
 
@@ -36,7 +35,6 @@ architecture bench of tb_bilinear_flt is
    signal o_ready: std_logic;
    signal i_pix  : t_in_pix;
    signal i_ready: std_logic_vector(G_PHASE_NUM -1 downto 0);
-   signal o_valid: std_logic_vector(G_PHASE_NUM -1 downto 0);
    signal o_pix  : t_out_pix_array;
 
    constant clk_period : time := 50 ns;
@@ -55,7 +53,6 @@ uut_bilinear_flt_i: entity work.bilinear_flt
       o_ready     => o_ready,
       i_pix       => i_pix,
       i_ready     => i_ready,
-      o_valid     => o_valid,
       o_pix       => o_pix );
 
 clk_proc: process
@@ -85,8 +82,8 @@ stimulus1: process(i_clk)
          else
             
 
-            i_pix.pix0  <= std_logic_vector(to_unsigned(10, 8));
-            i_pix.pix1  <= std_logic_vector(to_unsigned(20, 8));
+            i_pix.pix0  <= std_logic_vector(to_unsigned(1, 8));
+            i_pix.pix1  <= std_logic_vector(to_unsigned(2, 8));
             i_pix.last  <= '0'; --: std_logic; 
             i_pix.sof   <= '0'; --: std_logic;
  

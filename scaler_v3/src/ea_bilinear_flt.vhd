@@ -41,7 +41,6 @@ entity bilinear_flt is
       i_pix      : in  t_in_pix;
       -- next module ready to accept filter outputs
       i_ready    : in  std_logic_vector(0 to G_PHASE_NUM -1);
-      o_valid    : out std_logic_vector(0 to G_PHASE_NUM -1);
       -- output pixel data
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 
@@ -88,19 +87,40 @@ begin
    w_strt_reg_data_i  <= w_cf_calc_indx_start_pos_o;
    w_strt_reg_ready_i <= and(i_ready);
    w_strt_reg_valid_i <= w_cf_calc_indx_start_pos_valid_o;
-reg_start_pos: entity work.reg
-   generic map(
-      G_DWIDTH => 11)
-   port map(
-      i_clk             => i_clk,
-      i_rst             => i_rst,
-      i_data            => w_strt_reg_data_i,
-      i_valid           => w_strt_reg_valid_i,
-      o_ready           => w_strt_reg_ready_o,
-      i_ready           => w_strt_reg_ready_i,
-      o_valid           => w_strt_reg_valid_o,
-      o_data            => w_strt_reg_data_o);
+--reg_start_pos: entity work.reg
+--   generic map(
+--      G_DWIDTH => 11)
+--   port map(
+--      i_clk             => i_clk,
+--      i_rst             => i_rst,
+--      i_data            => w_strt_reg_data_i,
+--      i_valid           => w_strt_reg_valid_i,
+--      o_ready           => w_strt_reg_ready_o,
+--      i_ready           => w_strt_reg_ready_i,
+--      o_valid           => w_strt_reg_valid_o,
+--      o_data            => w_strt_reg_data_o);
 
+reg_start_pos_proc: process(i_clk)
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            w_strt_reg_data_o  <= (others => '0');
+            w_strt_reg_ready_o <= '0';
+            w_strt_reg_valid_o <= '0';        
+         else
+            if w_res_pix_calc_ready_o = '1' then
+               w_strt_reg_valid_o <= '0';
+               w_strt_reg_ready_o <= '1';             
+            end if;
+
+            if w_cf_calc_indx_start_pos_valid_o = '1' then
+               w_strt_reg_data_o  <= w_cf_calc_indx_start_pos_o;
+               w_strt_reg_valid_o <= '1';
+               w_strt_reg_ready_o <= '0';            
+            end if;
+         end if;
+      end if;
+   end process;
 -----------------------------------------
 -- coeficient index calculation module
 -----------------------------------------
