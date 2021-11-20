@@ -35,7 +35,7 @@ architecture bench of tb_bilinear_flt is
    signal i_rst  : std_logic;
    signal o_ready: std_logic;
    signal i_pix  : t_in_pix;
-   signal i_ready: std_logic;
+   signal i_ready: std_logic_vector(G_PHASE_NUM -1 downto 0);
    signal o_valid: std_logic_vector(G_PHASE_NUM -1 downto 0);
    signal o_pix  : t_out_pix_array;
 
@@ -80,7 +80,7 @@ stimulus1: process(i_clk)
       if rising_edge(i_clk) then
          if i_rst = '1' then
             i_pix       <= t_in_pix_rst;
-            i_ready     <= '0';
+            i_ready     <= (others => '0');
             vr_start    := '0';
          else
             
@@ -104,7 +104,7 @@ stimulus1: process(i_clk)
                i_pix.valid <= i_pix.valid;            
             end if;
                 i_pix.valid <= '1';           
-            i_ready     <= '1';
+            i_ready     <= (others => '1');
          end if;
       end if;
    end process;
