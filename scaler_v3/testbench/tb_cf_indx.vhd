@@ -10,8 +10,8 @@ library common_lib;
 
 entity tb_cf_indx is
      generic(
-        G_IN_SIZE       : integer               :=  4;
-        G_OUT_SIZE      : integer               :=  21;
+        G_IN_SIZE       : integer               :=  16;
+        G_OUT_SIZE      : integer               :=  4;
         G_PHASE_NUM     : integer range 2 to 64 :=    4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
 end;
@@ -23,9 +23,6 @@ architecture bench of tb_cf_indx is
   signal i_valid          : std_logic;
   signal o_ready          : std_logic;
   signal i_pos            : std_logic_vector(11 -1 downto 0);
-  signal i_start_pos      : std_logic_vector(11 -1 downto 0);
-  signal o_start_pos_ready: std_logic;
-  signal o_start_pos      : std_logic_vector(11 -1 downto 0);
   signal i_ready_indx     : std_logic;
   signal o_cf             : t_cf_indx_array;
    constant clk_period : time := 50 ns;
@@ -44,9 +41,6 @@ uut: entity work.cf_indx_calc
       i_valid           => i_valid,
       o_ready           => o_ready,
       i_pos             => i_pos,
-      i_start_pos       => i_start_pos,
-      o_start_pos_ready => o_start_pos_ready,
-      o_start_pos       => o_start_pos,
       i_ready           => i_ready_indx,
       o_cf              => o_cf );
 
@@ -65,19 +59,6 @@ rst_proc: process
          i_rst <= '0';
       wait;  
    end process;
-
-  stimulus1: process(i_clk)
-     begin
-      if rising_edge(i_clk) then
-        if i_rst = '1' then
-           i_start_pos <= (others => '0');
-        else
-           if o_start_pos_ready = '1' and to_integer(unsigned(o_start_pos)) < G_OUT_SIZE then
-               i_start_pos <= o_start_pos;
-           end if;
-        end if;
-        end if;
-   end process;
    
   stimulus: process(i_clk)
       variable vr_start : std_logic;
@@ -88,12 +69,12 @@ rst_proc: process
             i_pos            <= (others => '0');--: std_logic_vector(11 -1 downto 0);
             --i_start_pos      <= (others => '0');--: std_logic_vector(11 -1 downto 0);
             i_ready_indx     <= '0';--: std_logic_vector(0 to G_PHASE_NUM -1);        
-            vr_start         := '0';
+            vr_start         := '1';
          else
-            i_ready_indx     <= '1';
+            i_ready_indx     <= '0';
 
             if (i_valid  and   o_ready) = '1' then
-               i_valid <= '0';
+              -- i_valid <= '0';
  
              if vr_start = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1 then
                i_pos <= std_logic_vector(unsigned(i_pos) +1);
@@ -105,8 +86,6 @@ rst_proc: process
             else
                i_valid <= i_valid;            
             end if;
-
-
 
          end if;
       end if;
