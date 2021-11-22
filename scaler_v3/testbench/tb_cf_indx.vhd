@@ -24,11 +24,9 @@ architecture bench of tb_cf_indx is
   signal o_ready          : std_logic;
   signal i_pos            : std_logic_vector(11 -1 downto 0);
   signal i_start_pos      : std_logic_vector(11 -1 downto 0);
-  signal o_pos_ready      : std_logic;
   signal o_start_pos_ready: std_logic;
   signal o_start_pos      : std_logic_vector(11 -1 downto 0);
   signal i_ready_indx     : std_logic;
-  signal o_valid_indx     : std_logic_vector(0 to G_PHASE_NUM -1);
   signal o_cf             : t_cf_indx_array;
    constant clk_period : time := 50 ns;
 begin
@@ -47,7 +45,6 @@ uut: entity work.cf_indx_calc
       o_ready           => o_ready,
       i_pos             => i_pos,
       i_start_pos       => i_start_pos,
-      o_pos_ready       => o_pos_ready,
       o_start_pos_ready => o_start_pos_ready,
       o_start_pos       => o_start_pos,
       i_ready           => i_ready_indx,
@@ -91,22 +88,25 @@ rst_proc: process
             i_pos            <= (others => '0');--: std_logic_vector(11 -1 downto 0);
             --i_start_pos      <= (others => '0');--: std_logic_vector(11 -1 downto 0);
             i_ready_indx     <= '0';--: std_logic_vector(0 to G_PHASE_NUM -1);        
-            vr_start         := '1';
+            vr_start         := '0';
          else
             i_ready_indx     <= '1';
 
             if (i_valid  and   o_ready) = '1' then
-               --i_valid <= '0';
+               i_valid <= '0';
+ 
+             if vr_start = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1 then
+               i_pos <= std_logic_vector(unsigned(i_pos) +1);
+             end if;
+ 
+             vr_start         := '1';
             elsif(o_ready = '1') then
                i_valid <= '1';         
             else
                i_valid <= i_valid;            
             end if;
 
-            if i_valid = '1' and o_pos_ready = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1 then
-               i_pos <= std_logic_vector(unsigned(i_pos) +1);
-              -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
-            end if;
+
 
          end if;
       end if;

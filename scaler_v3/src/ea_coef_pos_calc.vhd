@@ -39,8 +39,6 @@ entity cf_indx_calc is
       i_pos       : in  std_logic_vector(11 -1 downto 0);
       --! current output pix possition in row/colmun for V/H filter
       i_start_pos : in  std_logic_vector(11 -1 downto 0);
-      --! 
-      o_pos_ready : out std_logic;
       o_start_pos_ready: out std_logic;
       o_start_pos : out std_logic_vector(11 -1 downto 0);
       -- next module ready to accept filter outputs
@@ -53,7 +51,6 @@ architecture Behavioral of cf_indx_calc is
    constant c_phase_num   : positive := 2**c_phase_width;
 
    -- cf index calc cell signals
-
    signal l_mux_sel          : std_logic_vector(c_phase_num -1 downto 0);
    signal l_ipos_as_expected : std_logic_vector(c_phase_num    downto 0);
  
@@ -63,6 +60,10 @@ architecture Behavioral of cf_indx_calc is
    type t_pix_pos is array (0 to c_phase_num) of std_logic_vector(11 -1 downto 0);
    signal w_next_start_pix :  t_pix_pos;
    signal w_expected_pos   :  t_pix_pos;
+
+   -- sync signals
+   signal l_ipos_ready : std_logic;
+   signal r_ipos_ready : std_logic;
 
 begin
 -----------------------------------------
@@ -112,8 +113,6 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
 -----------------------------------------
 -- outputs assignment
 -----------------------------------------
-   o_ready           <= i_ready;
-   o_pos_ready       <= or(l_mux_sel(c_phase_num -1 downto 0)) or (nor(l_ipos_as_expected) and i_valid);
    o_start_pos_ready <= or(l_mux_sel(c_phase_num -1 downto 0)) or (l_ipos_as_expected(c_phase_num) and i_valid);
 
 --   process(w_next_start_pix, i_rst, l_mux_sel)
@@ -143,4 +142,56 @@ gf: for cell_num_gen in 0 to c_phase_num -1 generate
    o_cf(cell_num_gen).cf_indx       <= l_cf_indx(cell_num_gen);
    o_cf(cell_num_gen).cf_indx_valid <= i_valid and l_ipos_as_expected(cell_num_gen);
 end generate;
+
+
+
+-------------------------------------------------------
+-- add
+-------------------------------------------------------
+
+----------------------------------------------------
+-- o_ready update process
+-- the module is ready to take a new pix pair if
+-- * i_pix is not as expected on any calc cell and
+-- * the next stage is ready
+-----------------------------------------------------
+ipos_ready_proc: process(all)
+      variable vl_ipos_ready : std_logic;
+   begin
+      vl_ipos_ready    := r_ipos_ready;
+
+      if i_valid = '1' then
+         vl_ipos_ready := '0';
+      end if;
+
+      if (i_ready = '1') and (nand(l_ipos_as_expected)) = '1' then
+         vl_ipos_ready := '1';
+      end if;
+
+      l_ipos_ready <= vl_ipos_ready;
+   end process;
+
+   process(i_clk)
+      variable vr_after_rst : std_logic;
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_ipos_ready <= '0';
+            vr_after_rst := '0';
+         else
+            r_ipos_ready <= l_ipos_ready;
+            if vr_after_rst = '0' then
+               r_ipos_ready <= '1';            
+               vr_after_rst := '1';
+            end if;
+
+         end if;
+      end if;
+   end process;
+
+
+-----------------------------------------
+-- outputs assignment
+-----------------------------------------
+   o_ready           <= r_ipos_ready;
 end Behavioral;
