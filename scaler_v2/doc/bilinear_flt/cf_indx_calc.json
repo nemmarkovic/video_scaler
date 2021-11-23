@@ -1,0 +1,21 @@
+{signal:[
+      {name: 'i_clk'      , wave:'P.......................'},
+      {name: 'i_rst'      , wave:'h.l.....................'},
+      {name: 'i_valid'    , wave:'l...hl......hl..........'},
+      {name: 'o_ready'    , wave:'l..h.l.....h.l.......h..'},  
+      {name: 'i_pos'      , wave:'x...8xxxxxx.7xxxxxx.....', data: ["0", "1"] },
+      {name: 'r_pos'      , wave:'8............9..........', data: ["0", "1"] },
+      {name: 'r_pos_valid', wave:'l....h......lh.......l..'},
+      {name: 'l_pos_fits' , wave:'l....h.....l.h.......l..'},
+      {name: 'l_start_pos', wave:'3....45...34...53.......', data: ["0", "4","8","c","f","12"] },
+      {name: 'r_start_pos', wave:'3.....4...53...45....3..', data: ["0", "4","8","c","f","12"] },
+      {name: 'o_idx_valid', wave:'l....h.....l.h.......l..'},
+      {name: 'i_ready'    , wave:'l..h..l..h.l..h.l...hl..'},],
+
+ head:
+ {
+    text:'coeff index calc module signals',
+ },   
+}
+
+ 
