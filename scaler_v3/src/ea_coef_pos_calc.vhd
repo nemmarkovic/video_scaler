@@ -49,6 +49,7 @@ architecture Behavioral of cf_indx_calc is
    -- cf index calc cell signals
    signal l_mux_sel          : std_logic_vector(c_phase_num -1 downto 0);
    signal l_ipos_as_expected : std_logic_vector(c_phase_num    downto 0);
+   signal r_ipos_as_expected : std_logic_vector(c_phase_num    downto 0);
  
    type t_cf_width_array is array (0 to c_phase_num) of std_logic_vector(c_phase_width -1 downto 0);
    signal l_cf_indx        : t_cf_width_array;
@@ -132,15 +133,13 @@ ipos_ready_proc: process(all)
    begin
       vl_ipos_ready    := r_ipos_ready;
 
-      if i_valid = '1' then
-         vl_ipos_ready := '0';
-      end if;
-
 --   signal l_indx_valid : std_logic_vector(0 to c_phase_num -1);
 --   signal r_indx_valid : std_logic_vector(0 to c_phase_num -1);
-
-      if (i_ready = '1') and (or(l_ipos_as_expected)) = '1' then -- if there is at least one cell where i_pos does not fit
-         vl_ipos_ready := '1';                                   -- and next step is ready to take the indexes - module  
+        --(i_ready = '1') utice na start pos ready, a ovdje samo start pos readu igra ulogu
+      if i_valid = '1' and (nand(l_ipos_as_expected)) = '1' and not(l_start_pos_valid) = '1' then -- if there is at least one cell where i_pos does not fit
+         vl_ipos_ready := '1';                                                                      -- and next step is ready to take the indexes - module  
+      elsif i_valid = '1' then
+         vl_ipos_ready := '0';
       end if;
 
       l_ipos_ready <= vl_ipos_ready;
@@ -175,11 +174,11 @@ ipos_valid_comb_proc: process(all)
       vl_ipos_valid    := r_ipos_valid;
       vl_ipos          := r_ipos;
 
-      if (nand(l_ipos_as_expected)) = '1' and i_ready = '1' then
+      if (nand(r_ipos_as_expected)) = '1' then
          vl_ipos_valid := '0';
       end if;
 
-      if i_ready = '1' and r_ipos_valid = '1' then
+      if l_ipos_ready = '1' and r_ipos_valid = '1' then
          vl_ipos_valid := '0';
       end if;
 
@@ -196,14 +195,16 @@ ipos_valid_reg_proc: process(i_clk)
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
-            r_ipos       <= (others => '0');
+            r_ipos_as_expected <= (others => '0');
+            --r_ipos       <= (others => '0');
             r_ipos_valid <= '0';
          else
-            if i_valid = '1' then
+            if i_valid = '1' and r_ipos_ready = '1' then
                 r_ipos       <= i_pos;
             end if;
             r_ipos       <= l_ipos;
             r_ipos_valid <= l_ipos_valid;
+            r_ipos_as_expected <= l_ipos_as_expected;
          end if;
       end if;
    end process;
@@ -218,13 +219,19 @@ start_pos_comb_proc: process(all)
       vl_start_pos_valid    := r_start_pos_valid;
       vl_start_pos          := r_start_pos;
 
+-- r_ipos_valid and l_ipos_as_expected(cell_num_gen);
+--r_indx_valid
 
-      if and(l_ipos_as_expected) = '1' then
+      if nand(l_ipos_as_expected) = '1' and i_ready = '1' then
+         vl_start_pos_valid := '0';
+      end if;
+
+      if and(l_ipos_as_expected) = '1' and l_ipos_valid = '1' then
          vl_start_pos       := w_next_start_pix(c_phase_num);
          vl_start_pos_valid := '1';
       else
          for cell_num_gen in 0 to c_phase_num -1 loop
-            if l_mux_sel(cell_num_gen) = '1' then
+            if l_mux_sel(cell_num_gen) = '1' and l_ipos_valid = '1' then
                vl_start_pos       := w_next_start_pix(cell_num_gen+1);
                vl_start_pos_valid := '1';
             end if;
@@ -241,9 +248,11 @@ start_pos_reg_proc: process(i_clk)
          if i_rst = '1' then
             r_start_pos       <= (others => '0');
             r_start_pos_valid <= '0';
+            r_indx_valid      <= (others => '0');
          else
             r_start_pos_valid <= l_start_pos_valid;
             r_start_pos       <= l_start_pos;
+            r_indx_valid      <= l_indx_valid;
          end if;
       end if;
    end process;
@@ -251,11 +260,11 @@ start_pos_reg_proc: process(i_clk)
 -----------------------------------------
 -- outputs assignment
 -----------------------------------------
-   o_ready           <= r_ipos_ready;
+   o_ready           <= l_ipos_ready; --r_ipos_ready;
 
 gf: for cell_num_gen in 0 to c_phase_num -1 generate
    o_cf(cell_num_gen).cf_indx       <= l_cf_indx(cell_num_gen);
-   o_cf(cell_num_gen).cf_indx_valid <= r_ipos_valid and l_ipos_as_expected(cell_num_gen);
+   o_cf(cell_num_gen).cf_indx_valid <= r_indx_valid(cell_num_gen);
 end generate;
 
 end Behavioral;
