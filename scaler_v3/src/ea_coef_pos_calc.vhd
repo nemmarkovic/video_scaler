@@ -62,20 +62,26 @@ architecture Behavioral of cf_indx_calc is
    signal l_ipos_ready : std_logic;
    signal r_ipos_ready : std_logic;
 
+   signal l_ipos_valid : std_logic;
+   signal r_ipos_valid : std_logic;
+
    signal l_ipos       : std_logic_vector(11 -1 downto 0);
    signal r_ipos       : std_logic_vector(11 -1 downto 0);
 
-   signal l_ipos_valid : std_logic;
-   signal r_ipos_valid : std_logic;
+   signal l_start_pos_ready : std_logic;
+   signal r_start_pos_ready : std_logic;
+
+   signal l_start_pos_valid : std_logic;
+   signal r_start_pos_valid : std_logic;
 
    signal l_start_pos  : std_logic_vector(11 -1 downto 0);
    signal r_start_pos  : std_logic_vector(11 -1 downto 0);
 
-   signal l_start_pos_valid : std_logic;
-   signal r_start_pos_valid : std_logic;
+   signal l_indx_ready : std_logic_vector(0 to c_phase_num -1);
+   signal r_indx_ready : std_logic_vector(0 to c_phase_num -1);
    
    signal l_indx_valid : std_logic_vector(0 to c_phase_num -1);
-   signal r_indx_valid : std_logic_vector(0 to c_phase_num -1);   
+   signal r_indx_valid : std_logic_vector(0 to c_phase_num -1);
    
 begin
 -----------------------------------------
@@ -132,12 +138,8 @@ ipos_ready_proc: process(all)
       variable vl_ipos_ready : std_logic;
    begin
       vl_ipos_ready    := r_ipos_ready;
-
---   signal l_indx_valid : std_logic_vector(0 to c_phase_num -1);
---   signal r_indx_valid : std_logic_vector(0 to c_phase_num -1);
-        --(i_ready = '1') utice na start pos ready, a ovdje samo start pos readu igra ulogu
-      if i_valid = '1' and (nand(l_ipos_as_expected)) = '1' and not(l_start_pos_valid) = '1' then -- if there is at least one cell where i_pos does not fit
-         vl_ipos_ready := '1';                                                                      -- and next step is ready to take the indexes - module  
+      if (i_valid and (nand(l_ipos_as_expected)) and l_start_pos_ready) = '1' then -- if there is at least one cell where i_pos does not fit
+         vl_ipos_ready := '1';                                                     -- and next step is ready to take the indexes - module  
       elsif i_valid = '1' then
          vl_ipos_ready := '0';
       end if;
@@ -170,11 +172,13 @@ ipos_ready_proc: process(all)
 ipos_valid_comb_proc: process(all)
       variable vl_ipos_valid : std_logic;
       variable vl_ipos       : std_logic_vector(11-1 downto 0);
+      variable vl_start_pos_valid : std_logic;
+      variable vl_start_pos       : std_logic_vector(11-1 downto 0);
    begin
       vl_ipos_valid    := r_ipos_valid;
       vl_ipos          := r_ipos;
 
-      if (nand(r_ipos_as_expected)) = '1' then
+      if (nor(r_ipos_as_expected)) = '1' then
          vl_ipos_valid := '0';
       end if;
 
@@ -196,15 +200,44 @@ ipos_valid_reg_proc: process(i_clk)
       if rising_edge(i_clk) then
          if i_rst = '1' then
             r_ipos_as_expected <= (others => '0');
-            --r_ipos       <= (others => '0');
+            r_ipos       <= (others => '0');
             r_ipos_valid <= '0';
          else
-            if i_valid = '1' and r_ipos_ready = '1' then
-                r_ipos       <= i_pos;
+            if i_valid = '1' and l_ipos_ready = '1' then
+                r_ipos       <= l_ipos;
             end if;
-            r_ipos       <= l_ipos;
             r_ipos_valid <= l_ipos_valid;
             r_ipos_as_expected <= l_ipos_as_expected;
+         end if;
+      end if;
+   end process;
+
+----------------------------------------------------
+-- register start_pos signal
+-----------------------------------------------------
+start_pos_ready_proc: process(all)
+      variable vl_start_pos_ready : std_logic;
+   begin
+      vl_start_pos_ready := r_start_pos_ready;
+      if (i_ready and r_start_pos_valid) = '1' then
+         vl_start_pos_ready := '1';
+      elsif i_ready = '1' then
+         vl_start_pos_ready := '1';
+      else
+         vl_start_pos_ready := '0';
+      end if;
+
+      l_start_pos_ready <= vl_start_pos_ready;
+   end process;
+
+
+start_pos_ready_reg_proc: process(i_clk)
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_start_pos_ready <= '0';
+         else
+            r_start_pos_ready <= l_start_pos_ready;
          end if;
       end if;
    end process;
@@ -219,9 +252,7 @@ start_pos_comb_proc: process(all)
       vl_start_pos_valid    := r_start_pos_valid;
       vl_start_pos          := r_start_pos;
 
--- r_ipos_valid and l_ipos_as_expected(cell_num_gen);
---r_indx_valid
-
+      -- i_pos does not fit for next out pix, and last one valid o_pix is used (i_ready)
       if nand(l_ipos_as_expected) = '1' and i_ready = '1' then
          vl_start_pos_valid := '0';
       end if;
