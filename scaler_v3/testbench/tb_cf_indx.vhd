@@ -88,13 +88,13 @@ rst_proc: process
             i_ready_indx     <= '0';
             i_valid          <= '0';
             i_pos            <= (others => '0');
-            i_pos(0)         <= ('1');
-            i_pos(0)         <= ('1');
+ --           i_pos(0)         <= ('1');
+ --           i_pos(0)         <= ('1');
             vr_start         := '0';
          else
             i_pos   <= l_pos;
             i_valid <= l_valid;
-            i_ready_indx <= l_ready_indx;
+            i_ready_indx <= not l_ready_indx;
             if vr_start = '0' then
                i_ready_indx <= '1';
                vr_start     := '1';
