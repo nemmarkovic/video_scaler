@@ -73,7 +73,6 @@ architecture Behavioral of cf_indx_calc is
 
    signal l_start_pos_valid : std_logic;
    signal r_start_pos_valid : std_logic;
-   signal r_next_start_pos  : std_logic_vector(11 -1 downto 0);
 
    signal l_start_pos  : std_logic_vector(11 -1 downto 0);
    signal r_start_pos  : std_logic_vector(11 -1 downto 0);
@@ -127,27 +126,6 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
       end loop;
       l_mux_sel <= vl_mux_sel;
 
-   end process;
-
-   process(i_clk)
-      variable vl_start_pos : std_logic_vector(11 -1 downto 0);
-   begin
-      if rising_edge(i_clk) then
-         if i_rst = '1' then
-            r_next_start_pos <= (others => '0');
-         else
-            if (and(l_ipos_as_expected)) = '1' then
-               vl_start_pos       := w_next_start_pix(c_phase_num);
-            else
-               cf_xor_gen: for gen_cell_num in 0 to c_phase_num -1 loop
-                  if (l_mux_sel(gen_cell_num )) = '1' then
-                     vl_start_pos       := w_next_start_pix(gen_cell_num);
-                  end if;
-               end loop;
-            end if;
-            r_next_start_pos <= l_start_pos; --vl_start_pos;
-         end if;
-      end if;
    end process;
 
 ----------------------------------------------------

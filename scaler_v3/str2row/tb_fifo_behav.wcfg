@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_fifo_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_fifo" />
+            <top_module name="vcomponents" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="166666fs"></ZoomStartTime>
+      <ZoomEndTime time="1166667fs"></ZoomEndTime>
+      <Cursor1Time time="1000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="174"></NameColumnWidth>
+      <ValueColumnWidth column_width="134"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="75" />
+   <wvobject fp_name="/tb_fifo/i_clk" type="logic">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/i_rst" type="logic">
+      <obj_property name="ElementShortName">i_rst</obj_property>
+      <obj_property name="ObjectShortName">i_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/i_dready" type="logic">
+      <obj_property name="ElementShortName">i_dready</obj_property>
+      <obj_property name="ObjectShortName">i_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/o_dvalid" type="logic">
+      <obj_property name="ElementShortName">o_dvalid</obj_property>
+      <obj_property name="ObjectShortName">o_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/o_dout" type="array">
+      <obj_property name="ElementShortName">o_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">o_dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/l_dvalid" type="logic">
+      <obj_property name="ElementShortName">l_dvalid</obj_property>
+      <obj_property name="ObjectShortName">l_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/i_dvalid" type="logic">
+      <obj_property name="ElementShortName">i_dvalid</obj_property>
+      <obj_property name="ObjectShortName">i_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/o_dready" type="logic">
+      <obj_property name="ElementShortName">o_dready</obj_property>
+      <obj_property name="ObjectShortName">o_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/i_din" type="array">
+      <obj_property name="ElementShortName">i_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">i_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/l_dready" type="logic">
+      <obj_property name="ElementShortName">l_dready</obj_property>
+      <obj_property name="ObjectShortName">l_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/l_din" type="array">
+      <obj_property name="ElementShortName">l_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">l_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/G_RD_DWIDTH" type="other">
+      <obj_property name="ElementShortName">G_RD_DWIDTH</obj_property>
+      <obj_property name="ObjectShortName">G_RD_DWIDTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/G_WR_DWIDTH" type="other">
+      <obj_property name="ElementShortName">G_WR_DWIDTH</obj_property>
+      <obj_property name="ObjectShortName">G_WR_DWIDTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/G_FIFO_WDEPTH" type="other">
+      <obj_property name="ElementShortName">G_FIFO_WDEPTH</obj_property>
+      <obj_property name="ObjectShortName">G_FIFO_WDEPTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/clk_period" type="other">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/i_wr_clk" type="logic">
+      <obj_property name="ElementShortName">i_wr_clk</obj_property>
+      <obj_property name="ObjectShortName">i_wr_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/i_rd_clk" type="logic">
+      <obj_property name="ElementShortName">i_rd_clk</obj_property>
+      <obj_property name="ObjectShortName">i_rd_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/i_rst" type="logic">
+      <obj_property name="ElementShortName">i_rst</obj_property>
+      <obj_property name="ObjectShortName">i_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/i_dready" type="logic">
+      <obj_property name="ElementShortName">i_dready</obj_property>
+      <obj_property name="ObjectShortName">i_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/o_dvalid" type="logic">
+      <obj_property name="ElementShortName">o_dvalid</obj_property>
+      <obj_property name="ObjectShortName">o_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/o_dout" type="array">
+      <obj_property name="ElementShortName">o_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">o_dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/i_din" type="array">
+      <obj_property name="ElementShortName">i_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">i_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/i_dvalid" type="logic">
+      <obj_property name="ElementShortName">i_dvalid</obj_property>
+      <obj_property name="ObjectShortName">i_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/o_dready" type="logic">
+      <obj_property name="ElementShortName">o_dready</obj_property>
+      <obj_property name="ObjectShortName">o_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGI_rst" type="logic">
+      <obj_property name="ElementShortName">s_iREGI_rst</obj_property>
+      <obj_property name="ObjectShortName">s_iREGI_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGI_din" type="array">
+      <obj_property name="ElementShortName">s_iREGI_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_iREGI_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGI_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_iREGI_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_iREGI_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGI_dready" type="logic">
+      <obj_property name="ElementShortName">s_oREGI_dready</obj_property>
+      <obj_property name="ObjectShortName">s_oREGI_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGI_dready" type="logic">
+      <obj_property name="ElementShortName">s_iREGI_dready</obj_property>
+      <obj_property name="ObjectShortName">s_iREGI_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGI_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_oREGI_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_oREGI_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGI_dout" type="array">
+      <obj_property name="ElementShortName">s_oREGI_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_oREGI_dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iFIFO_wr_en" type="logic">
+      <obj_property name="ElementShortName">s_iFIFO_wr_en</obj_property>
+      <obj_property name="ObjectShortName">s_iFIFO_wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iFIFO_rd_en" type="logic">
+      <obj_property name="ElementShortName">s_iFIFO_rd_en</obj_property>
+      <obj_property name="ObjectShortName">s_iFIFO_rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_rd_rst_busy" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_rd_rst_busy</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_rd_rst_busy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_wr_rst_busy" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_wr_rst_busy</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_wr_rst_busy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_ready" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_ready</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iFIFO_din" type="array">
+      <obj_property name="ElementShortName">s_iFIFO_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_iFIFO_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_empty" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_empty</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_full" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_full</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_wr_ack" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_wr_ack</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_wr_ack</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_oFIFO_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oFIFO_dout" type="array">
+      <obj_property name="ElementShortName">s_oFIFO_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_oFIFO_dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO_rst" type="logic">
+      <obj_property name="ElementShortName">s_iREGO_rst</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO_din" type="array">
+      <obj_property name="ElementShortName">s_iREGO_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_iREGO_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGO_dready" type="logic">
+      <obj_property name="ElementShortName">s_oREGO_dready</obj_property>
+      <obj_property name="ObjectShortName">s_oREGO_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO_dready" type="logic">
+      <obj_property name="ElementShortName">s_iREGO_dready</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGO_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_oREGO_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_oREGO_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGO_dout" type="array">
+      <obj_property name="ElementShortName">s_oREGO_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_oREGO_dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO1_rst" type="logic">
+      <obj_property name="ElementShortName">s_iREGO1_rst</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO1_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO1_din" type="array">
+      <obj_property name="ElementShortName">s_iREGO1_din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO1_din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO1_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_iREGO1_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO1_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGO1_dready" type="logic">
+      <obj_property name="ElementShortName">s_oREGO1_dready</obj_property>
+      <obj_property name="ObjectShortName">s_oREGO1_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_iREGO1_dready" type="logic">
+      <obj_property name="ElementShortName">s_iREGO1_dready</obj_property>
+      <obj_property name="ObjectShortName">s_iREGO1_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGO1_dvalid" type="logic">
+      <obj_property name="ElementShortName">s_oREGO1_dvalid</obj_property>
+      <obj_property name="ObjectShortName">s_oREGO1_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/s_oREGO1_dout" type="array">
+      <obj_property name="ElementShortName">s_oREGO1_dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_oREGO1_dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/G_RD_DWIDTH" type="other">
+      <obj_property name="ElementShortName">G_RD_DWIDTH</obj_property>
+      <obj_property name="ObjectShortName">G_RD_DWIDTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/G_WR_DWIDTH" type="other">
+      <obj_property name="ElementShortName">G_WR_DWIDTH</obj_property>
+      <obj_property name="ObjectShortName">G_WR_DWIDTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/G_FIFO_WDEPTH" type="other">
+      <obj_property name="ElementShortName">G_FIFO_WDEPTH</obj_property>
+      <obj_property name="ObjectShortName">G_FIFO_WDEPTH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/C_FIFO_MEMORY_TYPE" type="array">
+      <obj_property name="ElementShortName">C_FIFO_MEMORY_TYPE[1:4]</obj_property>
+      <obj_property name="ObjectShortName">C_FIFO_MEMORY_TYPE[1:4]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/i_clk" type="logic">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/i_rst" type="logic">
+      <obj_property name="ElementShortName">i_rst</obj_property>
+      <obj_property name="ObjectShortName">i_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/i_data" type="array">
+      <obj_property name="ElementShortName">i_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">i_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/i_valid" type="logic">
+      <obj_property name="ElementShortName">i_valid</obj_property>
+      <obj_property name="ObjectShortName">i_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/o_ready" type="logic">
+      <obj_property name="ElementShortName">o_ready</obj_property>
+      <obj_property name="ObjectShortName">o_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/i_ready" type="logic">
+      <obj_property name="ElementShortName">i_ready</obj_property>
+      <obj_property name="ObjectShortName">i_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/o_valid" type="logic">
+      <obj_property name="ElementShortName">o_valid</obj_property>
+      <obj_property name="ObjectShortName">o_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/o_data" type="array">
+      <obj_property name="ElementShortName">o_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">o_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/r_reg_data" type="array">
+      <obj_property name="ElementShortName">r_reg_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">r_reg_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/l_reg_data" type="array">
+      <obj_property name="ElementShortName">l_reg_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">l_reg_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/l_dvalid" type="logic">
+      <obj_property name="ElementShortName">l_dvalid</obj_property>
+      <obj_property name="ObjectShortName">l_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/r_dvalid" type="logic">
+      <obj_property name="ElementShortName">r_dvalid</obj_property>
+      <obj_property name="ObjectShortName">r_dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/r_dready" type="logic">
+      <obj_property name="ElementShortName">r_dready</obj_property>
+      <obj_property name="ObjectShortName">r_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/l_dready" type="logic">
+      <obj_property name="ElementShortName">l_dready</obj_property>
+      <obj_property name="ObjectShortName">l_dready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_fifo/uut_fifo/reg_in_i/G_DWIDTH" type="other">
+      <obj_property name="ElementShortName">G_DWIDTH</obj_property>
+      <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
+   </wvobject>
+</wave_config>
