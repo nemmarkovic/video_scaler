@@ -23,6 +23,15 @@ architecture bench of tb_cf_indx is
   signal i_valid          : std_logic;
   signal i_pos            : std_logic_vector(11 -1 downto 0);
   signal i_ready_indx     : std_logic;
+
+  signal i_start_pos_valid : std_logic;
+  signal o_start_pos_ready : std_logic;
+  signal i_start_pos       : std_logic_vector(11 -1 downto 0);
+
+  signal o_start_pos_valid : std_logic;
+  signal i_start_pos_ready : std_logic;
+  signal o_start_pos       : std_logic_vector(11 -1 downto 0);
+
   signal o_ready          : std_logic;
   signal o_cf             : t_cf_indx_array;
 
@@ -46,8 +55,29 @@ uut: entity work.cf_indx_calc
       i_valid           => i_valid,
       o_ready           => o_ready,
       i_pos             => i_pos,
+      i_start_pos_valid => i_start_pos_valid,
+      o_start_pos_ready => o_start_pos_ready,
+      i_start_pos       => i_start_pos,
+
+      o_start_pos_valid => o_start_pos_valid,
+      i_start_pos_ready => i_start_pos_ready,
+      o_start_pos       => o_start_pos,
       i_ready           => i_ready_indx,
       o_cf              => o_cf );
+
+reg_start_pos: entity work.reg_hs
+   generic map(
+      G_DWIDTH => 11)
+   port map(
+      i_clk   => i_clk,
+      i_rst   => i_rst,
+      i_data  => o_start_pos,
+      i_valid => o_start_pos_valid,
+      o_ready => i_start_pos_ready,
+      i_ready => o_start_pos_ready,
+      o_valid => i_start_pos_valid,
+      o_data  => i_start_pos);
+
 
 clk_proc: process
   begin
@@ -71,9 +101,11 @@ rst_proc: process
       l_ready_indx <= i_ready_indx;
       l_valid <= i_valid;
       l_pos   <= i_pos;   
-      if (l_valid and o_ready) = '1' and to_integer(unsigned(i_pos)) < G_IN_SIZE -1  then
-        l_pos   <= std_logic_vector(unsigned(i_pos) + 1);
-        l_valid <= '1';
+ 
+      if (i_valid and o_ready) = '1' then
+        l_valid <= not i_valid;
+        l_pos   <= std_logic_vector((unsigned(i_pos) + 1) mod (G_IN_SIZE));
+
       elsif o_ready <= '1' then
         l_valid <= '1';
       end if;
@@ -82,26 +114,52 @@ rst_proc: process
    
   stimulus: process(i_clk)
       variable vr_start : std_logic;
+      variable vr_cf_valid : std_logic;
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
-            i_ready_indx     <= '0';
+--            i_ready_indx     <= '0';
             i_valid          <= '0';
             i_pos            <= (others => '0');
- --           i_pos(0)         <= ('1');
- --           i_pos(0)         <= ('1');
             vr_start         := '0';
          else
             i_pos   <= l_pos;
             i_valid <= l_valid;
-            i_ready_indx <= not l_ready_indx;
+            for i in 0 to 3 loop
+               if o_cf(i).cf_indx_valid = '1' then
+                  vr_cf_valid := '1';
+               end if;
+            end loop;
+            if vr_cf_valid = '1' then
+ --              i_ready_indx <= not l_ready_indx;
+               vr_cf_valid := '0';
+            end if;
             if vr_start = '0' then
-               i_ready_indx <= '1';
+ --              i_ready_indx <= '1';
                vr_start     := '1';
             end if;
          end if;
       end if;
    end process;
 
+
+ stimulus2: process
+    begin
+       i_ready_indx     <= '0';
+       wait for clk_period * 20;
+       wait until rising_edge(i_clk);
+
+       i_ready_indx <= '1';
+       wait for clk_period * 2;
+       wait until rising_edge(i_clk);
+       i_ready_indx <= '0';
+
+       wait for clk_period * 20;
+       wait until rising_edge(i_clk);
+
+       i_ready_indx <= '1';
+
+       wait;
+     end process;
 
 end;

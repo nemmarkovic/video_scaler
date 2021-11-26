@@ -37,6 +37,13 @@ entity cf_indx_calc is
       o_ready     : out std_logic;
       --! input row/comlmun pair
       i_pos       : in  std_logic_vector(11 -1 downto 0);
+      i_start_pos_valid : in  std_logic;
+      o_start_pos_ready : out std_logic;
+      i_start_pos       : in  std_logic_vector(11 -1 downto 0);
+
+      o_start_pos_valid : out std_logic;
+      i_start_pos_ready : in  std_logic;
+      o_start_pos       : out std_logic_vector(11 -1 downto 0);
       -- next module ready to accept filter outputs
       i_ready      : in  std_logic;
       o_cf         : out t_cf_indx_array);
@@ -77,8 +84,8 @@ architecture Behavioral of cf_indx_calc is
    signal l_start_pos  : std_logic_vector(11 -1 downto 0);
    signal r_start_pos  : std_logic_vector(11 -1 downto 0);
 
-   signal l_indx_ready : std_logic_vector(0 to c_phase_num -1);
-   signal r_indx_ready : std_logic_vector(0 to c_phase_num -1);
+   signal r_indx_ready : std_logic;
+   signal l_indx_ready : std_logic;
    
    signal l_indx_valid : std_logic_vector(0 to c_phase_num -1);
    signal r_indx_valid : std_logic_vector(0 to c_phase_num -1);
@@ -156,7 +163,9 @@ ipos_ready_proc: process(all)
          if i_rst = '1' then
             r_ipos_ready <= '0';
          else
-            r_ipos_ready <= l_ipos_ready;
+  --          if (i_ready and or(r_indx_valid)) = '1' then
+               r_ipos_ready <= l_ipos_ready;
+  --          end if;
          end if;
       end if;
    end process;
@@ -198,8 +207,8 @@ ipos_valid_reg_proc: process(i_clk)
          else
             if i_valid = '1' and l_ipos_ready = '1' then
                 r_ipos       <= l_ipos;
+                r_ipos_valid <= l_ipos_valid;
             end if;
-            r_ipos_valid <= l_ipos_valid;
             r_ipos_as_expected <= l_ipos_as_expected;
          end if;
       end if;
@@ -208,13 +217,6 @@ ipos_valid_reg_proc: process(i_clk)
 ----------------------------------------------------
 -- start pos
 -----------------------------------------------------
-
---   signal l_indx_ready      : std_logic_vector(0 to c_phase_num -1);
---   signal r_indx_ready      : std_logic_vector(0 to c_phase_num -1);
---   signal l_indx_valid      : std_logic_vector(0 to c_phase_num -1);
---   signal r_indx_valid      : std_logic_vector(0 to c_phase_num -1);
-------------------------------------------------------------------------
-------------------------------------------------------------------------
 start_pos_valid_comb_proc: process(all)
       variable vl_start_pos_valid : std_logic;
       variable vl_start_pos       : std_logic_vector(11 -1 downto 0);
@@ -222,21 +224,18 @@ start_pos_valid_comb_proc: process(all)
       vl_start_pos_valid    := r_start_pos_valid;
       vl_start_pos          := r_start_pos;
 
-     -- if (l_ipos_valid and r_start_pos_ready) = '1' then
-         if (and(l_ipos_as_expected)) = '1' then
-            vl_start_pos       := w_next_start_pix(c_phase_num);
-            vl_start_pos_valid := '1';
-         else
-            cf_xor_gen: for gen_cell_num in 0 to c_phase_num -1 loop
-               if (l_mux_sel(gen_cell_num )) = '1' then
-                  vl_start_pos       := w_next_start_pix(gen_cell_num);
-                  vl_start_pos_valid := '1';
-               end if;
-            end loop;
-         end if;
-   --   end if;
+      if (and(l_ipos_as_expected)) = '1' then
+         vl_start_pos       := w_next_start_pix(c_phase_num);
+         vl_start_pos_valid := '1';
+      else
+         cf_xor_gen: for gen_cell_num in 0 to c_phase_num -1 loop
+            if (l_mux_sel(gen_cell_num )) = '1' then
+               vl_start_pos       := w_next_start_pix(gen_cell_num +1);
+               vl_start_pos_valid := '1';
+            end if;
+         end loop;
+      end if;
 
-      r_indx_valid <= (others => '0');
       if (r_ipos_valid = '1') then
          r_indx_valid <= l_ipos_as_expected(0 to c_phase_num -1);
       end if;
@@ -253,7 +252,7 @@ start_pos_valid_reg_proc: process(i_clk)
             r_start_pos       <= (others => '0');
          else
             r_start_pos_valid <= l_start_pos_valid;
-            if (l_start_pos_ready) = '1' then
+            if (l_start_pos_ready and i_ready) = '1' then
                r_start_pos       <= l_start_pos; --r_next_start_pos;--
             end if;
          end if;
@@ -293,6 +292,9 @@ start_pos_reg_proc: process(i_clk)
 -----------------------------------------
    o_ready           <= l_ipos_ready; --r_ipos_ready;
 
+   o_start_pos       <= l_start_pos;
+   o_start_pos_valid <= l_start_pos_valid;
+   o_start_pos_ready <= l_start_pos_ready;
 gf: for cell_num_gen in 0 to c_phase_num -1 generate
    o_cf(cell_num_gen).cf_indx       <= l_cf_indx(cell_num_gen);
    o_cf(cell_num_gen).cf_indx_valid <= r_indx_valid(cell_num_gen);

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="166666fs"></ZoomStartTime>
-      <ZoomEndTime time="1166667fs"></ZoomEndTime>
-      <Cursor1Time time="875000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="3615001fs"></ZoomEndTime>
+      <Cursor1Time time="2425000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="174"></NameColumnWidth>
-      <ValueColumnWidth column_width="138"></ValueColumnWidth>
+      <ValueColumnWidth column_width="134"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="28" />
+   <WVObjectSize size="35" />
    <wvobject fp_name="/tb_cf_indx/uut/i_clk" type="logic">
       <obj_property name="ElementShortName">i_clk</obj_property>
       <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -40,53 +40,46 @@
       <obj_property name="ElementShortName">i_pos[10:0]</obj_property>
       <obj_property name="ObjectShortName">i_pos[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/l_ipos_ready" type="logic">
-      <obj_property name="ElementShortName">l_ipos_ready</obj_property>
-      <obj_property name="ObjectShortName">l_ipos_ready</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/i_start_pos_valid" type="logic">
+      <obj_property name="ElementShortName">i_start_pos_valid</obj_property>
+      <obj_property name="ObjectShortName">i_start_pos_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/l_ipos_valid" type="logic">
-      <obj_property name="ElementShortName">l_ipos_valid</obj_property>
-      <obj_property name="ObjectShortName">l_ipos_valid</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/o_start_pos_ready" type="logic">
+      <obj_property name="ElementShortName">o_start_pos_ready</obj_property>
+      <obj_property name="ObjectShortName">o_start_pos_ready</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/l_ipos" type="array">
-      <obj_property name="ElementShortName">l_ipos[10:0]</obj_property>
-      <obj_property name="ObjectShortName">l_ipos[10:0]</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/i_start_pos" type="array">
+      <obj_property name="ElementShortName">i_start_pos[10:0]</obj_property>
+      <obj_property name="ObjectShortName">i_start_pos[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_ipos_ready" type="logic">
-      <obj_property name="ElementShortName">r_ipos_ready</obj_property>
-      <obj_property name="ObjectShortName">r_ipos_ready</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/o_start_pos_valid" type="logic">
+      <obj_property name="ElementShortName">o_start_pos_valid</obj_property>
+      <obj_property name="ObjectShortName">o_start_pos_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_ipos_valid" type="logic">
-      <obj_property name="ElementShortName">r_ipos_valid</obj_property>
-      <obj_property name="ObjectShortName">r_ipos_valid</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/i_start_pos_ready" type="logic">
+      <obj_property name="ElementShortName">i_start_pos_ready</obj_property>
+      <obj_property name="ObjectShortName">i_start_pos_ready</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_ipos" type="array">
-      <obj_property name="ElementShortName">r_ipos[10:0]</obj_property>
-      <obj_property name="ObjectShortName">r_ipos[10:0]</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/o_start_pos" type="array">
+      <obj_property name="ElementShortName">o_start_pos[10:0]</obj_property>
+      <obj_property name="ObjectShortName">o_start_pos[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/lxxx" type="logic">
-      <obj_property name="ElementShortName">lxxx</obj_property>
-      <obj_property name="ObjectShortName">lxxx</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/i_ready" type="logic">
+      <obj_property name="ElementShortName">i_ready</obj_property>
+      <obj_property name="ObjectShortName">i_ready</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/rxxx" type="logic">
-      <obj_property name="ElementShortName">rxxx</obj_property>
-      <obj_property name="ObjectShortName">rxxx</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_start_pos" type="array">
-      <obj_property name="ElementShortName">r_start_pos[10:0]</obj_property>
-      <obj_property name="ObjectShortName">r_start_pos[10:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/l_ipos_as_expected" type="array">
-      <obj_property name="ElementShortName">l_ipos_as_expected[0:4]</obj_property>
-      <obj_property name="ObjectShortName">l_ipos_as_expected[0:4]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/w_expected_pos" type="array">
-      <obj_property name="ElementShortName">w_expected_pos[0:4][10:0]</obj_property>
-      <obj_property name="ObjectShortName">w_expected_pos[0:4][10:0]</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/o_cf" type="array">
+      <obj_property name="ElementShortName">o_cf[0:3]</obj_property>
+      <obj_property name="ObjectShortName">o_cf[0:3]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/l_mux_sel" type="array">
       <obj_property name="ElementShortName">l_mux_sel[3:0]</obj_property>
       <obj_property name="ObjectShortName">l_mux_sel[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/l_ipos_as_expected" type="array">
+      <obj_property name="ElementShortName">l_ipos_as_expected[0:4]</obj_property>
+      <obj_property name="ObjectShortName">l_ipos_as_expected[0:4]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/r_ipos_as_expected" type="array">
       <obj_property name="ElementShortName">r_ipos_as_expected[0:4]</obj_property>
@@ -99,11 +92,42 @@
    <wvobject fp_name="/tb_cf_indx/uut/w_next_start_pix" type="array">
       <obj_property name="ElementShortName">w_next_start_pix[0:4][10:0]</obj_property>
       <obj_property name="ObjectShortName">w_next_start_pix[0:4][10:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/w_expected_pos" type="array">
+      <obj_property name="ElementShortName">w_expected_pos[0:4][10:0]</obj_property>
+      <obj_property name="ObjectShortName">w_expected_pos[0:4][10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/l_ipos_ready" type="logic">
+      <obj_property name="ElementShortName">l_ipos_ready</obj_property>
+      <obj_property name="ObjectShortName">l_ipos_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/r_ipos_ready" type="logic">
+      <obj_property name="ElementShortName">r_ipos_ready</obj_property>
+      <obj_property name="ObjectShortName">r_ipos_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/l_ipos_valid" type="logic">
+      <obj_property name="ElementShortName">l_ipos_valid</obj_property>
+      <obj_property name="ObjectShortName">l_ipos_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/r_ipos_valid" type="logic">
+      <obj_property name="ElementShortName">r_ipos_valid</obj_property>
+      <obj_property name="ObjectShortName">r_ipos_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/l_ipos" type="array">
+      <obj_property name="ElementShortName">l_ipos[10:0]</obj_property>
+      <obj_property name="ObjectShortName">l_ipos[10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/r_ipos" type="array">
+      <obj_property name="ElementShortName">r_ipos[10:0]</obj_property>
+      <obj_property name="ObjectShortName">r_ipos[10:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/l_start_pos_ready" type="logic">
       <obj_property name="ElementShortName">l_start_pos_ready</obj_property>
       <obj_property name="ObjectShortName">l_start_pos_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/r_start_pos_ready" type="logic">
+      <obj_property name="ElementShortName">r_start_pos_ready</obj_property>
+      <obj_property name="ObjectShortName">r_start_pos_ready</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/l_start_pos_valid" type="logic">
       <obj_property name="ElementShortName">l_start_pos_valid</obj_property>
@@ -117,20 +141,24 @@
       <obj_property name="ElementShortName">l_start_pos[10:0]</obj_property>
       <obj_property name="ObjectShortName">l_start_pos[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_next_start_pos" type="array">
-      <obj_property name="ElementShortName">r_next_start_pos[10:0]</obj_property>
-      <obj_property name="ObjectShortName">r_next_start_pos[10:0]</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/r_start_pos" type="array">
+      <obj_property name="ElementShortName">r_start_pos[10:0]</obj_property>
+      <obj_property name="ObjectShortName">r_start_pos[10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/r_indx_ready" type="logic">
+      <obj_property name="ElementShortName">r_indx_ready</obj_property>
+      <obj_property name="ObjectShortName">r_indx_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/l_indx_ready" type="logic">
+      <obj_property name="ElementShortName">l_indx_ready</obj_property>
+      <obj_property name="ObjectShortName">l_indx_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cf_indx/uut/l_indx_valid" type="array">
+      <obj_property name="ElementShortName">l_indx_valid[0:3]</obj_property>
+      <obj_property name="ObjectShortName">l_indx_valid[0:3]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/r_indx_valid" type="array">
       <obj_property name="ElementShortName">r_indx_valid[0:3]</obj_property>
       <obj_property name="ObjectShortName">r_indx_valid[0:3]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/i_ready" type="logic">
-      <obj_property name="ElementShortName">i_ready</obj_property>
-      <obj_property name="ObjectShortName">i_ready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/o_cf" type="array">
-      <obj_property name="ElementShortName">o_cf[0:3]</obj_property>
-      <obj_property name="ObjectShortName">o_cf[0:3]</obj_property>
    </wvobject>
 </wave_config>
