@@ -12,7 +12,7 @@ library common_lib;
 entity tb_bilinear_flt is
      generic(
         G_IN_SIZE       : integer               :=  4;
-        G_OUT_SIZE      : integer               := 16;
+        G_OUT_SIZE      : integer               := 21;
         G_PHASE_NUM     : integer range 2 to C_MAX_PHASE_NUM := 4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
    end;

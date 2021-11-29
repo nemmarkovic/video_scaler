@@ -267,6 +267,8 @@ start_pos_comb_proc: process(all)
          vl_start_pos_ready := '1';
       elsif (not(i_ready) and not(r_start_pos_valid)) = '1' then
          vl_start_pos_ready := '1';
+      elsif (i_ready and not(r_start_pos_valid)) = '1' then
+         vl_start_pos_ready := '1';
       elsif not(i_ready) = '1' then
          vl_start_pos_ready := '0';
       end if;
