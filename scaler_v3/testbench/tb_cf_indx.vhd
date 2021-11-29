@@ -35,6 +35,9 @@ architecture bench of tb_cf_indx is
   signal o_ready          : std_logic;
   signal o_cf             : t_cf_indx_array;
 
+  signal i_start_pos_valid_reg : std_logic;
+  signal i_start_pos_reg       : std_logic_vector(11 -1 downto 0);
+
   signal l_valid          : std_logic;
   signal l_pos            : std_logic_vector(11 -1 downto 0);
   signal l_ready_indx     : std_logic;
@@ -71,13 +74,33 @@ reg_start_pos: entity work.reg_hs
    port map(
       i_clk   => i_clk,
       i_rst   => i_rst,
-      i_data  => o_start_pos,
-      i_valid => o_start_pos_valid,
+      i_data  => i_start_pos_reg,
+      i_valid => i_start_pos_valid_reg,
       o_ready => i_start_pos_ready,
       i_ready => o_start_pos_ready,
       o_valid => i_start_pos_valid,
       o_data  => i_start_pos);
 
+process(all)
+   variable v_start : std_logic;
+begin
+   if i_rst = '1' then
+      i_start_pos_reg       <= (others => '0');
+      i_start_pos_valid_reg <= '0';
+      v_start               := '0';
+   else 
+      if v_start = '0' then
+         i_start_pos_valid_reg <= '1';
+         i_start_pos_reg       <= (others => '0');
+         if o_ready = '1' then
+            v_start               := '1';
+         end if;
+      else
+         i_start_pos_reg       <= o_start_pos;
+         i_start_pos_valid_reg <= o_start_pos_valid;
+      end if;
+   end if;
+end process;
 
 clk_proc: process
   begin

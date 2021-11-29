@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="3615001fs"></ZoomEndTime>
-      <Cursor1Time time="2425000fs"></Cursor1Time>
+      <ZoomEndTime time="5326048fs"></ZoomEndTime>
+      <Cursor1Time time="894951fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="174"></NameColumnWidth>
-      <ValueColumnWidth column_width="134"></ValueColumnWidth>
+      <ValueColumnWidth column_width="126"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="35" />
+   <WVObjectSize size="34" />
    <wvobject fp_name="/tb_cf_indx/uut/i_clk" type="logic">
       <obj_property name="ElementShortName">i_clk</obj_property>
       <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -133,32 +133,60 @@
       <obj_property name="ElementShortName">l_start_pos_valid</obj_property>
       <obj_property name="ObjectShortName">l_start_pos_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_start_pos_valid" type="logic">
-      <obj_property name="ElementShortName">r_start_pos_valid</obj_property>
-      <obj_property name="ObjectShortName">r_start_pos_valid</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/l_start_pos" type="array">
       <obj_property name="ElementShortName">l_start_pos[10:0]</obj_property>
       <obj_property name="ObjectShortName">l_start_pos[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_start_pos" type="array">
-      <obj_property name="ElementShortName">r_start_pos[10:0]</obj_property>
-      <obj_property name="ObjectShortName">r_start_pos[10:0]</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/i_start_pos_valid" type="logic">
+      <obj_property name="ElementShortName">i_start_pos_valid</obj_property>
+      <obj_property name="ObjectShortName">i_start_pos_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_indx_ready" type="logic">
-      <obj_property name="ElementShortName">r_indx_ready</obj_property>
-      <obj_property name="ObjectShortName">r_indx_ready</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/i_start_pos" type="array">
+      <obj_property name="ElementShortName">i_start_pos[10:0]</obj_property>
+      <obj_property name="ObjectShortName">i_start_pos[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/l_indx_ready" type="logic">
-      <obj_property name="ElementShortName">l_indx_ready</obj_property>
-      <obj_property name="ObjectShortName">l_indx_ready</obj_property>
+   <wvobject fp_name="/tb_cf_indx/uut/o_start_pos_ready" type="logic">
+      <obj_property name="ElementShortName">o_start_pos_ready</obj_property>
+      <obj_property name="ObjectShortName">o_start_pos_ready</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cf_indx/uut/l_indx_valid" type="array">
       <obj_property name="ElementShortName">l_indx_valid[0:3]</obj_property>
       <obj_property name="ObjectShortName">l_indx_valid[0:3]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_cf_indx/uut/r_indx_valid" type="array">
-      <obj_property name="ElementShortName">r_indx_valid[0:3]</obj_property>
-      <obj_property name="ObjectShortName">r_indx_valid[0:3]</obj_property>
+   <wvobject fp_name="group59" type="group">
+      <obj_property name="label">reg</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/i_clk" type="logic">
+         <obj_property name="ElementShortName">i_clk</obj_property>
+         <obj_property name="ObjectShortName">i_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/i_rst" type="logic">
+         <obj_property name="ElementShortName">i_rst</obj_property>
+         <obj_property name="ObjectShortName">i_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/i_valid" type="logic">
+         <obj_property name="ElementShortName">i_valid</obj_property>
+         <obj_property name="ObjectShortName">i_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/o_ready" type="logic">
+         <obj_property name="ElementShortName">o_ready</obj_property>
+         <obj_property name="ObjectShortName">o_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/i_data" type="array">
+         <obj_property name="ElementShortName">i_data[10:0]</obj_property>
+         <obj_property name="ObjectShortName">i_data[10:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/i_ready" type="logic">
+         <obj_property name="ElementShortName">i_ready</obj_property>
+         <obj_property name="ObjectShortName">i_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/o_valid" type="logic">
+         <obj_property name="ElementShortName">o_valid</obj_property>
+         <obj_property name="ObjectShortName">o_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_cf_indx/reg_start_pos/o_data" type="array">
+         <obj_property name="ElementShortName">o_data[10:0]</obj_property>
+         <obj_property name="ObjectShortName">o_data[10:0]</obj_property>
+      </wvobject>
    </wvobject>
 </wave_config>
