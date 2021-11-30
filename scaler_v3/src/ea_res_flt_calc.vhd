@@ -69,7 +69,8 @@ entity res_pix_calc is
 
 architecture Behavioral of res_pix_calc is
 
-   type t_dummy is array (0 to G_PHASE_NUM -1) of std_logic_vector(15 downto 0);
+--   type t_dummy is array (0 to G_PHASE_NUM -1) of std_logic_vector(15 downto 0);
+   type t_dummy is array (0 to (G_PHASE_NUM/2 -1) + (G_PHASE_NUM mod 2)) of std_logic_vector(48-1 downto 0);
    signal w_dummy0 : t_dummy;
    signal w_dummy1 : t_dummy;
    signal w_dummy2 : t_dummy;
@@ -88,7 +89,7 @@ architecture Behavioral of res_pix_calc is
 
    signal r_out_possition : unsigned(integer(ceil(log2(real(2048)))) -1 downto 0);
  
-   type t_cf is array (0 to G_PHASE_NUM -1) of natural range 0 to G_PHASE_NUM -1;
+   type t_cf is array (0 to G_PHASE_NUM -1) of std_logic_vector(7 downto 0);
    signal s_iA_cf_indx : t_cf;
    signal s_iB_cf_indx : t_cf;
 
@@ -103,11 +104,11 @@ cf_indx_gen: for i in 0 to (G_PHASE_NUM -1) generate
    process(all)
    begin
       if i_cf(i).cf_indx_valid = '1' then
-         s_iA_cf_indx(i) <= (to_integer(unsigned(    i_cf(i).cf_indx )));
-         s_iB_cf_indx(i) <= (to_integer(unsigned(not(i_cf(i).cf_indx))));
+         s_iA_cf_indx(i) <= coeff0(to_integer(unsigned(i_cf(i).cf_indx)));
+         s_iB_cf_indx(i) <= coeff0(to_integer(unsigned(not(i_cf(i).cf_indx))));
       else
-         s_iA_cf_indx(i) <= 0;
-         s_iB_cf_indx(i) <= 0;
+         s_iA_cf_indx(i) <= (others => '0');
+         s_iB_cf_indx(i) <= (others => '0');
       end if;
    end process;
 end generate;
@@ -121,27 +122,30 @@ gen_phase_dsp:
                i_clk    => i_clk,
                i_rst    => i_rst,
                i_B      => i_pix.pix0,
-               i_A      => coeff0(s_iA_cf_indx(2*i   )),
-               i_D      => coeff0(s_iA_cf_indx(2*i +1)),
+               i_A      => s_iA_cf_indx(2*i   ),
+               i_D      => s_iA_cf_indx(2*i +1),
                i_C      => (others => '0'),
-               o_mul1   => w_dummy0(i),
-               o_mul2   => w_dummy1(i) );
+               o_result => w_dummy0(i));
+--               o_mul1   => w_dummy0(i),
+--               o_mul2   => w_dummy1(i) );
     
       mul_cell1_i : entity work.mul_cell
             generic map (
-               G_REG_IN =>  0)
+               G_REG_IN =>  1)
             port map (
                i_clk    => i_clk,
                i_rst    => i_rst,
                i_B      => i_pix.pix1,
-               i_A      => coeff0(s_iB_cf_indx(2*i)),
-               i_D      => coeff0(s_iB_cf_indx(2*i +1)),
-               i_C      => "0000000000000" & w_dummy1(i) & "000" & w_dummy0(i),
-               o_mul1   => w_dummy2(i),
-               o_mul2   => w_dummy3(i) );
+               i_A      => s_iB_cf_indx(2*i   ),
+               i_D      => s_iB_cf_indx(2*i +1),
+               i_C      => w_dummy0(i)(47 downto 19) & w_dummy0(i)(18 downto 0), --(others => '0'), --
+--               i_C      => "0000000000000" & w_dummy1(i) & "0000" & w_dummy0(i),
+               o_result => w_dummy1(i));
+--               o_mul1   => w_dummy2(i),
+--               o_mul2   => w_dummy3(i) );
 
-       w_pix(2*i   ).pix <= w_dummy2(i)(7 downto 0);
-       w_pix(2*i +1).pix <= w_dummy3(i)(7 downto 0);
+       w_pix(2*i   ).pix <= w_dummy1(i)(7 downto 0);
+       w_pix(2*i +1).pix <= w_dummy1(i)(26 downto 19);
 
    end generate;
 
@@ -171,14 +175,14 @@ reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
       generic map(
          G_DWIDTH => G_DWIDTH +2)
       port map(
-         i_clk   => i_clk,--: in  std_logic;
-         i_rst   => i_rst,--: in  std_logic;
-         i_data  => w_pix(i).pix & r_ipix.last & r_ipix.sof,--: in  std_logic_vector(G_DWIDTH -1 downto 0);
-         i_valid => r_pix_valid(i),--: in  std_logic;
-         o_ready => w_ready(i),--: out std_logic;
-         i_ready => i_ready(i),--: in  std_logic;
-         o_valid => o_pix(i).valid,--: out std_logic;
-         o_data  => w_pix_out(i));--: out std_logic_vector(G_DWIDTH -1 downto 0));
+         i_clk   => i_clk,
+         i_rst   => i_rst,
+         i_data  => w_pix(i).pix & r_ipix.last & r_ipix.sof,
+         i_valid => r_pix_valid(i),
+         o_ready => w_ready(i),
+         i_ready => i_ready(i),
+         o_valid => o_pix(i).valid,
+         o_data  => w_pix_out(i));
 
       o_pix(i).pix  <= w_pix_out(i)(G_DWIDTH +2 -1 downto 2);
       o_pix(i).last <= w_pix_out(i)(1);

@@ -34,8 +34,9 @@ entity mul_cell is
       i_D    : in  std_logic_vector(G_DWIDTH -1 downto 0);
       i_B    : in  std_logic_vector(G_DWIDTH -1 downto 0);
       i_C    : in  std_logic_vector(48 -1 downto 0);
-      o_mul1 : out std_logic_vector(G_RWIDTH -1 downto 0);
-      o_mul2 : out std_logic_vector(G_RWIDTH -1 downto 0));
+      o_result:out std_logic_vector(48 -1 downto 0));
+--      o_mul1 : out std_logic_vector(G_RWIDTH -1 downto 0);
+--      o_mul2 : out std_logic_vector(G_RWIDTH -1 downto 0));
 end mul_cell;
 
 architecture Behavioral of mul_cell is
@@ -77,8 +78,8 @@ reg_in : if G_REG_IN = 1 generate
         end if;
       end process;
       w_A <= c_zeros & unsigned(r_A);
-      w_D <=  unsigned(r_B) & c_zeros;
-      w_B <= "0000000000" & unsigned(r_D);   
+      w_D <=  unsigned(r_D) & c_zeros;
+      w_B <= "0000000000" & unsigned(r_B);   
    else generate
       w_A <= c_zeros & unsigned(i_A);
       w_D <=  unsigned(i_D) & c_zeros; 
@@ -109,9 +110,9 @@ dsp_mul_p: process(i_clk)
       end if;   
    end process;
 
-   l_mac   <= r_result + r_C;
-
-   o_mul1 <= std_logic_vector(l_mac(15 downto 0));
-   o_mul2 <= std_logic_vector(l_mac(34 downto 19));
+   l_mac   <= r_result + unsigned(i_C);--r_C;
+   o_result <= std_logic_vector(l_mac);
+--   o_mul1 <= std_logic_vector(l_mac(15 downto 0));
+--   o_mul2 <= std_logic_vector(l_mac(34 downto 19));
 
 end Behavioral;
