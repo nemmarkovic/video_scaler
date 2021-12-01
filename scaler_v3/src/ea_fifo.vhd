@@ -4,6 +4,9 @@ library ieee;
 library xpm;
     use xpm.vcomponents.all;
 
+library common_lib;
+    use common_lib.p_common.all;
+
 entity fifo is
    generic(
       G_RD_DWIDTH   : integer := 8;
@@ -89,7 +92,7 @@ xpm_fifo_sync_i : xpm_fifo_sync
       ECC_MODE            => "no_ecc",
       FIFO_MEMORY_TYPE    => C_FIFO_MEMORY_TYPE,
       FIFO_READ_LATENCY   => 1,
-      FIFO_WRITE_DEPTH    => G_FIFO_WDEPTH,   -- In standard READ_MODE, the effective depth = FIFO_WRITE_DEPTH
+      FIFO_WRITE_DEPTH    => 2**clog2(G_FIFO_WDEPTH),   -- In standard READ_MODE, the effective depth = FIFO_WRITE_DEPTH
       FULL_RESET_VALUE    => 0,               -- In FWFT READ_MODE    , the effective depth = FIFO_WRITE_DEPTH+2  
       PROG_EMPTY_THRESH   => 10,
       PROG_FULL_THRESH    => 10,

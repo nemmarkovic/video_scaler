@@ -218,8 +218,8 @@ start_pos_valid_comb_proc: process(all)
       variable vl_start_pos_valid : std_logic;
       variable vl_start_pos       : std_logic_vector(11 -1 downto 0);
    begin
-      vl_start_pos_valid    := i_start_pos_valid; --r_start_pos_valid;
-      vl_start_pos          := i_start_pos;       --r_start_pos;
+      vl_start_pos_valid    := i_start_pos_valid;
+      vl_start_pos          := i_start_pos;
 
       if (and(l_ipos_as_expected)) = '1' then
          vl_start_pos       := w_next_start_pix(c_phase_num);
