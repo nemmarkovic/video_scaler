@@ -32,6 +32,7 @@ entity bilinear_flt is
       -- input reset
       i_rst     : in  std_logic;
       -- ready to filter new data pair
+      o_start_pos : out std_logic_vector(11 -1 downto 0);
       o_ready   : out std_logic;
       -- input pixel data
       -- pix0
@@ -165,15 +166,21 @@ cf_indx_calc_i: entity work.cf_indx_calc
    w_res_pix_calc_cf_i        <= w_cf_calc_indx_cf_o;
    w_res_pix_calc_pix_i       <= i_pix;
    process(i_clk)
+      variable v_start_pos : std_logic_vector(11 -1 downto 0);
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
             r_res_pix_calc_pix_i <= t_in_pix_rst;
+   o_start_pos  <= (others => '0');
+   v_start_pos  := (others => '0');
          else
             r_res_pix_calc_pix_i <= w_res_pix_calc_pix_i;
+   o_start_pos  <= v_start_pos;
+   v_start_pos  := w_strt_reg_data_o;
          end if;
       end if;
    end process;
+
 res_pix_calc_i: entity work.res_pix_calc
    generic map(
       G_IN_SIZE   => G_IN_SIZE,
@@ -193,12 +200,8 @@ res_pix_calc_i: entity work.res_pix_calc
 ------------------------------------------------------------------------------------
 -- output assignment
 ------------------------------------------------------------------------------------
-   o_pix   <= w_res_pix_calc_pix_o;
-   o_ready <= w_cf_calc_indx_ready_o;
---gen_out_unused_pix: for i in 0 to G_PHASE_NUM -1 generate
---      o_pix(i).last <= '0';
---      o_pix(i).sof  <= '0';
---   end generate;
+   o_pix        <= w_res_pix_calc_pix_o;
+   o_ready      <= w_cf_calc_indx_ready_o;
 
 end Behavioral;
 

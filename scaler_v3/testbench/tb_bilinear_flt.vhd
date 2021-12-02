@@ -11,8 +11,8 @@ library common_lib;
 
 entity tb_bilinear_flt is
      generic(
-        G_IN_SIZE       : integer               := 16;
-        G_OUT_SIZE      : integer               :=  4;
+        G_IN_SIZE       : integer               :=  4;
+        G_OUT_SIZE      : integer               := 21;
         G_PHASE_NUM     : integer range 2 to C_MAX_PHASE_NUM := 4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
    end;
@@ -25,6 +25,7 @@ architecture bench of tb_bilinear_flt is
    signal i_pix  : t_in_pix;
    signal i_ready: std_logic;
    signal o_pix  : t_out_pix_array;
+   signal o_start_pos : std_logic_vector(11 -1 downto 0);
 
    constant clk_period : time := 50 ns;
 begin
@@ -39,6 +40,7 @@ uut_bilinear_flt_i: entity work.bilinear_flt
    port map (
       i_clk       => i_clk,
       i_rst       => i_rst,
+      o_start_pos => o_start_pos,
       o_ready     => o_ready,
       i_pix       => i_pix,
       i_ready     => i_ready,
@@ -69,7 +71,6 @@ stimulus1: process(i_clk)
             i_ready     <= '0';
             vr_start    := '0';
          else
-            
 
             i_pix.pix0  <= std_logic_vector(to_unsigned(1, 8));
             i_pix.pix1  <= std_logic_vector(to_unsigned(2, 8));
