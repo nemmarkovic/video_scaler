@@ -47,7 +47,7 @@ architecture Behavioral of mul_cell is
    -- pack A and D inside P wia pre-adder
    signal l_dsp_post_adder : unsigned(27 -1 downto 0);
    signal l_mac            : unsigned(48 -1 downto 0);
-   signal r_C              : unsigned(48 -1 downto 0);
+   signal w_C              : unsigned(48 -1 downto 0);
 
    signal w_A              : unsigned(27 -1  downto 0);
    signal w_D              : unsigned(27 -1 downto 0);
@@ -64,6 +64,7 @@ reg_in : if G_REG_IN = 1 generate
       signal r_A              : unsigned(G_DWIDTH -1 downto 0);
       signal r_B              : unsigned(G_DWIDTH -1 downto 0);
       signal r_D              : unsigned(G_DWIDTH -1 downto 0);
+      signal r_C              : unsigned(48       -1 downto 0);
    begin
    reg_in_proc: process(i_clk)
       begin
@@ -72,34 +73,27 @@ reg_in : if G_REG_IN = 1 generate
                r_A      <= (others => '0');
                r_B      <= (others => '0');
                r_D      <= (others => '0');
+               r_C      <= (others => '0');
             else
                r_A      <= unsigned(i_A);
                r_B      <= unsigned(i_B);
                r_D      <= unsigned(i_D);
+               r_C      <= unsigned(i_C);
             end if;
          end if;
       end process;
       w_A <= c_zeros & unsigned(r_A);
       w_D <=  unsigned(r_D) & c_zeros;
       w_B <= "0000000000" & unsigned(r_B);   
+      w_C <= unsigned(r_C);
    else generate
       w_A <= c_zeros & unsigned(i_A);
       w_D <=  unsigned(i_D) & c_zeros; 
       w_B <= "0000000000" & unsigned(i_B);
+      w_C <= unsigned(i_C);
    end generate;
 
    l_dsp_post_adder      <= w_A + w_D;
-
-del_ic_proc: process(i_clk)
-   begin
-      if rising_edge(i_clk) then
-         if i_rst = '1' then
-            r_C      <= (others => '0');
-         else
-            r_C      <= unsigned(i_C);
-         end if;
-      end if;
-   end process;
 
 dsp_mul_p: process(i_clk)
    begin
@@ -112,7 +106,7 @@ dsp_mul_p: process(i_clk)
       end if;   
    end process;
 
-   l_mac   <= r_result + unsigned(i_C);--r_C;
+   l_mac   <= r_result + unsigned(w_C); --(i_C);--(r_C);
    o_result <= std_logic_vector(l_mac);
 --   o_mul1 <= std_logic_vector(l_mac(15 downto 0));
 --   o_mul2 <= std_logic_vector(l_mac(34 downto 19));
