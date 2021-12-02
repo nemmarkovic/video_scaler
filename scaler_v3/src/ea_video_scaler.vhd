@@ -33,6 +33,7 @@ entity video_scaler is
       -- eof   : std_logic;
       i_pix      : in  t_in_pix;
 
+      o_ready   : out std_logic;
       i_ready   : in  std_logic;
       o_pix     : out t_out_pix
       
@@ -40,8 +41,25 @@ entity video_scaler is
    end video_scaler;
 
 architecture Behavioral of video_scaler is
+   signal w_bfilter_ready_i  : std_logic;
+   signal w_bfilter_pix_o    : t_out_pix_array;
 
+
+   signal w_fifob_ready_o    : std_logic;
+   signal w_fifob_valid_i    : std_logic_vector(G_PHASE_NUM -1 downto 0);
+   signal w_fifob_pix_i      : t_out_pix_array;
+   signal w_fifob_valid_o    : std_logic_vector(G_PHASE_NUM -1 downto 0);  
+   signal w_fifob_ready_i    : std_logic_vector(G_PHASE_NUM -1 downto 0);  
+   signal w_fifob_data_o     : t_out_pix_array;
+   
+   signal w_pcsw_valid_i     : std_logic_vector(G_PHASE_NUM -1 downto 0);  
+   signal w_pcsw_ready_o     : std_logic_vector(G_PHASE_NUM -1 downto 0);  
+   signal w_pcsw_data_i      : t_out_pix_array;
+   
+   
 begin
+
+   w_bfilter_ready_i <= w_fifob_ready_o;
 
 uut_bilinear_flt_i: entity work.bilinear_flt 
    generic map (
@@ -52,55 +70,40 @@ uut_bilinear_flt_i: entity work.bilinear_flt
    port map (
       i_clk       => i_clk,
       i_rst       => i_rst,
-      o_ready     => open, -- : out std_logic;
+      o_ready     => o_ready,
       i_pix       => i_pix,
-      i_ready     => (others => '0'), --from fifo bank : in  std_logic_vector(0 to G_PHASE_NUM -1);
-      o_pix       => open); --: out t_out_pix_array);
+      i_ready     => w_bfilter_ready_i,
+      o_pix       => w_bfilter_pix_o); --: out t_out_pix_array);
 
 
-
-
-
+gl: for i in 0 to 3 generate
+   w_fifob_valid_i(i) <= w_bfilter_pix_o(i).valid;
+end generate;
+   w_fifob_pix_i      <= w_bfilter_pix_o;
+   w_fifob_ready_i    <= w_pcsw_ready_o;
+   
 fifo_bank_i: entity work.fifo_bank
-   generic(
-      G_RD_DWIDTH   = >
-      G_WR_DWIDTH   : integer :=  8;
-      G_PHASE_NUM     : integer range 2 to C_MAX_PHASE_NUM := 4;
-      -- Integer, Range: 16 - 4194304. Default value = 2048
-      -- Defines the FIFO Write Depth, must be power of two
-      -- NOTE: The maximum FIFO size (width x depth) is limited to 150-Megabits. 
-      G_FIFO_WDEPTH : integer := 2048);
-   port (
-      i_wr_clk     : in  std_logic;
-      i_rd_clk     : in  std_logic;
-      -- Reset: Must be synchronous to wr_clk. The clock(s) can be
-      -- unstable at the time of applying reset, but reset must be released
-      -- only after the clock(s) is/are stable.
-      i_rst        : in  std_logic;
-      -- WRITE_DATA_WIDTH-bit input: Write Data: The input data bus used when
-      -- writing the FIFO.
-      o_dready     : out std_logic;
-      i_valid      : in  std_logic_vector(G_PHASE_NUM -1 downto 0);
-      -- output pixel data
-      -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
-      -- last  : std_logic; 
-      -- eof   : std_logic;
-      i_din        : in  t_out_pix_array;
-      --! Read Data Valid: When asserted, this signal indicates
-      --! that valid data is available on the output bus (dout).
-      -- READ_DATA_WIDTH-bit output:
-      -- Read Data: The output data bus is driven when reading the FIFO.
-      o_dout       : out t_out_pix_array;
-      o_valid      : out std_logic_vector(G_PHASE_NUM -1 downto 0);
-      i_dready     : in  std_logic_vector(G_PHASE_NUM -1 downto 0));
-   end fifo_bank;
+   generic map(
+      G_RD_DWIDTH   => G_DWIDTH,
+      G_WR_DWIDTH   => G_DWIDTH,
+      G_PHASE_NUM   => G_PHASE_NUM,
+      G_FIFO_WDEPTH => 2048)
+   port map(
+      i_wr_clk       => i_clk,
+      i_rd_clk       => i_clk,
+      i_rst          => i_rst,
+      o_dready       => w_fifob_ready_o,
+      i_valid        => w_fifob_valid_i,
+      i_din          => w_fifob_pix_i,
+      o_dout         => w_fifob_data_o,--: out t_out_pix_array;
+      o_valid        => w_fifob_valid_o,
+      i_dready       => w_fifob_ready_i);--: in  std_logic_vector(G_PHASE_NUM -1 downto 0));
 
 
 
-
-
-
-
+   w_pcsw_valid_i <= w_fifob_valid_o;
+   w_pcsw_data_i  <= w_fifob_data_o;
+   
 pc_switch_i: entity work.pc_switch
     generic map(
       G_DWIDTH    => G_DWIDTH,
@@ -109,9 +112,9 @@ pc_switch_i: entity work.pc_switch
       i_clk       => i_clk,
       i_rst       => i_rst,
 
-      i_valid     => (others => '0'), --: in  std_logic_vector(G_NO_INPUT -1 downto 0);
-      o_ready     => open, -- : out std_logic_vector(G_NO_INPUT -1 downto 0);
-      i_pix       => (others => t_out_pix_rst), --: in  t_out_pix_array;
+      i_valid     => w_pcsw_valid_i,
+      o_ready     => w_pcsw_ready_o,
+      i_pix       => w_pcsw_data_i, --(others => t_out_pix_rst), --: in  t_out_pix_array;
 
       i_ready     => i_ready,
       o_pix       => o_pix);

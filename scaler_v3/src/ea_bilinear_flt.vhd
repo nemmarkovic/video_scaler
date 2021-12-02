@@ -40,7 +40,7 @@ entity bilinear_flt is
       -- eof   : std_logic;
       i_pix      : in  t_in_pix;
       -- next module ready to accept filter outputs
-      i_ready    : in  std_logic_vector(0 to G_PHASE_NUM -1);
+      i_ready    : in  std_logic;
       -- output pixel data
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 

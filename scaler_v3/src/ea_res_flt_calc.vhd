@@ -63,7 +63,7 @@ entity res_pix_calc is
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 
       -- eof   : std_logic;
-      i_ready    : in  std_logic_vector(0 to G_PHASE_NUM -1);
+      i_ready    : in  std_logic;
       o_pix      : out t_out_pix_array);
    end res_pix_calc;
 
@@ -180,7 +180,7 @@ reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
          i_data  => w_pix(i).pix & r_ipix.last & r_ipix.sof,
          i_valid => r_pix_valid(i),
          o_ready => w_ready(i),
-         i_ready => i_ready(i),
+         i_ready => i_ready,
          o_valid => o_pix(i).valid,
          o_data  => w_pix_out(i));
 

@@ -9,28 +9,27 @@ library ieee_proposed;
 library common_lib;
     use common_lib.p_common.all;
 
-entity tb_bilinear_flt is
+entity tb_video_scaler is
      generic(
-        G_IN_SIZE       : integer               := 16;
-        G_OUT_SIZE      : integer               :=  4;
+        G_IN_SIZE       : integer               := 4;
+        G_OUT_SIZE      : integer               := 21;
         G_PHASE_NUM     : integer range 2 to C_MAX_PHASE_NUM := 4;
         G_DWIDTH        : integer range 1 to 64 :=    8);
-   end;
+end tb_video_scaler;
 
-architecture bench of tb_bilinear_flt is
-
+architecture Behavioral of tb_video_scaler is
    signal i_clk  : std_logic;
    signal i_rst  : std_logic;
    signal o_ready: std_logic;
    signal i_pix  : t_in_pix;
    signal i_ready: std_logic;
-   signal o_pix  : t_out_pix_array;
+   signal o_pix  : t_out_pix;
 
    constant clk_period : time := 50 ns;
 begin
 
   -- Insert values for generic parameters !!
-uut_bilinear_flt_i: entity work.bilinear_flt 
+video_scaler_i: entity work.video_scaler 
    generic map (
       G_IN_SIZE   => G_IN_SIZE,
       G_OUT_SIZE  => G_OUT_SIZE,
@@ -76,9 +75,14 @@ stimulus1: process(i_clk)
             i_pix.last  <= '0'; --: std_logic; 
             i_pix.sof   <= '0'; --: std_logic;
  
-             if i_pix.valid = '1' and o_ready = '1' and to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -1 and vr_start = '1' then
+            if i_pix.valid = '1' and o_ready = '1' and to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -1 and vr_start = '1' then
+               i_pix.last <= '0';
+               if to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -2 then
+                  i_pix.last <= '1';
+               end if;
                i_pix.pos <= std_logic_vector(unsigned(i_pix.pos) +1);
               -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
+ 
             else
                i_pix.pos <= std_logic_vector(to_unsigned(0,11));
             end if;
@@ -98,4 +102,4 @@ stimulus1: process(i_clk)
    end process;
 
 
-end;
+end Behavioral;
