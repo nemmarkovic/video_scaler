@@ -67,15 +67,17 @@ reg_in : if G_REG_IN = 1 generate
    begin
    reg_in_proc: process(i_clk)
       begin
-        if i_rst = '1' then
-           r_A      <= (others => '0');
-           r_B      <= (others => '0');
-           r_D      <= (others => '0');
-        else
-           r_A      <= unsigned(i_A);
-           r_B      <= unsigned(i_B);
-           r_D      <= unsigned(i_D);
-        end if;
+         if rising_edge(i_clk) then
+            if i_rst = '1' then
+               r_A      <= (others => '0');
+               r_B      <= (others => '0');
+               r_D      <= (others => '0');
+            else
+               r_A      <= unsigned(i_A);
+               r_B      <= unsigned(i_B);
+               r_D      <= unsigned(i_D);
+            end if;
+         end if;
       end process;
       w_A <= c_zeros & unsigned(r_A);
       w_D <=  unsigned(r_D) & c_zeros;
