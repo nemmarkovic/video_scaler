@@ -18,28 +18,10 @@ library common_lib;
 library cf_lib;
     use cf_lib.p_coeff.all;
 
-
---      -- ready to filter new data pair
---      o_ready   : out std_logic;
---      i_valid   : in  std_logic;
---      -- input pixel data
---      -- data = pix0[2*G_MANTISA_WIDTH -1 : G_MANTISA_WIDTH], 
---      --        pix1[  G_MANTISA_WIDTH -1 : 0]
---      -- last  : std_logic; 
---      -- eof   : std_logic;
---      i_pix0     : in  std_logic_vector(8-1 downto 0);
---      i_pix1     : in  std_logic_vector(8-1 downto 0);
---      -- input row/comlmun number
---      i_pos      : in  std_logic_vector(11 -1 downto 0);
---      -- out pix valid
---      o_pix_valid : out std_logic_vector(G_PHASE_NUM -1 downto 0); 
---      -- out pix
---      o_pix0     : out  std_logic_vector(16-1 downto 0);
---      o_pix1     : out  std_logic_vector(16-1 downto 0));
-
-
 entity res_pix_calc is
    generic(
+      G_TYPE          : string                := "V"; --"V", "H"
+      G_CF_PREC       : natural               :=  0;
       G_IN_SIZE       : integer               :=  256;
       G_OUT_SIZE      : integer               := 1280;
       G_PHASE_NUM     : integer range 2 to C_MAX_PHASE_NUM := 4;
@@ -71,10 +53,8 @@ architecture Behavioral of res_pix_calc is
 
 --   type t_dummy is array (0 to G_PHASE_NUM -1) of std_logic_vector(15 downto 0);
    type t_dummy is array (0 to (G_PHASE_NUM/2 -1) + (G_PHASE_NUM mod 2)) of std_logic_vector(48-1 downto 0);
-   signal w_dummy0 : t_dummy;
-   signal w_dummy1 : t_dummy;
-   signal w_dummy2 : t_dummy;
-   signal w_dummy3 : t_dummy;
+   signal w_temp_res : t_dummy;
+   signal w_result   : t_dummy;
 
    signal w_pix    : t_out_pix_array;
    signal w_ready  : std_logic_vector(0 to G_PHASE_NUM -1);
@@ -125,9 +105,7 @@ gen_phase_dsp:
                i_A      => s_iA_cf_indx(2*i   ),
                i_D      => s_iA_cf_indx(2*i +1),
                i_C      => (others => '0'),
-               o_result => w_dummy0(i));
---               o_mul1   => w_dummy0(i),
---               o_mul2   => w_dummy1(i) );
+               o_result => w_temp_res(i));
     
       mul_cell1_i : entity work.mul_cell
             generic map (
@@ -138,31 +116,49 @@ gen_phase_dsp:
                i_B      => i_pix.pix1,
                i_A      => s_iB_cf_indx(2*i   ),
                i_D      => s_iB_cf_indx(2*i +1),
-               i_C      => w_dummy0(i)(47 downto 19) & w_dummy0(i)(18 downto 0), --(others => '0'), --
---               i_C      => "0000000000000" & w_dummy1(i) & "0000" & w_dummy0(i),
-               o_result => w_dummy1(i));
---               o_mul1   => w_dummy2(i),
---               o_mul2   => w_dummy3(i) );
+               i_C      => w_temp_res(i)(47 downto 19) & w_temp_res(i)(18 downto 0),
+               o_result => w_result(i));
 
-       w_pix(2*i   ).pix <= w_dummy1(i)(7 downto 0);
-       w_pix(2*i +1).pix <= w_dummy1(i)(26 downto 19);
+
+       w_pix(2*i   ).pix <= w_result(i)(G_DWIDTH + G_CF_PREC     -1 downto      G_CF_PREC);
+       w_pix(2*i +1).pix <= w_result(i)(G_DWIDTH + G_CF_PREC +19 -1 downto 19 + G_CF_PREC);
 
    end generate;
 
-
+------------------------------------------------------------------------------------------------------
+-- !!!!!!!   This is fixed solution for vertical filter
+--    implement this in better way using generic for V-H filter type
+------------------------------------------------------------------------------------------------------
       process(i_clk)
+         variable vr_pix_valid  : std_logic_vector(0 to G_PHASE_NUM -1);
+         variable vr_ipix_valid : std_logic;
+         variable vr_ipix       : t_in_pix;
       begin
          if rising_edge(i_clk) then
             if i_rst = '1' then
                r_ipix      <= t_in_pix_rst;
+               vr_ipix     := t_in_pix_rst;
                r_pix_valid <= (others => '0');
+               vr_pix_valid := (others => '0');
+               vr_ipix_valid := '0';
             else
-               r_ipix <= i_pix;
+               r_ipix      <= vr_ipix;
+
+               r_pix_valid <= vr_pix_valid;
+               
+               vr_ipix     := i_pix;
+
+               if i_pix.pos = std_logic_vector(to_unsigned(3,11)) then
+                  vr_ipix_valid     := '1';
+               else
+                  vr_ipix_valid     := '0';
+               end if;
+
                for i in 0 to (G_PHASE_NUM -1) loop
                   if i_cf(i).cf_indx_valid = '1' then
-                     r_pix_valid(i) <= '1';
+                     vr_pix_valid(i) := '1';
                   else
-                     r_pix_valid(i) <= '0';
+                     vr_pix_valid(i) := '0';
                   end if;
                end loop;
             end if;

@@ -77,11 +77,15 @@ stimulus1: process(i_clk)
             i_pix.last  <= '0'; --: std_logic; 
             i_pix.sof   <= '0'; --: std_logic;
  
-             if i_pix.valid = '1' and o_ready = '1' and to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -1 and vr_start = '1' then
+            if i_pix.valid = '1' and o_ready = '1' and vr_start = '1' then
                i_pix.pos <= std_logic_vector(unsigned(i_pix.pos) +1);
-              -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
-            else
+               i_pix.last <='0';
+               if  to_integer(unsigned(i_pix.pos)) >=  G_IN_SIZE -2 then
+                  i_pix.last <='1';
+               end if;
+            elsif  to_integer(unsigned(i_pix.pos)) >=  G_IN_SIZE -1 then
                i_pix.pos <= std_logic_vector(to_unsigned(0,11));
+               i_pix.last <='0';
             end if;
  
             if (i_pix.valid  and   o_ready) = '1' then

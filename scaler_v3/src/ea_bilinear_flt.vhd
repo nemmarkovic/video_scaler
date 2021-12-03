@@ -22,6 +22,7 @@ library common_lib;
 
 entity bilinear_flt is
    generic(
+      G_TYPE          : string                := "V"; --"V", "H"
       G_IN_SIZE       : integer               :=  446;
       G_OUT_SIZE      : integer               := 2048;
       G_PHASE_NUM     : integer range 2 to C_MAX_PHASE_NUM := 4;
@@ -183,6 +184,7 @@ cf_indx_calc_i: entity work.cf_indx_calc
 
 res_pix_calc_i: entity work.res_pix_calc
    generic map(
+      G_TYPE      => G_TYPE,
       G_IN_SIZE   => G_IN_SIZE,
       G_OUT_SIZE  => G_OUT_SIZE,
       G_PHASE_NUM => G_PHASE_NUM,

@@ -17,7 +17,7 @@
 
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.NUMERIC_STD.all;
+    use ieee.numeric_std.all;
 
 --library ieee_proposed;
 --    use ieee_proposed.fixed_pkg.all;
@@ -47,12 +47,11 @@ architecture Behavioral of mul_cell is
    -- pack A and D inside P wia pre-adder
    signal l_dsp_post_adder : unsigned(27 -1 downto 0);
    signal l_mac            : unsigned(48 -1 downto 0);
-   signal w_C              : unsigned(48 -1 downto 0);
 
    signal w_A              : unsigned(27 -1  downto 0);
    signal w_D              : unsigned(27 -1 downto 0);
    signal w_B              : unsigned(18 -1 downto 0);
-
+   signal w_C              : unsigned(48 -1 downto 0);
 
    attribute use_dsp : string;
 --   attribute use_dsp of l_p : signal is "yes";
@@ -64,7 +63,7 @@ reg_in : if G_REG_IN = 1 generate
       signal r_A              : unsigned(G_DWIDTH -1 downto 0);
       signal r_B              : unsigned(G_DWIDTH -1 downto 0);
       signal r_D              : unsigned(G_DWIDTH -1 downto 0);
-      signal r_C              : unsigned(48       -1 downto 0);
+      signal r_C              : unsigned(48 -1 downto 0);
    begin
    reg_in_proc: process(i_clk)
       begin
@@ -84,8 +83,8 @@ reg_in : if G_REG_IN = 1 generate
       end process;
       w_A <= c_zeros & unsigned(r_A);
       w_D <=  unsigned(r_D) & c_zeros;
-      w_B <= "0000000000" & unsigned(r_B);   
-      w_C <= unsigned(r_C);
+      w_B <= "0000000000" & unsigned(r_B);
+      w_C <= r_C;
    else generate
       w_A <= c_zeros & unsigned(i_A);
       w_D <=  unsigned(i_D) & c_zeros; 
@@ -106,7 +105,7 @@ dsp_mul_p: process(i_clk)
       end if;   
    end process;
 
-   l_mac   <= r_result + unsigned(w_C); --(i_C);--(r_C);
+   l_mac   <= r_result + unsigned(w_C);
    o_result <= std_logic_vector(l_mac);
 --   o_mul1 <= std_logic_vector(l_mac(15 downto 0));
 --   o_mul2 <= std_logic_vector(l_mac(34 downto 19));

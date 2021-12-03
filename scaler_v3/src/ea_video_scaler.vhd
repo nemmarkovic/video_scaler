@@ -63,6 +63,7 @@ begin
 
 uut_bilinear_flt_i: entity work.bilinear_flt 
    generic map (
+      G_TYPE      => "V",
       G_IN_SIZE   => G_IN_SIZE,
       G_OUT_SIZE  => G_OUT_SIZE,
       G_PHASE_NUM => G_PHASE_NUM,
