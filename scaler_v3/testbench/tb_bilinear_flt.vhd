@@ -68,22 +68,29 @@ stimulus1: process(i_clk)
       if rising_edge(i_clk) then
          if i_rst = '1' then
             i_pix       <= t_in_pix_rst;
+               i_pix.pix0  <= std_logic_vector(to_unsigned(1, 8));
+               i_pix.pix1  <= std_logic_vector(to_unsigned(1, 8));
             i_ready     <= '0';
             vr_start    := '0';
          else
 
-            i_pix.pix0  <= std_logic_vector(to_unsigned(1, 8));
-            i_pix.pix1  <= std_logic_vector(to_unsigned(2, 8));
             i_pix.last  <= '0'; --: std_logic; 
             i_pix.sof   <= '0'; --: std_logic;
  
+                i_pix.pix0  <= std_logic_vector(to_unsigned(1, 8));
+               i_pix.pix1  <= std_logic_vector(to_unsigned(2, 8));
+ 
             if i_pix.valid = '1' and o_ready = '1' and vr_start = '1' then
+--               i_pix.pix0  <= std_logic_vector(unsigned(i_pix.pix0) +1);
+--               i_pix.pix1  <= std_logic_vector(unsigned(i_pix.pix1) +1);
                i_pix.pos <= std_logic_vector(unsigned(i_pix.pos) +1);
                i_pix.last <='0';
                if  to_integer(unsigned(i_pix.pos)) >=  G_IN_SIZE -2 then
                   i_pix.last <='1';
                end if;
-            elsif  to_integer(unsigned(i_pix.pos)) >=  G_IN_SIZE -1 then
+            end if;
+
+            if  to_integer(unsigned(i_pix.pos)) >=  G_IN_SIZE -1 then
                i_pix.pos <= std_logic_vector(to_unsigned(0,11));
                i_pix.last <='0';
             end if;

@@ -64,7 +64,8 @@ architecture Behavioral of bilinear_flt is
    signal w_cf_calc_indx_ready_o           : std_logic;
    signal w_cf_calc_indx_start_pos_valid_i : std_logic;
    signal w_cf_calc_indx_start_pos_ready_i : std_logic;
-   signal w_cf_calc_indx_pos_i             : std_logic_vector(11 -1 downto 0);
+   signal w_cf_calc_indx_pix_i             : t_in_pix;
+   signal w_cf_calc_indx_pix_o             : t_in_pix;
    signal w_cf_calc_indx_start_pos_i       : std_logic_vector(11 -1 downto 0);
    signal w_cf_calc_indx_start_pos_o       : std_logic_vector(11 -1 downto 0);
    signal w_cf_calc_indx_ipos_ready_o      : std_logic;
@@ -75,7 +76,6 @@ architecture Behavioral of bilinear_flt is
 
    signal w_res_pix_calc_cf_i              : t_cf_indx_array;
    signal w_res_pix_calc_pix_i             : t_in_pix;
-   signal r_res_pix_calc_pix_i             : t_in_pix;
    signal w_res_pix_calc_ready_o           : std_logic;
    signal w_res_pix_calc_pix_valid_i       : std_logic;
    signal w_res_pix_calc_pix_o             : t_out_pix_array;
@@ -130,7 +130,7 @@ end process;
 -----------------------------------------
 -- coeficient index calculation module
 -----------------------------------------
-   w_cf_calc_indx_pos_i        <= i_pix.pos;
+   w_cf_calc_indx_pix_i        <= i_pix;
    w_cf_calc_indx_valid_i      <= i_pix.valid;
 
    w_cf_calc_indx_start_pos_valid_i <= w_strt_reg_valid_o;
@@ -147,9 +147,8 @@ cf_indx_calc_i: entity work.cf_indx_calc
    port map( 
       i_clk             => i_clk,
       i_rst             => i_rst,
-      i_valid           => w_cf_calc_indx_valid_i,
       o_ready           => w_cf_calc_indx_ready_o,
-      i_pos             => w_cf_calc_indx_pos_i,
+      i_pix             => w_cf_calc_indx_pix_i,
       i_start_pos_valid => w_cf_calc_indx_start_pos_valid_i,
       o_start_pos_ready => w_cf_calc_indx_start_pos_ready_o,
       i_start_pos       => w_cf_calc_indx_start_pos_i,
@@ -159,23 +158,22 @@ cf_indx_calc_i: entity work.cf_indx_calc
 
       o_start_pos       => w_cf_calc_indx_start_pos_o,
       i_ready           => w_cf_calc_indx_indx_ready_i,
+      o_pix             => w_cf_calc_indx_pix_o,
       o_cf              => w_cf_calc_indx_cf_o);
 
 -----------------------------------------
 -- resulting pix calculation - filtering
 -----------------------------------------
    w_res_pix_calc_cf_i        <= w_cf_calc_indx_cf_o;
-   w_res_pix_calc_pix_i       <= i_pix;
+   w_res_pix_calc_pix_i       <= w_cf_calc_indx_pix_o;
    process(i_clk)
       variable v_start_pos : std_logic_vector(11 -1 downto 0);
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
-            r_res_pix_calc_pix_i <= t_in_pix_rst;
    o_start_pos  <= (others => '0');
    v_start_pos  := (others => '0');
          else
-            r_res_pix_calc_pix_i <= w_res_pix_calc_pix_i;
    o_start_pos  <= v_start_pos;
    v_start_pos  := w_strt_reg_data_o;
          end if;
@@ -194,7 +192,7 @@ res_pix_calc_i: entity work.res_pix_calc
       i_rst       => i_rst,
 
       o_ready     => w_res_pix_calc_ready_o,
-      i_pix       => r_res_pix_calc_pix_i,
+      i_pix       => w_res_pix_calc_pix_i,
       i_cf        => w_res_pix_calc_cf_i,
       i_ready     => i_ready,
       o_pix       => w_res_pix_calc_pix_o);

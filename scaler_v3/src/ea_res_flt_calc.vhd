@@ -96,28 +96,28 @@ end generate;
 gen_phase_dsp:
    for i in 0 to ((G_PHASE_NUM/2 -1) + (G_PHASE_NUM mod 2)) generate
       mul_cell0_i : entity work.mul_cell
-            generic map (
-               G_REG_IN =>  0)
-            port map (
-               i_clk    => i_clk,
-               i_rst    => i_rst,
-               i_B      => i_pix.pix0,
-               i_A      => s_iA_cf_indx(2*i   ),
-               i_D      => s_iA_cf_indx(2*i +1),
-               i_C      => (others => '0'),
-               o_result => w_temp_res(i));
+         generic map (
+            G_REG_IN => 0)
+         port map (
+            i_clk    => i_clk,
+            i_rst    => i_rst,
+            i_B      => i_pix.pix0,
+            i_A      => s_iA_cf_indx(2*i   ),
+            i_D      => s_iA_cf_indx(2*i +1),
+            i_C      => (others => '0'),
+            o_result => w_temp_res(i));
     
       mul_cell1_i : entity work.mul_cell
-            generic map (
-               G_REG_IN =>  1)
-            port map (
-               i_clk    => i_clk,
-               i_rst    => i_rst,
-               i_B      => i_pix.pix1,
-               i_A      => s_iB_cf_indx(2*i   ),
-               i_D      => s_iB_cf_indx(2*i +1),
-               i_C      => w_temp_res(i)(47 downto 19) & w_temp_res(i)(18 downto 0),
-               o_result => w_result(i));
+         generic map (
+            G_REG_IN => 1)
+         port map (
+            i_clk    => i_clk,
+            i_rst    => i_rst,
+            i_B      => i_pix.pix1,
+            i_A      => s_iB_cf_indx(2*i   ),
+            i_D      => s_iB_cf_indx(2*i +1),
+            i_C      => w_temp_res(i)(47 downto 19) & w_temp_res(i)(18 downto 0),
+            o_result => w_result(i));
 
 
        w_pix(2*i   ).pix <= w_result(i)(G_DWIDTH + G_CF_PREC     -1 downto      G_CF_PREC);
@@ -130,40 +130,40 @@ gen_phase_dsp:
 --    implement this in better way using generic for V-H filter type
 ------------------------------------------------------------------------------------------------------
       process(i_clk)
-         variable vr_pix_valid  : std_logic_vector(0 to G_PHASE_NUM -1);
-         variable vr_ipix_valid : std_logic;
          variable vr_ipix       : t_in_pix;
       begin
          if rising_edge(i_clk) then
             if i_rst = '1' then
-               r_ipix      <= t_in_pix_rst;
-               vr_ipix     := t_in_pix_rst;
-               r_pix_valid <= (others => '0');
-               vr_pix_valid := (others => '0');
-               vr_ipix_valid := '0';
+               r_ipix <= t_in_pix_rst;
+               vr_ipix:= t_in_pix_rst;
             else
-               r_ipix      <= vr_ipix;
-
-               r_pix_valid <= vr_pix_valid;
-               
-               vr_ipix     := i_pix;
-
-               if i_pix.pos = std_logic_vector(to_unsigned(3,11)) then
-                  vr_ipix_valid     := '1';
-               else
-                  vr_ipix_valid     := '0';
-               end if;
-
-               for i in 0 to (G_PHASE_NUM -1) loop
-                  if i_cf(i).cf_indx_valid = '1' then
-                     vr_pix_valid(i) := '1';
-                  else
-                     vr_pix_valid(i) := '0';
-                  end if;
-               end loop;
+               r_ipix  <= vr_ipix;
+               vr_ipix := i_pix;
             end if;
          end if;
       end process;
+
+
+valid_proc: process(i_clk)
+      variable vr_pix_valid  : std_logic_vector(0 to G_PHASE_NUM -1);
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_pix_valid <= (others => '0');
+            vr_pix_valid := (others => '0');
+         else
+            r_pix_valid <= vr_pix_valid;
+   
+            for i in 0 to (G_PHASE_NUM -1) loop
+               if i_cf(i).cf_indx_valid = '1' then
+                  vr_pix_valid(i) := '1';
+               else
+                  vr_pix_valid(i) := '0';
+               end if;
+            end loop;
+         end if;
+      end if;
+   end process;
 
 reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
 

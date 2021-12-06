@@ -32,11 +32,9 @@ entity cf_indx_calc is
       --! input reset
       i_rst       : in  std_logic;
       --! input row/comlmun position valid
-      i_valid     : in  std_logic;
+      i_pix       : in  t_in_pix;
       --! ready
       o_ready     : out std_logic;
-      --! input row/comlmun pair
-      i_pos       : in  std_logic_vector(11 -1 downto 0);
       i_start_pos_valid : in  std_logic;
       o_start_pos_ready : out std_logic;
       i_start_pos       : in  std_logic_vector(11 -1 downto 0);
@@ -46,6 +44,7 @@ entity cf_indx_calc is
       o_start_pos       : out std_logic_vector(11 -1 downto 0);
       -- next module ready to accept filter outputs
       i_ready      : in  std_logic;
+      o_pix        : out t_in_pix;
       o_cf         : out t_cf_indx_array);
    end cf_indx_calc;
 
@@ -72,8 +71,8 @@ architecture Behavioral of cf_indx_calc is
    signal l_ipos_valid : std_logic;
    signal r_ipos_valid : std_logic;
 
-   signal l_ipos       : std_logic_vector(11 -1 downto 0);
-   signal r_ipos       : std_logic_vector(11 -1 downto 0);
+   signal l_ipix       : t_in_pix;
+   signal r_ipix       : t_in_pix;
 
    signal l_start_pos_ready : std_logic;
    signal r_start_pos_ready : std_logic;
@@ -118,7 +117,7 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
          o_cf_num          => l_cf_indx(gen_cell_num));
 
       --                                             is equal to i_pos
-      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipos) and r_ipos_valid;
+      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipix.pos) and r_ipos_valid;
    end generate;
 
 
@@ -147,9 +146,9 @@ ipos_ready_proc: process(all)
       vl_ipos_ready    := r_ipos_ready;
       -- ready for new i_pos(and/or a new pix pair) on the input if
 
-      if (i_valid and (nand(l_ipos_as_expected)) and l_start_pos_ready) = '1' then
+      if (i_pix.valid and (nand(l_ipos_as_expected)) and l_start_pos_ready) = '1' then
          vl_ipos_ready := '1';  
-      elsif i_valid = '1' then
+      elsif i_pix.valid = '1' then
          vl_ipos_ready := '0';
       end if;
 
@@ -172,10 +171,10 @@ ipos_ready_proc: process(all)
 -----------------------------------------------------
 ipos_valid_comb_proc: process(all)
       variable vl_ipos_valid : std_logic;
-      variable vl_ipos       : std_logic_vector(11-1 downto 0);
+      variable vl_ipix       : t_in_pix;
    begin
       vl_ipos_valid    := r_ipos_valid;
-      vl_ipos          := r_ipos;
+      vl_ipix          := r_ipix;
 
       if (nor(r_ipos_as_expected)) = '1' then
          vl_ipos_valid := '0';
@@ -185,13 +184,13 @@ ipos_valid_comb_proc: process(all)
          vl_ipos_valid := '0';
       end if;
 
-      if i_valid = '1' then
+      if i_pix.valid = '1' then
          vl_ipos_valid := '1';
-         vl_ipos       := i_pos;
+         vl_ipix       := i_pix;
       end if;
 
       l_ipos_valid <= vl_ipos_valid;
-      l_ipos       <= vl_ipos;
+      l_ipix       <= vl_ipix;
    end process;
 
 ipos_valid_reg_proc: process(i_clk)
@@ -199,11 +198,11 @@ ipos_valid_reg_proc: process(i_clk)
       if rising_edge(i_clk) then
          if i_rst = '1' then
             r_ipos_as_expected <= (others => '0');
-            r_ipos       <= (others => '0');
+            r_ipix             <= t_in_pix_rst;
             r_ipos_valid <= '0';
          else
-            if i_valid = '1' and l_ipos_ready = '1' then
-                r_ipos       <= l_ipos;
+            if i_pix.valid = '1' and l_ipos_ready = '1' then
+                r_ipix       <= l_ipix;
                 r_ipos_valid <= l_ipos_valid;
             end if;
             r_ipos_as_expected <= l_ipos_as_expected;
@@ -291,6 +290,7 @@ start_pos_reg_proc: process(i_clk)
 -- outputs assignment
 -----------------------------------------
    o_ready           <= l_ipos_ready; --r_ipos_ready;
+   o_pix             <= r_ipix;
 
    o_start_pos       <= l_start_pos;
    o_start_pos_valid <= l_start_pos_valid;
