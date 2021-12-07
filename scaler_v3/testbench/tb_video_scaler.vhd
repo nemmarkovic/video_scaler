@@ -22,8 +22,15 @@ architecture Behavioral of tb_video_scaler is
    signal i_rst  : std_logic;
    signal o_ready: std_logic;
    signal i_pix  : t_in_pix;
+
    signal i_ready: std_logic;
    signal o_pix  : t_out_pix;
+
+   signal s_pix_gen  : t_in_pix;
+   signal s_pix_i    : std_logic_vector(11 +2 +G_DWIDTH*2 +1-1 downto 0);
+   signal s_pix_o    : std_logic_vector(11 +2 +G_DWIDTH*2 +1-1 downto 0);
+   signal s_valid_i : std_logic;
+   signal s_ready_o : std_logic;
 
    constant clk_period : time := 50 ns;
 begin
@@ -59,48 +66,75 @@ rst_proc: process
       wait;  
    end process;
 
+
+
+reg_hs_i: entity work.reg_hs
+   generic map(
+      G_DWIDTH => 11 +2 +G_DWIDTH*2 +1)
+   port map(
+      i_clk   => i_clk,
+      i_rst   => i_rst,
+      i_data  => s_pix_i,
+      i_valid => s_valid_i,
+      o_ready => s_ready_o,
+      i_ready => o_ready,
+      o_valid => i_pix.valid,
+      o_data  => s_pix_o);
+
+s_valid_i <= s_pix_gen.valid;
+s_pix_i <= s_pix_gen.valid & s_pix_gen.pix0 & s_pix_gen.pix1 & s_pix_gen.pos & s_pix_gen.last & s_pix_gen.sof;
+--i_pix.valid <= s_pix_o(11 +2 +G_DWIDTH*2);
+i_pix.pix0  <= s_pix_o(11 +2 +G_DWIDTH*2 -1 downto 11 +2 +G_DWIDTH);
+i_pix.pix1  <= s_pix_o(11 +2 +G_DWIDTH -1 downto 11 +2);
+i_pix.pos   <= s_pix_o(11 +2 -1 downto 2);
+i_pix.last  <= s_pix_o(1);
+i_pix.sof   <= s_pix_o(0);
+
+
+
 stimulus1: process(i_clk)
       variable vr_start : std_logic;
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
-            i_pix       <= t_in_pix_rst;
+            s_pix_gen       <= t_in_pix_rst;
             i_ready     <= '0';
-            vr_start    := '0';
+            vr_start    := '1';
          else
             
 
-            i_pix.pix0  <= std_logic_vector(to_unsigned(1, 8));
-            i_pix.pix1  <= std_logic_vector(to_unsigned(2, 8));
+            s_pix_gen.pix0  <= std_logic_vector(to_unsigned(1, 8));
+            s_pix_gen.pix1  <= std_logic_vector(to_unsigned(2, 8));
  
-            if i_pix.valid = '1' and o_ready = '1' and vr_start = '1' then -- and to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -1 
+            if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then -- and to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -1 
  
-               i_pix.last <= '0';
-               if to_integer(unsigned(i_pix.pos)) >= G_IN_SIZE -2 then
-                  i_pix.last <= '1';
+               s_pix_gen.last <= '0';
+               if to_integer(unsigned(s_pix_gen.pos)) >= G_IN_SIZE -2 then
+                  s_pix_gen.last <= '1';
                end if;
 
-               if to_integer(unsigned(i_pix.pos)) >= G_IN_SIZE -1 then
-                  i_pix.pos  <= (others => '0');
-                  i_pix.last <= '0';
+               if to_integer(unsigned(s_pix_gen.pos)) >= G_IN_SIZE -1 then
+                 -- s_pix_gen.pos  <= (others => '0');
+                  s_pix_gen.last <= '0';
                else
-                  i_pix.pos <= std_logic_vector(unsigned(i_pix.pos) +1);
+                  s_pix_gen.pos <= std_logic_vector(unsigned(s_pix_gen.pos) +1);
                end if;
               -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
  
---            elsif to_integer(unsigned(i_pix.pos)) > G_IN_SIZE -1 then
---               i_pix.pos <= std_logic_vector(to_unsigned(0,11));
+--            elsif to_integer(unsigned(s_pix_gen.pos)) > G_IN_SIZE -1 then
+--               s_pix_gen.pos <= std_logic_vector(to_unsigned(0,11));
             end if;
  
-            if (i_pix.valid  and   o_ready) = '1' then
-               --i_valid <= '0';
+            if (s_valid_i  and   s_ready_o) = '1' then
+              -- s_pix_gen.valid <= '0';
                vr_start := '1';
-            elsif(o_ready = '1') then
-               i_pix.valid <= '1';         
+            elsif(s_ready_o = '1' and to_integer(unsigned(s_pix_gen.pos)) <= G_IN_SIZE -1) then
+               s_pix_gen.valid <= '1';         
             else
-               i_pix.valid <= i_pix.valid;            
+               s_pix_gen.valid <= s_pix_gen.valid;            
+               s_pix_gen.valid <= '0'; 
             end if;
-                i_pix.valid <= '1';           
+            --i_pix.valid <= '1';           
             i_ready     <=  '1';
          end if;
       end if;

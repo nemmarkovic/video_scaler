@@ -11,6 +11,7 @@
 -----------------------------------------------------------------------------------
 library ieee;
     use ieee.std_logic_1164.all;
+    use ieee.numeric_std.all;
 
 library common_lib;
     use common_lib.p_common.all;
@@ -41,25 +42,26 @@ entity video_scaler is
    end video_scaler;
 
 architecture Behavioral of video_scaler is
-   signal w_bfilter_ready_i  : std_logic;
+   signal w_bfilter_ready_i  : std_logic_vector(G_PHASE_NUM -1 downto 0);
    signal w_bfilter_pix_o    : t_out_pix_array;
+   signal w_bfilter_bank_sel_o : std_logic_vector(11 downto 0);
 
 
-   signal w_fifob_ready_o    : std_logic;
-   signal w_fifob_valid_i    : std_logic_vector(G_PHASE_NUM -1 downto 0);
-   signal w_fifob_pix_i      : t_out_pix_array;
-   signal w_fifob_valid_o    : std_logic_vector(G_PHASE_NUM -1 downto 0);  
-   signal w_fifob_ready_i    : std_logic_vector(G_PHASE_NUM -1 downto 0);  
-   signal w_fifob_data_o     : t_out_pix_array;
+   signal w_fifob_ready_o    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);
+   signal w_fifob_valid_i    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);
+   signal w_fifob_pix_i      : t_in_mux_array; --t_out_pix_array;
+   signal w_fifob_valid_o    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);  
+   signal w_fifob_ready_i    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);  
+   signal w_fifob_data_o     : t_in_mux_array; --t_out_pix_array;
    
-   signal w_pcsw_valid_i     : std_logic_vector(G_PHASE_NUM -1 downto 0);  
-   signal w_pcsw_ready_o     : std_logic_vector(G_PHASE_NUM -1 downto 0);  
-   signal w_pcsw_data_i      : t_out_pix_array;
+   signal w_pcsw_valid_i     : std_logic_vector(2* G_PHASE_NUM -1 downto 0);  
+   signal w_pcsw_ready_o     : std_logic_vector(2* G_PHASE_NUM -1 downto 0);  
+   signal w_pcsw_data_i      : t_in_mux_array; --t_out_pix_array;
    
    
 begin
 
-   w_bfilter_ready_i <= w_fifob_ready_o;
+   w_bfilter_ready_i <= w_fifob_ready_o( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) *G_PHASE_NUM -1 downto (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM);
 
 uut_bilinear_flt_i: entity work.bilinear_flt 
    generic map (
@@ -73,21 +75,22 @@ uut_bilinear_flt_i: entity work.bilinear_flt
       i_rst       => i_rst,
       o_ready     => o_ready,
       i_pix       => i_pix,
-      i_ready     => w_bfilter_ready_i,
+      i_ready     => and(w_bfilter_ready_i),
+      o_bank_sel  => w_bfilter_bank_sel_o,
       o_pix       => w_bfilter_pix_o); --: out t_out_pix_array);
 
 
 gl: for i in 0 to 3 generate
-   w_fifob_valid_i(i) <= w_bfilter_pix_o(i).valid;
+   w_fifob_valid_i(i + (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
 end generate;
-   w_fifob_pix_i      <= w_bfilter_pix_o;
-   w_fifob_ready_i    <= w_pcsw_ready_o;
+   w_fifob_pix_i  ( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) ) <= w_bfilter_pix_o;
+   w_fifob_ready_i   <= w_pcsw_ready_o;
    
 fifo_bank_i: entity work.fifo_bank
    generic map(
       G_RD_DWIDTH   => G_DWIDTH,
       G_WR_DWIDTH   => G_DWIDTH,
-      G_PHASE_NUM   => G_PHASE_NUM,
+      G_PHASE_NUM   => G_PHASE_NUM *2,
       G_FIFO_WDEPTH => 2048)
    port map(
       i_wr_clk       => i_clk,
@@ -108,7 +111,7 @@ fifo_bank_i: entity work.fifo_bank
 pc_switch_i: entity work.pc_switch
     generic map(
       G_DWIDTH    => G_DWIDTH,
-      G_NO_INPUT  => G_PHASE_NUM)
+      G_NO_INPUT  => G_PHASE_NUM *2)
     port map(
       i_clk       => i_clk,
       i_rst       => i_rst,

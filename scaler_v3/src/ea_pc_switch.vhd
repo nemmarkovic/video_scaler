@@ -16,7 +16,7 @@ entity pc_switch is
 
        i_valid   : in  std_logic_vector(G_NO_INPUT -1 downto 0);
        o_ready   : out std_logic_vector(G_NO_INPUT -1 downto 0);
-       i_pix     : in  t_out_pix_array;
+       i_pix     : in  t_in_mux_array; --t_out_pix_array;
 
        i_ready   : in  std_logic;
        o_pix     : out t_out_pix);
@@ -30,7 +30,7 @@ architecture Behavioral of pc_switch is
     signal s_ready    : std_logic_vector(G_NO_INPUT -1 downto 0);
     signal s_oREG_ready    : std_logic_vector(G_NO_INPUT -1 downto 0);
     signal s_oREG_valid    : std_logic_vector(G_NO_INPUT -1 downto 0);
-   type t_byte_array_x is array (0 to 4 -1) of std_logic_vector(G_DWIDTH +2 -1 downto 0);
+   type t_byte_array_x is array (0 to 2*4 -1) of std_logic_vector(G_DWIDTH +2 -1 downto 0);
     signal s_oREG_data     : t_byte_array_x;
 
     signal s_oREGO_ready    : std_logic;
@@ -45,7 +45,7 @@ in_reg_gen:
          port map(
             i_clk   => i_clk,
             i_rst   => i_rst,
-            i_data  => i_pix(gen_ver).pix & i_pix(gen_ver).last & i_pix(gen_ver).sof, --in  std_logic_vector(G_DWIDTH -1 downto 0);
+            i_data  => i_pix(gen_ver / 4)(gen_ver mod 4).pix & i_pix(gen_ver / 4)(gen_ver mod 4).last & i_pix(gen_ver / 4)(gen_ver mod 4).sof, --in  std_logic_vector(G_DWIDTH -1 downto 0);
             i_valid => i_valid(gen_ver),
             o_ready => s_oREG_ready(gen_ver),
             i_ready => s_ready(gen_ver),
@@ -65,9 +65,9 @@ gen_din: process(i_clk)
             s_ready    <= (others => '0');
             s_ready(to_integer(s_cnt)) <= i_ready;
 
-            if i_pix(to_integer(s_cnt)).last = '1' and i_pix(to_integer(s_cnt)).sof = '1' then
+            if i_pix(to_integer(s_cnt) mod 4)(to_integer(s_cnt)/4).last = '1' and i_pix(to_integer(s_cnt) mod 4)(to_integer(s_cnt)/4).sof = '1' then
                s_cnt      <= (others => '0');
-            elsif i_pix(to_integer(s_cnt)).last = '1' then
+            elsif i_pix(to_integer(s_cnt) mod 4)(to_integer(s_cnt)/4).last = '1' then
                s_cnt      <= s_cnt +1;
             end if;
          end if;

@@ -46,7 +46,8 @@ entity res_pix_calc is
       -- last  : std_logic; 
       -- eof   : std_logic;
       i_ready    : in  std_logic;
-      o_pix      : out t_out_pix_array);
+      o_pix      : out t_out_pix_array;
+      o_bank_sel : out std_logic_vector(11 downto 0));
    end res_pix_calc;
 
 architecture Behavioral of res_pix_calc is
@@ -75,6 +76,7 @@ architecture Behavioral of res_pix_calc is
 
    signal r_ipix       : t_in_pix;
    signal r_pix_valid  : std_logic_vector(0 to G_PHASE_NUM -1);
+   signal l_bank_sel   : unsigned(11 downto 0);
 begin
 
 --------------------------------------------------------
@@ -131,14 +133,17 @@ gen_phase_dsp:
 ------------------------------------------------------------------------------------------------------
       process(i_clk)
          variable vr_ipix       : t_in_pix;
+         variable vr_ipix2      : t_in_pix;
       begin
          if rising_edge(i_clk) then
             if i_rst = '1' then
                r_ipix <= t_in_pix_rst;
                vr_ipix:= t_in_pix_rst;
+               vr_ipix2:= t_in_pix_rst;
             else
-               r_ipix  <= vr_ipix;
-               vr_ipix := i_pix;
+               r_ipix   <= vr_ipix;
+               vr_ipix  := vr_ipix2;
+               vr_ipix2 := i_pix;
             end if;
          end if;
       end process;
@@ -185,6 +190,33 @@ reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
       o_pix(i).sof  <= w_pix_out(i)(0);
    end generate;
 
-   o_ready  <= and(w_ready);
+------------------------------------------------------------
+-- select signal
+------------------------------------------------------------
+      process(i_clk)
+         variable v_do : std_logic;
+      begin
+         if rising_edge(i_clk) then
+            if i_rst = '1' then
+               l_bank_sel <= (others => '0');
+               v_do := '0';
+            else
+               v_do := '0';
+               for i in 0 to G_PHASE_NUM -1 loop
+                  if o_pix(i).valid = '1' and i_ready = '1' then
+                     v_do := '1';
+                  end if;
+               end loop;
+               if v_do = '1' then
+                  l_bank_sel <= (l_bank_sel +1) mod 2; -- 2 je broj banaka potreban (G_OUT/GIN) / G_PHASE_NUM
+               end if;
+            end if;
+         end if;
+      end process;
+------------------------------------------------------------
+------------------------------------------------------------
 
+
+   o_ready    <= and(w_ready);
+   o_bank_sel <= std_logic_vector(l_bank_sel);
 end Behavioral;

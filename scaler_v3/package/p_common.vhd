@@ -58,6 +58,7 @@ package p_common is
 
    type t_out_pix_array is array (0 to 4 -1) of t_out_pix;
 
+   type t_in_mux_array is array (0 to 2 -1) of t_out_pix_array;
 end package p_common;
 
 package body p_common is

@@ -3,23 +3,24 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="tb_bilinear_flt_behav.wdb" id="1">
+      <db_ref path="tb_video_scaler_behav.wdb" id="1">
          <top_modules>
             <top_module name="glbl" />
             <top_module name="p_coeff" />
             <top_module name="p_common" />
-            <top_module name="tb_bilinear_flt" />
+            <top_module name="tb_video_scaler" />
+            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="2376084fs"></ZoomEndTime>
-      <Cursor1Time time="1225000fs"></Cursor1Time>
+      <ZoomEndTime time="4692850fs"></ZoomEndTime>
+      <Cursor1Time time="825000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="186"></NameColumnWidth>
-      <ValueColumnWidth column_width="114"></ValueColumnWidth>
+      <ValueColumnWidth column_width="102"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="2" />
    <wvobject fp_name="group564" type="group">
@@ -27,584 +28,358 @@
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="group59" type="group">
-         <obj_property name="label">reg</obj_property>
+         <obj_property name="label">reg_start_pos</obj_property>
          <obj_property name="DisplayName">label</obj_property>
       </wvobject>
       <wvobject fp_name="group480" type="group">
          <obj_property name="label">cf_indx_calc</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_clk" type="logic">
-            <obj_property name="ElementShortName">i_clk</obj_property>
-            <obj_property name="ObjectShortName">i_clk</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_rst" type="logic">
-            <obj_property name="ElementShortName">i_rst</obj_property>
-            <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_pix" type="array">
-            <obj_property name="ElementShortName">i_pix</obj_property>
-            <obj_property name="ObjectShortName">i_pix</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/o_ready" type="logic">
-            <obj_property name="ElementShortName">o_ready</obj_property>
-            <obj_property name="ObjectShortName">o_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_start_pos_valid" type="logic">
-            <obj_property name="ElementShortName">i_start_pos_valid</obj_property>
-            <obj_property name="ObjectShortName">i_start_pos_valid</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/o_start_pos_ready" type="logic">
-            <obj_property name="ElementShortName">o_start_pos_ready</obj_property>
-            <obj_property name="ObjectShortName">o_start_pos_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_start_pos" type="array">
-            <obj_property name="ElementShortName">i_start_pos[10:0]</obj_property>
-            <obj_property name="ObjectShortName">i_start_pos[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/o_start_pos_valid" type="logic">
-            <obj_property name="ElementShortName">o_start_pos_valid</obj_property>
-            <obj_property name="ObjectShortName">o_start_pos_valid</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_start_pos_ready" type="logic">
-            <obj_property name="ElementShortName">i_start_pos_ready</obj_property>
-            <obj_property name="ObjectShortName">i_start_pos_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/o_start_pos" type="array">
-            <obj_property name="ElementShortName">o_start_pos[10:0]</obj_property>
-            <obj_property name="ObjectShortName">o_start_pos[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/i_ready" type="logic">
-            <obj_property name="ElementShortName">i_ready</obj_property>
-            <obj_property name="ObjectShortName">i_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/o_cf" type="array">
-            <obj_property name="ElementShortName">o_cf[0:3]</obj_property>
-            <obj_property name="ObjectShortName">o_cf[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_mux_sel" type="array">
-            <obj_property name="ElementShortName">l_mux_sel[3:0]</obj_property>
-            <obj_property name="ObjectShortName">l_mux_sel[3:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_ipos_as_expected" type="array">
-            <obj_property name="ElementShortName">l_ipos_as_expected[0:4]</obj_property>
-            <obj_property name="ObjectShortName">l_ipos_as_expected[0:4]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_ipos_as_expected" type="array">
-            <obj_property name="ElementShortName">r_ipos_as_expected[0:4]</obj_property>
-            <obj_property name="ObjectShortName">r_ipos_as_expected[0:4]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_cf_indx" type="array">
-            <obj_property name="ElementShortName">l_cf_indx[0:4][1:0]</obj_property>
-            <obj_property name="ObjectShortName">l_cf_indx[0:4][1:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/w_next_start_pix" type="array">
-            <obj_property name="ElementShortName">w_next_start_pix[0:4][10:0]</obj_property>
-            <obj_property name="ObjectShortName">w_next_start_pix[0:4][10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/w_expected_pos" type="array">
-            <obj_property name="ElementShortName">w_expected_pos[0:4][10:0]</obj_property>
-            <obj_property name="ObjectShortName">w_expected_pos[0:4][10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_ipos_ready" type="logic">
-            <obj_property name="ElementShortName">l_ipos_ready</obj_property>
-            <obj_property name="ObjectShortName">l_ipos_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_ipos_ready" type="logic">
-            <obj_property name="ElementShortName">r_ipos_ready</obj_property>
-            <obj_property name="ObjectShortName">r_ipos_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_ipos_valid" type="logic">
-            <obj_property name="ElementShortName">l_ipos_valid</obj_property>
-            <obj_property name="ObjectShortName">l_ipos_valid</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_ipos_valid" type="logic">
-            <obj_property name="ElementShortName">r_ipos_valid</obj_property>
-            <obj_property name="ObjectShortName">r_ipos_valid</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_ipix" type="array">
-            <obj_property name="ElementShortName">l_ipix</obj_property>
-            <obj_property name="ObjectShortName">l_ipix</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_ipix" type="array">
-            <obj_property name="ElementShortName">r_ipix</obj_property>
-            <obj_property name="ObjectShortName">r_ipix</obj_property>
-            <obj_property name="isExpanded"></obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_start_pos_ready" type="logic">
-            <obj_property name="ElementShortName">l_start_pos_ready</obj_property>
-            <obj_property name="ObjectShortName">l_start_pos_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_start_pos_ready" type="logic">
-            <obj_property name="ElementShortName">r_start_pos_ready</obj_property>
-            <obj_property name="ObjectShortName">r_start_pos_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_start_pos_valid" type="logic">
-            <obj_property name="ElementShortName">l_start_pos_valid</obj_property>
-            <obj_property name="ObjectShortName">l_start_pos_valid</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_start_pos_valid" type="logic">
-            <obj_property name="ElementShortName">r_start_pos_valid</obj_property>
-            <obj_property name="ObjectShortName">r_start_pos_valid</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_start_pos" type="array">
-            <obj_property name="ElementShortName">l_start_pos[10:0]</obj_property>
-            <obj_property name="ObjectShortName">l_start_pos[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/r_indx_ready" type="logic">
-            <obj_property name="ElementShortName">r_indx_ready</obj_property>
-            <obj_property name="ObjectShortName">r_indx_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_indx_ready" type="logic">
-            <obj_property name="ElementShortName">l_indx_ready</obj_property>
-            <obj_property name="ObjectShortName">l_indx_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/l_indx_valid" type="array">
-            <obj_property name="ElementShortName">l_indx_valid[0:3]</obj_property>
-            <obj_property name="ObjectShortName">l_indx_valid[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/G_IN_SIZE" type="other">
-            <obj_property name="ElementShortName">G_IN_SIZE</obj_property>
-            <obj_property name="ObjectShortName">G_IN_SIZE</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/G_OUT_SIZE" type="other">
-            <obj_property name="ElementShortName">G_OUT_SIZE</obj_property>
-            <obj_property name="ObjectShortName">G_OUT_SIZE</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/G_PHASE_NUM" type="other">
-            <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
-            <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/c_phase_width" type="other">
-            <obj_property name="ElementShortName">c_phase_width</obj_property>
-            <obj_property name="ObjectShortName">c_phase_width</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/cf_indx_calc_i/c_phase_num" type="other">
-            <obj_property name="ElementShortName">c_phase_num</obj_property>
-            <obj_property name="ObjectShortName">c_phase_num</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="group508" type="group">
          <obj_property name="label">res_pix</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/i_clk" type="logic">
-            <obj_property name="ElementShortName">i_clk</obj_property>
-            <obj_property name="ObjectShortName">i_clk</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/i_rst" type="logic">
-            <obj_property name="ElementShortName">i_rst</obj_property>
-            <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/o_ready" type="logic">
-            <obj_property name="ElementShortName">o_ready</obj_property>
-            <obj_property name="ObjectShortName">o_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/i_pix" type="array">
-            <obj_property name="ElementShortName">i_pix</obj_property>
-            <obj_property name="ObjectShortName">i_pix</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/i_cf" type="array">
-            <obj_property name="ElementShortName">i_cf[0:3]</obj_property>
-            <obj_property name="ObjectShortName">i_cf[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/i_ready" type="logic">
-            <obj_property name="ElementShortName">i_ready</obj_property>
-            <obj_property name="ObjectShortName">i_ready</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/r_ipix" type="array">
-            <obj_property name="ElementShortName">r_ipix</obj_property>
-            <obj_property name="ObjectShortName">r_ipix</obj_property>
-            <obj_property name="isExpanded"></obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/o_pix" type="array">
-            <obj_property name="ElementShortName">o_pix[0:3]</obj_property>
-            <obj_property name="ObjectShortName">o_pix[0:3]</obj_property>
-            <obj_property name="isExpanded"></obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/w_temp_res" type="array">
-            <obj_property name="ElementShortName">w_temp_res[0:1][47:0]</obj_property>
-            <obj_property name="ObjectShortName">w_temp_res[0:1][47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/w_result" type="array">
-            <obj_property name="ElementShortName">w_result[0:1][47:0]</obj_property>
-            <obj_property name="ObjectShortName">w_result[0:1][47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/w_pix" type="array">
-            <obj_property name="ElementShortName">w_pix[0:3]</obj_property>
-            <obj_property name="ObjectShortName">w_pix[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/w_ready" type="array">
-            <obj_property name="ElementShortName">w_ready[0:3]</obj_property>
-            <obj_property name="ObjectShortName">w_ready[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/w_pix_out" type="array">
-            <obj_property name="ElementShortName">w_pix_out[0:3][9:0]</obj_property>
-            <obj_property name="ObjectShortName">w_pix_out[0:3][9:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/r_out_possition" type="array">
-            <obj_property name="ElementShortName">r_out_possition[10:0]</obj_property>
-            <obj_property name="ObjectShortName">r_out_possition[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/s_iA_cf_indx" type="array">
-            <obj_property name="ElementShortName">s_iA_cf_indx[0:3][7:0]</obj_property>
-            <obj_property name="ObjectShortName">s_iA_cf_indx[0:3][7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/s_iB_cf_indx" type="array">
-            <obj_property name="ElementShortName">s_iB_cf_indx[0:3][7:0]</obj_property>
-            <obj_property name="ObjectShortName">s_iB_cf_indx[0:3][7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/r_pix_valid" type="array">
-            <obj_property name="ElementShortName">r_pix_valid[0:3]</obj_property>
-            <obj_property name="ObjectShortName">r_pix_valid[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/G_TYPE" type="array">
-            <obj_property name="ElementShortName">G_TYPE[1:1]</obj_property>
-            <obj_property name="ObjectShortName">G_TYPE[1:1]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/G_CF_PREC" type="other">
-            <obj_property name="ElementShortName">G_CF_PREC</obj_property>
-            <obj_property name="ObjectShortName">G_CF_PREC</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/G_IN_SIZE" type="other">
-            <obj_property name="ElementShortName">G_IN_SIZE</obj_property>
-            <obj_property name="ObjectShortName">G_IN_SIZE</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/G_OUT_SIZE" type="other">
-            <obj_property name="ElementShortName">G_OUT_SIZE</obj_property>
-            <obj_property name="ObjectShortName">G_OUT_SIZE</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/G_PHASE_NUM" type="other">
-            <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
-            <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="group605" type="group">
          <obj_property name="label">mul_cell0_dsp0</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/i_clk" type="logic">
-            <obj_property name="ElementShortName">i_clk</obj_property>
-            <obj_property name="ObjectShortName">i_clk</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/i_rst" type="logic">
-            <obj_property name="ElementShortName">i_rst</obj_property>
-            <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/i_A" type="array">
-            <obj_property name="ElementShortName">i_A[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_A[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/i_D" type="array">
-            <obj_property name="ElementShortName">i_D[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_D[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/i_B" type="array">
-            <obj_property name="ElementShortName">i_B[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_B[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/i_C" type="array">
-            <obj_property name="ElementShortName">i_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">i_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/o_result" type="array">
-            <obj_property name="ElementShortName">o_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">o_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/r_result" type="array">
-            <obj_property name="ElementShortName">r_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">r_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/l_dsp_post_adder" type="array">
-            <obj_property name="ElementShortName">l_dsp_post_adder[26:0]</obj_property>
-            <obj_property name="ObjectShortName">l_dsp_post_adder[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/l_mac" type="array">
-            <obj_property name="ElementShortName">l_mac[47:0]</obj_property>
-            <obj_property name="ObjectShortName">l_mac[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/w_A" type="array">
-            <obj_property name="ElementShortName">w_A[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_A[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/w_D" type="array">
-            <obj_property name="ElementShortName">w_D[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_D[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/w_B" type="array">
-            <obj_property name="ElementShortName">w_B[17:0]</obj_property>
-            <obj_property name="ObjectShortName">w_B[17:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/w_C" type="array">
-            <obj_property name="ElementShortName">w_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">w_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/G_RWIDTH" type="other">
-            <obj_property name="ElementShortName">G_RWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_RWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/G_REG_IN" type="other">
-            <obj_property name="ElementShortName">G_REG_IN</obj_property>
-            <obj_property name="ObjectShortName">G_REG_IN</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell0_i/c_zeros" type="array">
-            <obj_property name="ElementShortName">c_zeros[18:0]</obj_property>
-            <obj_property name="ObjectShortName">c_zeros[18:0]</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="group625" type="group">
          <obj_property name="label">mul_cell1_dsp0</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/i_clk" type="logic">
-            <obj_property name="ElementShortName">i_clk</obj_property>
-            <obj_property name="ObjectShortName">i_clk</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/i_rst" type="logic">
-            <obj_property name="ElementShortName">i_rst</obj_property>
-            <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/i_A" type="array">
-            <obj_property name="ElementShortName">i_A[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_A[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/i_D" type="array">
-            <obj_property name="ElementShortName">i_D[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_D[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/i_B" type="array">
-            <obj_property name="ElementShortName">i_B[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_B[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/i_C" type="array">
-            <obj_property name="ElementShortName">i_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">i_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/o_result" type="array">
-            <obj_property name="ElementShortName">o_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">o_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/r_result" type="array">
-            <obj_property name="ElementShortName">r_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">r_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/l_dsp_post_adder" type="array">
-            <obj_property name="ElementShortName">l_dsp_post_adder[26:0]</obj_property>
-            <obj_property name="ObjectShortName">l_dsp_post_adder[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/l_mac" type="array">
-            <obj_property name="ElementShortName">l_mac[47:0]</obj_property>
-            <obj_property name="ObjectShortName">l_mac[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/w_A" type="array">
-            <obj_property name="ElementShortName">w_A[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_A[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/w_D" type="array">
-            <obj_property name="ElementShortName">w_D[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_D[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/w_B" type="array">
-            <obj_property name="ElementShortName">w_B[17:0]</obj_property>
-            <obj_property name="ObjectShortName">w_B[17:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/w_C" type="array">
-            <obj_property name="ElementShortName">w_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">w_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/G_RWIDTH" type="other">
-            <obj_property name="ElementShortName">G_RWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_RWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/G_REG_IN" type="other">
-            <obj_property name="ElementShortName">G_REG_IN</obj_property>
-            <obj_property name="ObjectShortName">G_REG_IN</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(0)\/mul_cell1_i/c_zeros" type="array">
-            <obj_property name="ElementShortName">c_zeros[18:0]</obj_property>
-            <obj_property name="ObjectShortName">c_zeros[18:0]</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="group645" type="group">
          <obj_property name="label">mul_cell0_dsp1</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/i_clk" type="logic">
-            <obj_property name="ElementShortName">i_clk</obj_property>
-            <obj_property name="ObjectShortName">i_clk</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/i_rst" type="logic">
-            <obj_property name="ElementShortName">i_rst</obj_property>
-            <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/i_A" type="array">
-            <obj_property name="ElementShortName">i_A[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_A[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/i_D" type="array">
-            <obj_property name="ElementShortName">i_D[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_D[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/i_B" type="array">
-            <obj_property name="ElementShortName">i_B[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_B[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/i_C" type="array">
-            <obj_property name="ElementShortName">i_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">i_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/o_result" type="array">
-            <obj_property name="ElementShortName">o_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">o_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/r_result" type="array">
-            <obj_property name="ElementShortName">r_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">r_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/l_dsp_post_adder" type="array">
-            <obj_property name="ElementShortName">l_dsp_post_adder[26:0]</obj_property>
-            <obj_property name="ObjectShortName">l_dsp_post_adder[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/l_mac" type="array">
-            <obj_property name="ElementShortName">l_mac[47:0]</obj_property>
-            <obj_property name="ObjectShortName">l_mac[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/w_A" type="array">
-            <obj_property name="ElementShortName">w_A[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_A[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/w_D" type="array">
-            <obj_property name="ElementShortName">w_D[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_D[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/w_B" type="array">
-            <obj_property name="ElementShortName">w_B[17:0]</obj_property>
-            <obj_property name="ObjectShortName">w_B[17:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/w_C" type="array">
-            <obj_property name="ElementShortName">w_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">w_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/G_RWIDTH" type="other">
-            <obj_property name="ElementShortName">G_RWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_RWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/G_REG_IN" type="other">
-            <obj_property name="ElementShortName">G_REG_IN</obj_property>
-            <obj_property name="ObjectShortName">G_REG_IN</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell0_i/c_zeros" type="array">
-            <obj_property name="ElementShortName">c_zeros[18:0]</obj_property>
-            <obj_property name="ObjectShortName">c_zeros[18:0]</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="group665" type="group">
          <obj_property name="label">mul_cell1_dsp1</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/i_clk" type="logic">
-            <obj_property name="ElementShortName">i_clk</obj_property>
-            <obj_property name="ObjectShortName">i_clk</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/i_rst" type="logic">
-            <obj_property name="ElementShortName">i_rst</obj_property>
-            <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/i_A" type="array">
-            <obj_property name="ElementShortName">i_A[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_A[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/i_D" type="array">
-            <obj_property name="ElementShortName">i_D[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_D[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/i_B" type="array">
-            <obj_property name="ElementShortName">i_B[7:0]</obj_property>
-            <obj_property name="ObjectShortName">i_B[7:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/i_C" type="array">
-            <obj_property name="ElementShortName">i_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">i_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/o_result" type="array">
-            <obj_property name="ElementShortName">o_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">o_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/r_result" type="array">
-            <obj_property name="ElementShortName">r_result[47:0]</obj_property>
-            <obj_property name="ObjectShortName">r_result[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/l_dsp_post_adder" type="array">
-            <obj_property name="ElementShortName">l_dsp_post_adder[26:0]</obj_property>
-            <obj_property name="ObjectShortName">l_dsp_post_adder[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/l_mac" type="array">
-            <obj_property name="ElementShortName">l_mac[47:0]</obj_property>
-            <obj_property name="ObjectShortName">l_mac[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/w_A" type="array">
-            <obj_property name="ElementShortName">w_A[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_A[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/w_D" type="array">
-            <obj_property name="ElementShortName">w_D[26:0]</obj_property>
-            <obj_property name="ObjectShortName">w_D[26:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/w_B" type="array">
-            <obj_property name="ElementShortName">w_B[17:0]</obj_property>
-            <obj_property name="ObjectShortName">w_B[17:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/w_C" type="array">
-            <obj_property name="ElementShortName">w_C[47:0]</obj_property>
-            <obj_property name="ObjectShortName">w_C[47:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/G_RWIDTH" type="other">
-            <obj_property name="ElementShortName">G_RWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_RWIDTH</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/G_REG_IN" type="other">
-            <obj_property name="ElementShortName">G_REG_IN</obj_property>
-            <obj_property name="ObjectShortName">G_REG_IN</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_bilinear_flt/uut_bilinear_flt_i/res_pix_calc_i/\gen_phase_dsp(1)\/mul_cell1_i/c_zeros" type="array">
-            <obj_property name="ElementShortName">c_zeros[18:0]</obj_property>
-            <obj_property name="ObjectShortName">c_zeros[18:0]</obj_property>
-         </wvobject>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group642" type="group">
       <obj_property name="label">video_scaler</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="group603" type="group">
          <obj_property name="label">blf_top</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_clk" type="logic">
+            <obj_property name="ElementShortName">i_clk</obj_property>
+            <obj_property name="ObjectShortName">i_clk</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_rst" type="logic">
+            <obj_property name="ElementShortName">i_rst</obj_property>
+            <obj_property name="ObjectShortName">i_rst</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_start_pos" type="array">
+            <obj_property name="ElementShortName">o_start_pos[10:0]</obj_property>
+            <obj_property name="ObjectShortName">o_start_pos[10:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_ready" type="logic">
+            <obj_property name="ElementShortName">o_ready</obj_property>
+            <obj_property name="ObjectShortName">o_ready</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_pix" type="array">
+            <obj_property name="ElementShortName">i_pix</obj_property>
+            <obj_property name="ObjectShortName">i_pix</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_ready" type="logic">
+            <obj_property name="ElementShortName">i_ready</obj_property>
+            <obj_property name="ObjectShortName">i_ready</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_bank_sel" type="array">
+            <obj_property name="ElementShortName">o_bank_sel[11:0]</obj_property>
+            <obj_property name="ObjectShortName">o_bank_sel[11:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_pix" type="array">
+            <obj_property name="ElementShortName">o_pix[0:3]</obj_property>
+            <obj_property name="ObjectShortName">o_pix[0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_data_i" type="array">
+            <obj_property name="ElementShortName">w_strt_reg_data_i[10:0]</obj_property>
+            <obj_property name="ObjectShortName">w_strt_reg_data_i[10:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_valid_i" type="logic">
+            <obj_property name="ElementShortName">w_strt_reg_valid_i</obj_property>
+            <obj_property name="ObjectShortName">w_strt_reg_valid_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_ready_o" type="logic">
+            <obj_property name="ElementShortName">w_strt_reg_ready_o</obj_property>
+            <obj_property name="ObjectShortName">w_strt_reg_ready_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_ready_i" type="logic">
+            <obj_property name="ElementShortName">w_strt_reg_ready_i</obj_property>
+            <obj_property name="ObjectShortName">w_strt_reg_ready_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_valid_o" type="logic">
+            <obj_property name="ElementShortName">w_strt_reg_valid_o</obj_property>
+            <obj_property name="ObjectShortName">w_strt_reg_valid_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_data_o" type="array">
+            <obj_property name="ElementShortName">w_strt_reg_data_o[10:0]</obj_property>
+            <obj_property name="ObjectShortName">w_strt_reg_data_o[10:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_valid_i" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_valid_i</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_valid_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_ready_o" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_ready_o</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_ready_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_valid_i" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_valid_i</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_valid_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_ready_i" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_ready_i</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_ready_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_pix_i" type="array">
+            <obj_property name="ElementShortName">w_cf_calc_indx_pix_i</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_pix_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_pix_o" type="array">
+            <obj_property name="ElementShortName">w_cf_calc_indx_pix_o</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_pix_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_i" type="array">
+            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_i[10:0]</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_i[10:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_o" type="array">
+            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_o[10:0]</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_o[10:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_ipos_ready_o" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_ipos_ready_o</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_ipos_ready_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_valid_o" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_valid_o</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_valid_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_ready_o" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_ready_o</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_ready_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_indx_ready_i" type="logic">
+            <obj_property name="ElementShortName">w_cf_calc_indx_indx_ready_i</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_indx_ready_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_cf_o" type="array">
+            <obj_property name="ElementShortName">w_cf_calc_indx_cf_o[0:3]</obj_property>
+            <obj_property name="ObjectShortName">w_cf_calc_indx_cf_o[0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_cf_i" type="array">
+            <obj_property name="ElementShortName">w_res_pix_calc_cf_i[0:3]</obj_property>
+            <obj_property name="ObjectShortName">w_res_pix_calc_cf_i[0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_i" type="array">
+            <obj_property name="ElementShortName">w_res_pix_calc_pix_i</obj_property>
+            <obj_property name="ObjectShortName">w_res_pix_calc_pix_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_ready_o" type="logic">
+            <obj_property name="ElementShortName">w_res_pix_calc_ready_o</obj_property>
+            <obj_property name="ObjectShortName">w_res_pix_calc_ready_o</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_valid_i" type="logic">
+            <obj_property name="ElementShortName">w_res_pix_calc_pix_valid_i</obj_property>
+            <obj_property name="ObjectShortName">w_res_pix_calc_pix_valid_i</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_o" type="array">
+            <obj_property name="ElementShortName">w_res_pix_calc_pix_o[0:3]</obj_property>
+            <obj_property name="ObjectShortName">w_res_pix_calc_pix_o[0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_bank_sel_o" type="array">
+            <obj_property name="ElementShortName">w_res_pix_calc_bank_sel_o[11:0]</obj_property>
+            <obj_property name="ObjectShortName">w_res_pix_calc_bank_sel_o[11:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_start_pos_valid_reg" type="logic">
+            <obj_property name="ElementShortName">i_start_pos_valid_reg</obj_property>
+            <obj_property name="ObjectShortName">i_start_pos_valid_reg</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_start_pos_reg" type="array">
+            <obj_property name="ElementShortName">i_start_pos_reg[10:0]</obj_property>
+            <obj_property name="ObjectShortName">i_start_pos_reg[10:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/r_start" type="logic">
+            <obj_property name="ElementShortName">r_start</obj_property>
+            <obj_property name="ObjectShortName">r_start</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_TYPE" type="array">
+            <obj_property name="ElementShortName">G_TYPE[1:1]</obj_property>
+            <obj_property name="ObjectShortName">G_TYPE[1:1]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_IN_SIZE" type="other">
+            <obj_property name="ElementShortName">G_IN_SIZE</obj_property>
+            <obj_property name="ObjectShortName">G_IN_SIZE</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_OUT_SIZE" type="other">
+            <obj_property name="ElementShortName">G_OUT_SIZE</obj_property>
+            <obj_property name="ObjectShortName">G_OUT_SIZE</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_PHASE_NUM" type="other">
+            <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
+            <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_DWIDTH" type="other">
+            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
+            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
+         </wvobject>
       </wvobject>
       <wvobject fp_name="group623" type="group">
          <obj_property name="label">fifo_bank</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_wr_clk" type="logic">
+            <obj_property name="ElementShortName">i_wr_clk</obj_property>
+            <obj_property name="ObjectShortName">i_wr_clk</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_rd_clk" type="logic">
+            <obj_property name="ElementShortName">i_rd_clk</obj_property>
+            <obj_property name="ObjectShortName">i_rd_clk</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_rst" type="logic">
+            <obj_property name="ElementShortName">i_rst</obj_property>
+            <obj_property name="ObjectShortName">i_rst</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_dready" type="array">
+            <obj_property name="ElementShortName">o_dready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">o_dready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_valid" type="array">
+            <obj_property name="ElementShortName">i_valid[7:0]</obj_property>
+            <obj_property name="ObjectShortName">i_valid[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_din" type="array">
+            <obj_property name="ElementShortName">i_din[0:1][0:3]</obj_property>
+            <obj_property name="ObjectShortName">i_din[0:1][0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_dout" type="array">
+            <obj_property name="ElementShortName">o_dout[0:1][0:3]</obj_property>
+            <obj_property name="ObjectShortName">o_dout[0:1][0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_valid" type="array">
+            <obj_property name="ElementShortName">o_valid[7:0]</obj_property>
+            <obj_property name="ObjectShortName">o_valid[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_dready" type="array">
+            <obj_property name="ElementShortName">i_dready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">i_dready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/s_oFIFO_data" type="array">
+            <obj_property name="ElementShortName">s_oFIFO_data[87:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oFIFO_data[87:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/s_iFIFO_data" type="array">
+            <obj_property name="ElementShortName">s_iFIFO_data[87:0]</obj_property>
+            <obj_property name="ObjectShortName">s_iFIFO_data[87:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/s_oFIFO_dvalid" type="array">
+            <obj_property name="ElementShortName">s_oFIFO_dvalid[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oFIFO_dvalid[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/s_iFIFO_dvalid" type="array">
+            <obj_property name="ElementShortName">s_iFIFO_dvalid[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_iFIFO_dvalid[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/s_oFIFO_ready" type="array">
+            <obj_property name="ElementShortName">s_oFIFO_ready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oFIFO_ready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/s_iFIFO_ready" type="array">
+            <obj_property name="ElementShortName">s_iFIFO_ready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_iFIFO_ready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/G_RD_DWIDTH" type="other">
+            <obj_property name="ElementShortName">G_RD_DWIDTH</obj_property>
+            <obj_property name="ObjectShortName">G_RD_DWIDTH</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/G_WR_DWIDTH" type="other">
+            <obj_property name="ElementShortName">G_WR_DWIDTH</obj_property>
+            <obj_property name="ObjectShortName">G_WR_DWIDTH</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/G_PHASE_NUM" type="other">
+            <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
+            <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/G_FIFO_WDEPTH" type="other">
+            <obj_property name="ElementShortName">G_FIFO_WDEPTH</obj_property>
+            <obj_property name="ObjectShortName">G_FIFO_WDEPTH</obj_property>
+         </wvobject>
       </wvobject>
       <wvobject fp_name="group641" type="group">
          <obj_property name="label">switch</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/i_clk" type="logic">
+            <obj_property name="ElementShortName">i_clk</obj_property>
+            <obj_property name="ObjectShortName">i_clk</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/i_rst" type="logic">
+            <obj_property name="ElementShortName">i_rst</obj_property>
+            <obj_property name="ObjectShortName">i_rst</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/i_valid" type="array">
+            <obj_property name="ElementShortName">i_valid[7:0]</obj_property>
+            <obj_property name="ObjectShortName">i_valid[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/o_ready" type="array">
+            <obj_property name="ElementShortName">o_ready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">o_ready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/i_pix" type="array">
+            <obj_property name="ElementShortName">i_pix[0:1][0:3]</obj_property>
+            <obj_property name="ObjectShortName">i_pix[0:1][0:3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/i_ready" type="logic">
+            <obj_property name="ElementShortName">i_ready</obj_property>
+            <obj_property name="ObjectShortName">i_ready</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/o_pix" type="array">
+            <obj_property name="ElementShortName">o_pix</obj_property>
+            <obj_property name="ObjectShortName">o_pix</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_cnt" type="array">
+            <obj_property name="ElementShortName">s_cnt[2:0]</obj_property>
+            <obj_property name="ObjectShortName">s_cnt[2:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_valid" type="logic">
+            <obj_property name="ElementShortName">s_valid</obj_property>
+            <obj_property name="ObjectShortName">s_valid</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_ready" type="array">
+            <obj_property name="ElementShortName">s_ready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_ready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_oREG_ready" type="array">
+            <obj_property name="ElementShortName">s_oREG_ready[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oREG_ready[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_oREG_valid" type="array">
+            <obj_property name="ElementShortName">s_oREG_valid[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oREG_valid[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_oREG_data" type="array">
+            <obj_property name="ElementShortName">s_oREG_data[0:7][9:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oREG_data[0:7][9:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_oREGO_ready" type="logic">
+            <obj_property name="ElementShortName">s_oREGO_ready</obj_property>
+            <obj_property name="ObjectShortName">s_oREGO_ready</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/s_oREGO_dout" type="array">
+            <obj_property name="ElementShortName">s_oREGO_dout[7:0]</obj_property>
+            <obj_property name="ObjectShortName">s_oREGO_dout[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/G_DWIDTH" type="other">
+            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
+            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/pc_switch_i/G_NO_INPUT" type="other">
+            <obj_property name="ElementShortName">G_NO_INPUT</obj_property>
+            <obj_property name="ObjectShortName">G_NO_INPUT</obj_property>
+         </wvobject>
       </wvobject>
    </wvobject>
 </wave_config>

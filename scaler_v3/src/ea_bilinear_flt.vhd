@@ -43,6 +43,7 @@ entity bilinear_flt is
       i_pix      : in  t_in_pix;
       -- next module ready to accept filter outputs
       i_ready    : in  std_logic;
+      o_bank_sel : out std_logic_vector(11 downto 0);
       -- output pixel data
       -- data = pix0[G_MANTISA_WIDTH -1 : -G_PRESISION], 
       -- last  : std_logic; 
@@ -79,10 +80,12 @@ architecture Behavioral of bilinear_flt is
    signal w_res_pix_calc_ready_o           : std_logic;
    signal w_res_pix_calc_pix_valid_i       : std_logic;
    signal w_res_pix_calc_pix_o             : t_out_pix_array;
-
+   signal w_res_pix_calc_bank_sel_o        : std_logic_vector(11  downto 0);
    -- infering latch - fix this !!!!!!!!!!!!!!!!!!!!!!!!!!
    signal i_start_pos_valid_reg : std_logic;
    signal i_start_pos_reg       : std_logic_vector(11 -1 downto 0);
+
+   signal r_start : std_logic;
 begin
 
 -----------------------------------------
@@ -105,21 +108,29 @@ reg_start_pos: entity work.reg_hs
       o_valid  => w_strt_reg_valid_o,
       o_data   => w_strt_reg_data_o);
 
+process(i_clk)
+begin
+
+if rising_edge(i_clk) then
+   if i_rst = '1' then
+      r_start <= '0';
+   else 
+      if r_start = '0' and o_ready = '1' then
+         r_start <= '1';
+      end if;
+   end if;
+end if;
+end process;
 
 process(all)
-   variable v_start : std_logic;
 begin
    if i_rst = '1' then
       i_start_pos_reg       <= (others => '0');
       i_start_pos_valid_reg <= '0';
-      v_start               := '0';
    else 
-      if v_start = '0' then
+      if r_start = '0' then
          i_start_pos_valid_reg <= '1';
          i_start_pos_reg       <= (others => '0');
-         if o_ready = '1' then
-            v_start               := '1';
-         end if;
       else
          i_start_pos_reg       <= w_strt_reg_data_i;
          i_start_pos_valid_reg <= w_strt_reg_valid_i;
@@ -195,13 +206,14 @@ res_pix_calc_i: entity work.res_pix_calc
       i_pix       => w_res_pix_calc_pix_i,
       i_cf        => w_res_pix_calc_cf_i,
       i_ready     => i_ready,
-      o_pix       => w_res_pix_calc_pix_o);
+      o_pix       => w_res_pix_calc_pix_o,
+      o_bank_sel  => w_res_pix_calc_bank_sel_o);
       
 ------------------------------------------------------------------------------------
 -- output assignment
 ------------------------------------------------------------------------------------
    o_pix        <= w_res_pix_calc_pix_o;
    o_ready      <= w_cf_calc_indx_ready_o;
-
+   o_bank_sel   <= w_res_pix_calc_bank_sel_o;
 end Behavioral;
 
