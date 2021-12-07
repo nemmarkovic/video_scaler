@@ -46,8 +46,8 @@ entity res_pix_calc is
       -- last  : std_logic; 
       -- eof   : std_logic;
       i_ready    : in  std_logic;
-      o_pix      : out t_out_pix_array;
-      o_bank_sel : out std_logic_vector(11 downto 0));
+      o_out_pos  : out std_logic_vector(11-1 downto 0);
+      o_pix      : out t_out_pix_array);
    end res_pix_calc;
 
 architecture Behavioral of res_pix_calc is
@@ -190,33 +190,6 @@ reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
       o_pix(i).sof  <= w_pix_out(i)(0);
    end generate;
 
-------------------------------------------------------------
--- select signal
-------------------------------------------------------------
-      process(i_clk)
-         variable v_do : std_logic;
-      begin
-         if rising_edge(i_clk) then
-            if i_rst = '1' then
-               l_bank_sel <= (others => '0');
-               v_do := '0';
-            else
-               v_do := '0';
-               for i in 0 to G_PHASE_NUM -1 loop
-                  if o_pix(i).valid = '1' and i_ready = '1' then
-                     v_do := '1';
-                  end if;
-               end loop;
-               if v_do = '1' then
-                  l_bank_sel <= (l_bank_sel +1) mod 2; -- 2 je broj banaka potreban (G_OUT/GIN) / G_PHASE_NUM
-               end if;
-            end if;
-         end if;
-      end process;
-------------------------------------------------------------
-------------------------------------------------------------
-
-
-   o_ready    <= and(w_ready);
-   o_bank_sel <= std_logic_vector(l_bank_sel);
+   o_ready   <= and(w_ready);
+   o_out_pos <= r_ipix.pos;
 end Behavioral;

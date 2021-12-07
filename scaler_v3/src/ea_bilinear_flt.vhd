@@ -41,6 +41,7 @@ entity bilinear_flt is
       -- last  : std_logic; 
       -- eof   : std_logic;
       i_pix      : in  t_in_pix;
+      o_sel_start_pos : out std_logic_vector(11 - clog2(G_PHASE_NUM) -1 downto 0);
       -- next module ready to accept filter outputs
       i_ready    : in  std_logic;
       o_bank_sel : out std_logic_vector(11 downto 0);
@@ -80,7 +81,8 @@ architecture Behavioral of bilinear_flt is
    signal w_res_pix_calc_ready_o           : std_logic;
    signal w_res_pix_calc_pix_valid_i       : std_logic;
    signal w_res_pix_calc_pix_o             : t_out_pix_array;
-   signal w_res_pix_calc_bank_sel_o        : std_logic_vector(11  downto 0);
+   signal w_res_pix_calc_sel_start_pos_o   : std_logic_vector(11-1 downto 0);
+
    -- infering latch - fix this !!!!!!!!!!!!!!!!!!!!!!!!!!
    signal i_start_pos_valid_reg : std_logic;
    signal i_start_pos_reg       : std_logic_vector(11 -1 downto 0);
@@ -206,14 +208,14 @@ res_pix_calc_i: entity work.res_pix_calc
       i_pix       => w_res_pix_calc_pix_i,
       i_cf        => w_res_pix_calc_cf_i,
       i_ready     => i_ready,
-      o_pix       => w_res_pix_calc_pix_o,
-      o_bank_sel  => w_res_pix_calc_bank_sel_o);
+      o_out_pos   => w_res_pix_calc_sel_start_pos_o,
+      o_pix       => w_res_pix_calc_pix_o);
       
 ------------------------------------------------------------------------------------
 -- output assignment
 ------------------------------------------------------------------------------------
-   o_pix        <= w_res_pix_calc_pix_o;
-   o_ready      <= w_cf_calc_indx_ready_o;
-   o_bank_sel   <= w_res_pix_calc_bank_sel_o;
+   o_pix           <= w_res_pix_calc_pix_o;
+   o_ready         <= w_cf_calc_indx_ready_o;
+   o_sel_start_pos <= w_res_pix_calc_sel_start_pos_o(11-1 downto clog2(G_PHASE_NUM));
 end Behavioral;
 
