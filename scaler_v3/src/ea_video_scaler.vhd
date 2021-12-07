@@ -41,8 +41,9 @@ entity video_scaler is
    end video_scaler;
 
 architecture Behavioral of video_scaler is
-   signal w_bfilter_ready_i  : std_logic;
-   signal w_bfilter_pix_o    : t_out_pix_array;
+   signal w_bfilter_ready_i         : std_logic;
+   signal w_bfilter_pix_o           : t_out_pix_array;
+   signal w_bfilter_start_pix_sel_o : std_logic_vector(11 - clog2(G_PHASE_NUM) -1 downto 0);
 
 
    signal w_fifob_ready_o    : std_logic;
@@ -74,7 +75,8 @@ uut_bilinear_flt_i: entity work.bilinear_flt
       o_ready     => o_ready,
       i_pix       => i_pix,
       i_ready     => w_bfilter_ready_i,
-      o_pix       => w_bfilter_pix_o); --: out t_out_pix_array);
+      o_sel_start_pos => w_bfilter_start_pix_sel_o,
+      o_pix           => w_bfilter_pix_o); --: out t_out_pix_array);
 
 
 gl: for i in 0 to 3 generate

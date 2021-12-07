@@ -46,6 +46,7 @@ entity res_pix_calc is
       -- last  : std_logic; 
       -- eof   : std_logic;
       i_ready    : in  std_logic;
+      o_out_pos  : out std_logic_vector(11-1 downto 0);
       o_pix      : out t_out_pix_array);
    end res_pix_calc;
 
@@ -185,6 +186,6 @@ reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
       o_pix(i).sof  <= w_pix_out(i)(0);
    end generate;
 
-   o_ready  <= and(w_ready);
-
+   o_ready   <= and(w_ready);
+   o_out_pos <= r_ipix.pos;
 end Behavioral;

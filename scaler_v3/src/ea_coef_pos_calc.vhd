@@ -72,7 +72,9 @@ architecture Behavioral of cf_indx_calc is
    signal r_ipos_valid : std_logic;
 
    signal l_ipix       : t_in_pix;
-   signal r_ipix       : t_in_pix;
+   signal l_ipix_pos   : std_logic_vector(11 -1 downto 0);
+   signal r_ipix_pos   : std_logic_vector(11 -1 downto 0);
+   signal r_ipix_out   : t_in_pix;
 
    signal l_start_pos_ready : std_logic;
    signal r_start_pos_ready : std_logic;
@@ -117,7 +119,7 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
          o_cf_num          => l_cf_indx(gen_cell_num));
 
       --                                             is equal to i_pos
-      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipix.pos) and r_ipos_valid;
+      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipix_pos) and r_ipos_valid;
    end generate;
 
 
@@ -171,10 +173,12 @@ ipos_ready_proc: process(all)
 -----------------------------------------------------
 ipos_valid_comb_proc: process(all)
       variable vl_ipos_valid : std_logic;
-      variable vl_ipix       : t_in_pix;
+      variable vl_ipix_out   : t_in_pix;
+      variable vl_ipix_pos   : std_logic_vector(11-1 downto 0);
    begin
       vl_ipos_valid    := r_ipos_valid;
-      vl_ipix          := r_ipix;
+      vl_ipix_out      := r_ipix_out;
+      vl_ipix_pos      := r_ipix_pos;
 
       if (nor(r_ipos_as_expected)) = '1' then
          vl_ipos_valid := '0';
@@ -186,11 +190,17 @@ ipos_valid_comb_proc: process(all)
 
       if i_pix.valid = '1' then
          vl_ipos_valid := '1';
-         vl_ipix       := i_pix;
+         vl_ipix_out   := i_pix;
+         vl_ipix_pos   := i_pix.pos;
+      end if;
+
+      if i_start_pos_valid = '1' then
+         vl_ipix_out.pos := i_start_pos;
       end if;
 
       l_ipos_valid <= vl_ipos_valid;
-      l_ipix       <= vl_ipix;
+      l_ipix       <= vl_ipix_out;
+      l_ipix_pos   <= vl_ipix_pos;
    end process;
 
 ipos_valid_reg_proc: process(i_clk)
@@ -198,13 +208,17 @@ ipos_valid_reg_proc: process(i_clk)
       if rising_edge(i_clk) then
          if i_rst = '1' then
             r_ipos_as_expected <= (others => '0');
-            r_ipix             <= t_in_pix_rst;
+            r_ipix_out         <= t_in_pix_rst;
             r_ipos_valid <= '0';
          else
             if i_pix.valid = '1' and l_ipos_ready = '1' then
-                r_ipix       <= l_ipix;
-                r_ipos_valid <= l_ipos_valid;
+                r_ipix_pos       <= l_ipix_pos;
+                r_ipos_valid     <= l_ipos_valid;
             end if;
+            if i_start_pos_valid = '1' then
+                r_ipix_out       <= l_ipix;
+            end if;
+
             r_ipos_as_expected <= l_ipos_as_expected;
          end if;
       end if;
@@ -290,7 +304,7 @@ start_pos_reg_proc: process(i_clk)
 -- outputs assignment
 -----------------------------------------
    o_ready           <= l_ipos_ready; --r_ipos_ready;
-   o_pix             <= r_ipix;
+   o_pix             <= r_ipix_out;
 
    o_start_pos       <= l_start_pos;
    o_start_pos_valid <= l_start_pos_valid;
