@@ -79,13 +79,17 @@ uut_bilinear_flt_i: entity work.bilinear_flt
       o_bank_sel  => w_bfilter_bank_sel_o,
       o_pix       => w_bfilter_pix_o); --: out t_out_pix_array);
 
-
-gl: for i in 0 to 3 generate
-   w_fifob_valid_i(i + (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
-end generate;
-   w_fifob_pix_i  ( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) ) <= w_bfilter_pix_o;
+process(i_clk)
+begin
+if rising_edge(i_clk) then
+gl: for i in 0 to 3 loop--generate
+   w_fifob_valid_i(i              ) <= w_bfilter_pix_o(i).valid;
+   w_fifob_valid_i(i + G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
+end loop;--generate;
+   w_fifob_pix_i  ( to_integer(unsigned(w_bfilter_bank_sel_o)) ) <= w_bfilter_pix_o;
    w_fifob_ready_i   <= w_pcsw_ready_o;
-   
+end if;
+end process;   
 fifo_bank_i: entity work.fifo_bank
    generic map(
       G_RD_DWIDTH   => G_DWIDTH,

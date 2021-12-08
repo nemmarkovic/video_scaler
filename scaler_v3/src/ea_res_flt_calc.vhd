@@ -141,7 +141,7 @@ gen_phase_dsp:
                vr_ipix:= t_in_pix_rst;
                vr_ipix2:= t_in_pix_rst;
             else
-               r_ipix   <= vr_ipix;
+               r_ipix   <= vr_ipix2;
                vr_ipix  := vr_ipix2;
                vr_ipix2 := i_pix;
             end if;
