@@ -44,7 +44,7 @@ entity video_scaler is
 architecture Behavioral of video_scaler is
    signal w_bfilter_ready_i         : std_logic;
    signal w_bfilter_pix_o           : t_out_pix_array;
-   signal w_bfilter_start_pix_sel_o : std_logic_vector(11 - clog2(G_PHASE_NUM) -1 downto 0);
+   signal w_bfilter_bank_sel_o      : std_logic_vector(11 - clog2(G_PHASE_NUM) -1 downto 0);
 
 
    signal w_fifob_ready_o    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);
@@ -61,7 +61,7 @@ architecture Behavioral of video_scaler is
    
 begin
 
-   w_bfilter_ready_i <= w_fifob_ready_o( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) *G_PHASE_NUM -1 downto (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM);
+   w_bfilter_ready_i <= and(w_fifob_ready_o( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) *G_PHASE_NUM -1 downto (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM));
 
 uut_bilinear_flt_i: entity work.bilinear_flt 
    generic map (
@@ -76,14 +76,15 @@ uut_bilinear_flt_i: entity work.bilinear_flt
       o_ready     => o_ready,
       i_pix       => i_pix,
       i_ready     => w_bfilter_ready_i,
-      o_sel_start_pos => w_bfilter_start_pix_sel_o,
+      o_sel_start_pos => w_bfilter_bank_sel_o,
       o_pix           => w_bfilter_pix_o); --: out t_out_pix_array);
 
 
 gl: for i in 0 to 3 generate
-   w_fifob_valid_i(i + (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
+   w_fifob_valid_i(i              ) <= w_bfilter_pix_o(i).valid;
+   w_fifob_valid_i(i + G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
 end generate;
-   w_fifob_pix_i  ( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) ) <= w_bfilter_pix_o;
+   w_fifob_pix_i  (to_integer(unsigned(w_bfilter_bank_sel_o)) ) <= w_bfilter_pix_o;
    w_fifob_ready_i   <= w_pcsw_ready_o;
    
 fifo_bank_i: entity work.fifo_bank

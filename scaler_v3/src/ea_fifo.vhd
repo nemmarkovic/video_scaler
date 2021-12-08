@@ -37,9 +37,9 @@ entity fifo is
    end fifo;
 
 architecture Behavioral of fifo is
-   -- "auto"- Allow Vivado Synthesis to choose                                                                          |
-   -- "block"- Block RAM FIFO                                                                                           |
-   -- "distributed"- Distributed RAM FIFO                                                                               |
+   -- "auto"- Allow Vivado Synthesis to choose
+   -- "block"- Block RAM FIFO
+   -- "distributed"- Distributed RAM FIFO
    -- "ultra"- URAM FIFO   
    constant C_FIFO_MEMORY_TYPE : string := "auto";
    -- Write Enable: If the FIFO is not full, asserting this
@@ -71,6 +71,7 @@ architecture Behavioral of fifo is
    signal s_iREGO1_din    : std_logic_vector(G_RD_DWIDTH -1 downto 0);
    signal s_iREGO1_dvalid : std_logic;
    signal s_oREGO1_dready : std_logic;
+   signal r_oREGO1_dready : std_logic;
    signal s_iREGO1_dready : std_logic;
    signal s_oREGO1_dvalid : std_logic;
    signal s_oREGO1_dout   : std_logic_vector(G_RD_DWIDTH -1 downto 0);
@@ -81,8 +82,9 @@ begin
    s_iFIFO_wr_en <= i_dvalid and s_oFIFO_ready;
    s_iFIFO_din   <= i_din;
 
+   r_oREGO1_dready <= s_oREGO1_dready when rising_edge(i_rd_clk);
    -- 1 Must be held active-low when rd_rst_busy is active high.
-   s_iFIFO_rd_en <= i_dready and s_oREGO1_dready and not(s_oFIFO_empty) and not(s_oFIFO_rd_rst_busy); -- s_oREGO1_dready 
+   s_iFIFO_rd_en <= i_dready and r_oREGO1_dready and not(s_oFIFO_empty) and not(s_oFIFO_rd_rst_busy); -- s_oREGO1_dready 
 
    -- xpm_fifo_sync: Synchronous FIFO
    -- Xilinx Parameterized Macro, version 2020.1
