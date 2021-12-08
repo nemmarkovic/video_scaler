@@ -92,9 +92,9 @@ stimulus: process(s_axis_aclk)
                s_axis_in.tvalid <= '1';           
                s_axis_in.tdata  <= std_logic_vector(v_cnt);
                v_cnt            := v_cnt+1;
-               if v_cnt = 9 then
+               if v_cnt = 10 then
                   s_axis_in.tlast  <= '1';              
-               elsif v_cnt = 10 then
+               elsif v_cnt = 11 then
                   v_cnt         := (others => '0');
                   v_cnt_pause   := (others => '0');
                   s_axis_in.tlast  <= '0';
