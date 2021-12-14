@@ -93,6 +93,11 @@ architecture Behavioral of stream_to_rows is
    signal s_iREGF_ready  : std_logic;
    signal s_oREGF_valid  : std_logic;
 
+   signal l_fifo_reg_ready  : std_logic;
+   signal l_reg2_ready  : std_logic;
+   signal r_fifo_reg_ready  : std_logic;
+   signal r_reg2_ready  : std_logic;
+
    signal s_frame_in_progres  : std_logic;
    signal s_col_cnt      : unsigned(11 -1 downto 0);
 begin
@@ -126,8 +131,8 @@ reg1_i : entity work.reg_hs
 ------------------------------------------------------------------------
    s_iREG2_rst   <= not(s_axis_arst_n);
    s_iREG2_data  <= s_oREG1_data;
-   s_iREG2_valid <= s_oREG1_valid;
-   s_iREG2_ready <= i_ready;
+   s_iREG2_valid <= s_oREG1_valid and s_frame_in_progres;
+   s_iREG2_ready <= r_reg2_ready;
 
 reg2_i : entity work.reg_hs
    generic map(
@@ -155,8 +160,7 @@ reg2_i : entity work.reg_hs
       end if;
    end process;
    s_iFIFO_dvalid <= s_oREG1_valid;
---   s_iFIFO_ready  <= s_oREGF_ready and s_frame_in_progres and s_oREG1_valid;
-   s_iFIFO_ready  <= i_ready and s_frame_in_progres;
+   s_iFIFO_ready  <= s_oREGF_ready and s_oREG1_valid;
 
 fifo_i: entity work.fifo
    generic map(
@@ -179,23 +183,60 @@ fifo_i: entity work.fifo
 -- output used to take data from ffo and sinchronise it with other output
 -- reg. Contains pix0
 ------------------------------------------------------------------------
---   s_iREGF_rst   <= not(s_axis_arst_n);
---   s_iREGF_data  <= s_oFIFO_data;
---   s_iREGF_valid <= s_oFIFO_dvalid;
---   s_iREGF_ready <= i_ready and s_frame_in_progres;
---
---reg_fifo_i : entity work.reg_hs
---   generic map(
---      G_DWIDTH => G_PIX_WIDTH +2)
---   port map(
---      i_clk   => s_axis_aclk,
---      i_rst   => s_iREGF_rst,
---      i_data  => s_iREGF_data,
---      i_valid => s_iREGF_valid,
---      o_ready => s_oREGF_ready,
---      i_ready => s_iREGF_ready,
---      o_valid => s_oREGF_valid,
---      o_data  => s_oREGF_data);
+   s_iREGF_rst   <= not(s_axis_arst_n);
+   s_iREGF_data  <= s_oFIFO_data;
+   s_iREGF_valid <= s_oFIFO_dvalid;
+   s_iREGF_ready <= r_fifo_reg_ready and s_iREG2_valid;
+
+reg_fifo_i : entity work.reg_hs
+   generic map(
+      G_DWIDTH => G_PIX_WIDTH +2)
+   port map(
+      i_clk   => s_axis_aclk,
+      i_rst   => s_iREGF_rst,
+      i_data  => s_iREGF_data,
+      i_valid => s_iREGF_valid,
+      o_ready => s_oREGF_ready,
+      i_ready => s_iREGF_ready,
+      o_valid => s_oREGF_valid,
+      o_data  => s_oREGF_data);
+
+
+comb_ready_proc: process(all)
+      variable v_start   : std_logic;
+   begin
+      l_reg2_ready     <= r_reg2_ready;
+      l_fifo_reg_ready <= r_fifo_reg_ready;
+      v_start          := i_ready and s_frame_in_progres;
+
+      l_reg2_ready     <= '0';
+      l_fifo_reg_ready <= '0';
+
+      if v_start = '1' then
+         if (s_iREGF_valid xor s_iREG2_valid) = '1' then
+            l_reg2_ready     <= '1';
+            l_fifo_reg_ready <= '1';
+         elsif not(s_iREG2_valid) = '1' then
+            l_reg2_ready     <= '1';
+         elsif not(s_iREGF_valid) = '1' then
+            l_fifo_reg_ready <= '1';
+         end if;
+      end if;
+
+   end process;
+
+reg_ready_proc: process(s_axis_aclk)
+   begin
+      if rising_edge(s_axis_aclk) then
+         if s_iREG1_rst = '1' then
+            r_reg2_ready     <= '0';
+            r_fifo_reg_ready <= '0';
+         else
+            r_reg2_ready     <= l_reg2_ready;
+            r_fifo_reg_ready <= l_fifo_reg_ready;
+         end if;
+      end if;
+   end process;
 
 
 ------------------------------------------------------------------------
@@ -245,11 +286,10 @@ col_cnt_proc: process(s_axis_aclk)
    s_axis_out.tready  <= s_oREG1_ready;
 
    o_pix.pos      <= std_logic_vector(s_col_cnt);
---   o_pix.valid    <= s_oREGF_valid and s_oREG2_valid and or(s_col_cnt);
-   o_pix.valid    <= s_oFIFO_dvalid and s_oREG2_valid and or(s_col_cnt);
-   o_pix.last     <= s_oFIFO_data(1); --s_oREGF_data(1);
-   o_pix.sof      <= s_oFIFO_data(0); --s_oREGF_data(0);
-   o_pix.pix0     <= s_oREG2_data(G_PIX_WIDTH +2 -1 downto 2);
-   o_pix.pix1     <= s_oFIFO_data(G_PIX_WIDTH +2 -1 downto 2); --s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
+   o_pix.valid    <= s_oREGF_valid and s_oREG2_valid and or(s_col_cnt);
+   o_pix.last     <= s_oREGF_data(1);
+   o_pix.sof      <= s_oREGF_data(0);
+   o_pix.pix0     <= s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
+   o_pix.pix1     <= s_oREG2_data(G_PIX_WIDTH +2 -1 downto 2);
 
 end Behavioral;

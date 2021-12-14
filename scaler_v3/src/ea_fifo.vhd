@@ -100,7 +100,7 @@ xpm_fifo_sync_i : xpm_fifo_sync
       PROG_FULL_THRESH    => 10,
       RD_DATA_COUNT_WIDTH => 1,
       READ_DATA_WIDTH     => G_RD_DWIDTH,
-      READ_MODE           => "std", --"fwft", --
+      READ_MODE           => "fwft", --"std", --
       SIM_ASSERT_CHK      => 1,
       USE_ADV_FEATURES    => "1707",
       WAKEUP_TIME         => 0,
@@ -140,7 +140,7 @@ xpm_fifo_sync_i : xpm_fifo_sync
 -----------------------------------------------------
    s_iREGO1_rst    <= i_rst or s_oFIFO_rd_rst_busy;
    s_iREGO1_din    <= s_oFIFO_dout;
-   s_iREGO1_dvalid <= s_oFIFO_dvalid;
+   s_iREGO1_dvalid <= s_oFIFO_dvalid and s_iFIFO_rd_en;
    s_iREGO1_dready <= i_dready;      -- next module ready - reead the data
 
 reg_out1_i: entity work.reg_hs
