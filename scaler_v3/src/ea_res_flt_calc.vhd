@@ -131,22 +131,43 @@ gen_phase_dsp:
 -- !!!!!!!   This is fixed solution for vertical filter
 --    implement this in better way using generic for V-H filter type
 ------------------------------------------------------------------------------------------------------
-      process(i_clk)
-         variable vr_ipix       : t_in_pix;
-         variable vr_ipix2      : t_in_pix;
-      begin
-         if rising_edge(i_clk) then
-            if i_rst = '1' then
-               r_ipix <= t_in_pix_rst;
-               vr_ipix:= t_in_pix_rst;
-               vr_ipix2:= t_in_pix_rst;
-            else
-               r_ipix   <= vr_ipix2;
-               vr_ipix  := vr_ipix2;
-               vr_ipix2 := i_pix;
-            end if;
+gen_vert_flt: if G_TYPE = "V" generate
+   process(i_clk)
+      variable vr_ipix       : t_in_pix;
+      variable vr_ipix2      : t_in_pix;
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_ipix <= t_in_pix_rst;
+            vr_ipix:= t_in_pix_rst;
+            vr_ipix2:= t_in_pix_rst;
+         else
+            r_ipix   <= vr_ipix2;
+            vr_ipix  := vr_ipix2;
+            vr_ipix2 := i_pix;
          end if;
-      end process;
+      end if;
+   end process;
+end generate;
+
+gen_horisontal_flt: if G_TYPE = "H" generate
+   process(i_clk)
+--      variable vr_ipix       : t_in_pix;
+--      variable vr_ipix2      : t_in_pix;
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+--            r_ipix <= t_in_pix_rst;
+--            vr_ipix:= t_in_pix_rst;
+--            vr_ipix2:= t_in_pix_rst;
+         else
+--            r_ipix   <= vr_ipix2;
+--            vr_ipix  := vr_ipix2;
+--            vr_ipix2 := i_pix;
+         end if;
+      end if;
+   end process;
+end generate;
 
 
 valid_proc: process(i_clk)

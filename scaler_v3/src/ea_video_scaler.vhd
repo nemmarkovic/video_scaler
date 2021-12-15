@@ -12,7 +12,7 @@
 library ieee;
     use ieee.std_logic_1164.all;
     use ieee.numeric_std.all;
-
+    use work.p_axi.all;
 library common_lib;
     use common_lib.p_common.all;
 
@@ -27,12 +27,8 @@ entity video_scaler is
       i_clk     : in  std_logic;
       -- input reset
       i_rst     : in  std_logic;
-      -- input pixel data
-      -- pix0
-      -- pix1
-      -- last  : std_logic; 
-      -- eof   : std_logic;
-      i_pix      : in  t_in_pix;
+      s_axis_in       : in  t_axis_s_in;
+      s_axis_out      : out t_axis_s_out;
 
       o_ready   : out std_logic;
       i_ready   : in  std_logic;
@@ -45,7 +41,8 @@ architecture Behavioral of video_scaler is
    signal w_bfilter_ready_i  : std_logic_vector(G_PHASE_NUM -1 downto 0);
    signal w_bfilter_pix_o    : t_out_pix_array;
    signal w_bfilter_bank_sel_o : std_logic_vector(11 downto 0);
-
+   signal w_bfilter_ready_o : std_logic;
+   signal w_bfilter_pix_i   : t_in_pix;
 
    signal w_fifob_ready_o    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);
    signal w_fifob_valid_i    : std_logic_vector(G_PHASE_NUM*2 -1 downto 0);
@@ -61,6 +58,29 @@ architecture Behavioral of video_scaler is
    
 begin
 
+
+
+
+stream_to_rows_i: entity work.stream_to_rows
+   generic map(
+      G_PIX_WIDTH    => G_DWIDTH,
+      G_MAX_ROW_SIZE => 2048)
+   port map( 
+		s_axis_aclk	 => i_clk,
+		s_axis_arst_n=> not(i_rst),
+        -- AXI Stream, Slave interface
+        s_axis_in    => s_axis_in,
+        s_axis_out   => s_axis_out,
+
+        -- next moule ready to accept the data
+        i_ready      => w_bfilter_ready_o,
+        -- output pixel
+        -- contains stream info: last, eof
+        -- pixel pair (pix0, pix1)
+        o_pix        => w_bfilter_pix_i);
+
+
+
    w_bfilter_ready_i <= w_fifob_ready_o( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) *G_PHASE_NUM -1 downto (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM);
 
 uut_bilinear_flt_i: entity work.bilinear_flt 
@@ -73,8 +93,8 @@ uut_bilinear_flt_i: entity work.bilinear_flt
    port map (
       i_clk       => i_clk,
       i_rst       => i_rst,
-      o_ready     => o_ready,
-      i_pix       => i_pix,
+      o_ready     => w_bfilter_ready_o, --o_ready,
+      i_pix       => w_bfilter_pix_i, --i_pix,
       i_ready     => and(w_bfilter_ready_i),
       o_bank_sel  => w_bfilter_bank_sel_o,
       o_pix       => w_bfilter_pix_o); --: out t_out_pix_array);

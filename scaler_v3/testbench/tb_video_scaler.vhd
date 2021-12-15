@@ -2,7 +2,7 @@ library ieee;
     use ieee.std_logic_1164.all;
     use ieee.numeric_std.all;
     use ieee.math_real.all;
-
+    use work.p_axi.all;
 library ieee_proposed;
     use ieee_proposed.fixed_pkg.all;
 
@@ -21,16 +21,21 @@ architecture Behavioral of tb_video_scaler is
    signal i_clk  : std_logic;
    signal i_rst  : std_logic;
    signal o_ready: std_logic;
-   signal i_pix  : t_in_pix;
+
+   signal s_axis_in    : t_axis_s_in;
+   signal s_axis_out   : t_axis_s_out;
 
    signal i_ready: std_logic;
    signal o_pix  : t_out_pix;
 
    signal s_pix_gen  : t_in_pix;
-   signal s_pix_i    : std_logic_vector(11 +2 +G_DWIDTH*2 +1-1 downto 0);
-   signal s_pix_o    : std_logic_vector(11 +2 +G_DWIDTH*2 +1-1 downto 0);
    signal s_valid_i : std_logic;
    signal s_ready_o : std_logic;
+
+   signal s_axis_in_gen  : t_axis_s_in;
+   signal s_pix_i    : std_logic_vector(11 -1 downto 0);
+   signal s_pix_o    : std_logic_vector(11 -1 downto 0);
+   signal s_valid   : std_logic;
 
    constant clk_period : time := 50 ns;
 begin
@@ -46,7 +51,10 @@ video_scaler_i: entity work.video_scaler
       i_clk       => i_clk,
       i_rst       => i_rst,
       o_ready     => o_ready,
-      i_pix       => i_pix,
+
+      s_axis_in   => s_axis_in,
+      s_axis_out  => s_axis_out,
+
       i_ready     => i_ready,
       o_pix       => o_pix );
 
@@ -70,25 +78,25 @@ rst_proc: process
 
 reg_hs_i: entity work.reg_hs
    generic map(
-      G_DWIDTH => 11 +2 +G_DWIDTH*2 +1)
+      G_DWIDTH => 11)
    port map(
       i_clk   => i_clk,
       i_rst   => i_rst,
       i_data  => s_pix_i,
       i_valid => s_valid_i,
       o_ready => s_ready_o,
-      i_ready => o_ready,
-      o_valid => i_pix.valid,
+      i_ready => s_axis_out.tready,
+      o_valid => s_valid,
       o_data  => s_pix_o);
 
-s_valid_i <= s_pix_gen.valid;
-s_pix_i <= s_pix_gen.valid & s_pix_gen.pix0 & s_pix_gen.pix1 & s_pix_gen.pos & s_pix_gen.last & s_pix_gen.sof;
---i_pix.valid <= s_pix_o(11 +2 +G_DWIDTH*2);
-i_pix.pix0  <= s_pix_o(11 +2 +G_DWIDTH*2 -1 downto 11 +2 +G_DWIDTH);
-i_pix.pix1  <= s_pix_o(11 +2 +G_DWIDTH -1 downto 11 +2);
-i_pix.pos   <= s_pix_o(11 +2 -1 downto 2);
-i_pix.last  <= s_pix_o(1);
-i_pix.sof   <= s_pix_o(0);
+
+s_valid_i        <= s_axis_in_gen.tvalid;
+s_pix_i          <= s_axis_in_gen.tvalid & s_axis_in_gen.tdata & s_axis_in_gen.tlast & s_axis_in_gen.tuser;
+
+s_axis_in.tvalid <= s_valid;
+s_axis_in.tdata  <= s_pix_o(10 -1 downto 2);
+s_axis_in.tlast  <= s_pix_o(1);
+s_axis_in.tuser  <= s_pix_o(0);
 
 
 
@@ -97,48 +105,38 @@ stimulus1: process(i_clk)
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
-            s_pix_gen       <= t_in_pix_rst;
-            i_ready     <= '0';
-            vr_start    := '1';
+            s_axis_in_gen <= t_axis_s_in_rst;
+            i_ready       <= '0';
+            vr_start      := '1';
          else
-            
 
-            s_pix_gen.pix0  <= std_logic_vector(to_unsigned(1, 8));
-            s_pix_gen.pix1  <= std_logic_vector(to_unsigned(2, 8));
- 
-            if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then -- and to_integer(unsigned(i_pix.pos)) < G_IN_SIZE -1 
- 
-               s_pix_gen.last <= '0';
-               if to_integer(unsigned(s_pix_gen.pos)) >= G_IN_SIZE -2 then
-                  s_pix_gen.last <= '1';
+            if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then
+
+               s_axis_in_gen.tlast <= '0';
+               if to_integer(unsigned(s_axis_in_gen.tdata)) >= 8 then
+                  s_axis_in_gen.tlast <= '1';
                end if;
 
-               if to_integer(unsigned(s_pix_gen.pos)) >= G_IN_SIZE -1 then
+               if to_integer(unsigned(s_axis_in_gen.tdata)) >= 9 then
                  -- s_pix_gen.pos  <= (others => '0');
-                  s_pix_gen.last <= '0';
+                  s_axis_in_gen.tlast <= '0';
+                  s_axis_in_gen <= t_axis_s_in_rst;
                else
-                  s_pix_gen.pos <= std_logic_vector(unsigned(s_pix_gen.pos) +1);
+                  s_axis_in_gen.tdata <= std_logic_vector(unsigned(s_axis_in_gen.tdata) +1);
                end if;
-              -- i_start_pos <= std_logic_vector(unsigned(i_start_pos) +4);
- 
---            elsif to_integer(unsigned(s_pix_gen.pos)) > G_IN_SIZE -1 then
---               s_pix_gen.pos <= std_logic_vector(to_unsigned(0,11));
             end if;
- 
+
             if (s_valid_i  and   s_ready_o) = '1' then
-              -- s_pix_gen.valid <= '0';
                vr_start := '1';
-            elsif(s_ready_o = '1' and to_integer(unsigned(s_pix_gen.pos)) <= G_IN_SIZE -1) then
-               s_pix_gen.valid <= '1';         
+            elsif(s_ready_o = '1' and to_integer(unsigned(s_axis_in_gen.tdata)) <= 20 -1) then
+               s_axis_in_gen.tvalid <= '1';
             else
-               s_pix_gen.valid <= s_pix_gen.valid;            
-               s_pix_gen.valid <= '0'; 
+               s_axis_in_gen.tvalid <= s_axis_in_gen.tvalid;
+               s_axis_in_gen.tvalid <= '0';
             end if;
-            --i_pix.valid <= '1';           
-            i_ready     <=  '1';
+            i_ready     <=  '1'; --not(i_ready); --
          end if;
       end if;
    end process;
-
 
 end Behavioral;
