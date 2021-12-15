@@ -106,6 +106,9 @@ architecture Behavioral of stream_to_rows is
    signal l_pix_1_valid : std_logic;
 
 
+   signal last_fe       : std_logic;
+
+
    signal s_frame_in_progres  : std_logic;
    signal s_col_cnt      : unsigned(11 -1 downto 0);
 begin
@@ -118,7 +121,7 @@ begin
    s_iREG1_rst   <= not(s_axis_arst_n);
    s_iREG1_data  <= s_axis_in.tdata & s_axis_in.tlast & s_axis_in.tuser;
    s_iREG1_valid <= s_axis_in.tvalid;
-   s_iREG1_ready <= (s_oREG2_ready or not(s_frame_in_progres)) and s_oFIFO_ready;
+--   s_iREG1_ready <= (s_oREG2_ready or not(s_frame_in_progres)) and s_oFIFO_ready;
 
 reg1_i : entity work.reg_hs
    generic map(
@@ -133,6 +136,25 @@ reg1_i : entity work.reg_hs
       o_valid => s_oREG1_valid,
       o_data  => s_oREG1_data);
 
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+pr: process(all)
+   begin
+      if(not(s_frame_in_progres))= '1' then
+         s_iREG2_valid  <= '0';
+         s_iFIFO_dvalid <= s_oREG1_valid;
+         s_iREG1_ready  <= s_oFIFO_ready;
+      else 
+         s_iREG2_valid  <= '0';
+         s_iFIFO_dvalid <= '0';
+         s_iREG1_ready  <= '0';
+         if (s_oREG2_ready and s_oFIFO_dvalid) = '1' then
+            s_iREG2_valid  <= s_oREG1_valid;
+            s_iFIFO_dvalid <= s_oREG1_valid;
+            s_iREG1_ready  <= '1';
+         end if;
+      end if;
+   end process;
 
 ------------------------------------------------------------------------
 -- fifo instance
@@ -146,7 +168,8 @@ reg1_i : entity work.reg_hs
          s_iFIFO_data   <= s_oREG1_data;
       end if;
    end process;
-   s_iFIFO_dvalid <= s_oREG1_valid;
+                 -- !!!!!!!!! Ovdje je greska - sredi!!!!!!!!!!!!!!!!
+--   s_iFIFO_dvalid <= s_oREG1_valid and (s_iREG2_ready or not(s_frame_in_progres));
    s_iFIFO_ready  <= s_oREGF_ready;
 
 fifo_i: entity work.fifo
@@ -173,7 +196,7 @@ fifo_i: entity work.fifo
    s_iREGF_rst   <= not(s_axis_arst_n);
    s_iREGF_data  <= s_oFIFO_data;
    s_iREGF_valid <= s_oFIFO_dvalid;
-   s_iREGF_ready <= r_fifo_reg_ready;
+   s_iREGF_ready <= l_fifo_reg_ready;
 
 reg_fifo_i : entity work.reg_hs
    generic map(
@@ -196,8 +219,8 @@ reg_fifo_i : entity work.reg_hs
 ------------------------------------------------------------------------
    s_iREG2_rst   <= not(s_axis_arst_n);
    s_iREG2_data  <= s_oREG1_data;
-   s_iREG2_valid <= s_oREG1_valid and s_frame_in_progres;
-   s_iREG2_ready <= r_reg2_ready;
+--   s_iREG2_valid <= s_oREG1_valid and s_frame_in_progres;
+   s_iREG2_ready <= l_reg2_ready;
 
 reg2_i : entity work.reg_hs
    generic map(
@@ -230,13 +253,6 @@ comb_ready_proc: process(all)
 
       l_reg2_ready     <= '0';
       l_fifo_reg_ready <= '0';
-
---   signal l_pix_0       : std_logic_vector(7 downto 0);
---   signal l_pix_0_valid : std_logic;
---   signal l_last        : std_logic;
---   signal l_sof         : std_logic;
---   signal l_pix_1       : std_logic_vector(7 downto 0);
---   signal l_pix_1_valid : std_logic;
 
       if v_start = '1' then
          if (s_oREG2_valid) = '1' then
@@ -300,6 +316,7 @@ col_cnt_proc: process(s_axis_aclk)
       variable v_cnt_en  : std_logic;
       variable v_cnt_dis : std_logic;
       variable v_start   : std_logic;
+      variable v_reg_last: std_logic_vector(1 downto 0);
    begin
       if rising_edge(s_axis_aclk) then
          if s_iREG1_rst = '1' then
@@ -308,14 +325,18 @@ col_cnt_proc: process(s_axis_aclk)
             v_cnt_en           := '0';
             v_cnt_dis          := '0';
             v_start            := '0';
+            v_reg_last         := (others => '0');
          else
- 
-            if v_start = '1' then
+
+            v_reg_last := v_reg_last(0) & s_oREGF_data(1); 
+            if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
                s_col_cnt          <= s_col_cnt +1; 
-            elsif v_cnt_dis = '1' then
+            end if;
+
+            if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
                s_col_cnt          <= (others => '0'); 
             end if;
- 
+
            v_start := '0';
            if s_oREG1_valid = '1' and s_oREG1_data(1) = '1' and s_oREG1_data(0) = '1' then                                         
               s_frame_in_progres <= '0';                                                    

@@ -63,15 +63,15 @@ stream_to_rows_i: entity work.stream_to_rows
 clk_proc: process
   begin
      s_axis_aclk <= '0';
-        wait for clk_period/2; 
+        wait for clk_period/2;
      s_axis_aclk <= '1';
         wait for clk_period/2;
   end process;
-  
+
 rst_proc: process
   begin
         s_axis_arst_n <= '0';
-     wait for clk_period *10; 
+     wait for clk_period *10;
      wait until rising_edge(s_axis_aclk);
         s_axis_arst_n <= '1';
      wait;
@@ -113,7 +113,7 @@ stimulus1: process(s_axis_aclk)
          else
 
             if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then
- 
+
                s_axis_in_gen.tlast <= '0';
                if to_integer(unsigned(s_axis_in_gen.tdata)) >= 8 then
                   s_axis_in_gen.tlast <= '1';
@@ -127,15 +127,15 @@ stimulus1: process(s_axis_aclk)
                   s_axis_in_gen.tdata <= std_logic_vector(unsigned(s_axis_in_gen.tdata) +1);
                end if;
             end if;
- 
+
             if (s_valid_i  and   s_ready_o) = '1' then
                vr_start := '1';
             elsif(s_ready_o = '1' and to_integer(unsigned(s_axis_in_gen.tdata)) <= 20 -1) then
-               s_axis_in_gen.tvalid <= '1';         
+               s_axis_in_gen.tvalid <= '1';
             else
-               s_axis_in_gen.tvalid <= s_axis_in_gen.tvalid;            
-               s_axis_in_gen.tvalid <= '0'; 
-            end if;         
+               s_axis_in_gen.tvalid <= s_axis_in_gen.tvalid;
+               s_axis_in_gen.tvalid <= '0';
+            end if;
             i_ready     <=  '1'; --not(i_ready); --
          end if;
       end if;
