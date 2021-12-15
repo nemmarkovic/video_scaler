@@ -134,7 +134,7 @@ xpm_fifo_sync_i : xpm_fifo_sync
       wr_en        => s_iFIFO_wr_en);
 
     s_oFIFO_ready <= not(s_oFIFO_wr_rst_busy or s_oFIFO_full);
-    s_oFIFO_dvalid <= not(s_oFIFO_empty) and s_iFIFO_rd_en;
+    s_oFIFO_dvalid <= not(s_oFIFO_empty);
 -----------------------------------------------------
 --
 -----------------------------------------------------

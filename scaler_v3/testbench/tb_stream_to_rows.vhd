@@ -35,6 +35,14 @@ architecture bench of tb_stream_to_rows is
   signal data0         : std_logic_vector(7 downto 0);
   signal data1         : std_logic_vector(7 downto 0);
 
+   signal s_axis_in_gen  : t_axis_s_in;
+   signal s_pix_i    : std_logic_vector(11 -1 downto 0);
+   signal s_pix_o    : std_logic_vector(11 -1 downto 0);
+   signal s_valid_i : std_logic;
+   signal s_ready_o : std_logic;
+   signal s_valid   : std_logic;
+
+
   constant clk_period : time := 10 ns;
 
 begin
@@ -70,42 +78,67 @@ rst_proc: process
   end process;
 
 
-stimulus: process(s_axis_aclk)
-      variable v_cnt       : unsigned(7 downto 0);
-      variable v_cnt_pause : unsigned(7 downto 0);
+reg_hs_i: entity work.reg_hs
+   generic map(
+      G_DWIDTH => 11)
+   port map(
+      i_clk   => s_axis_aclk,
+      i_rst   => not(s_axis_arst_n),
+      i_data  => s_pix_i,
+      i_valid => s_valid_i,
+      o_ready => s_ready_o,
+      i_ready => s_axis_out.tready,
+      o_valid => s_valid,
+      o_data  => s_pix_o);
+
+
+s_valid_i        <= s_axis_in_gen.tvalid;
+s_pix_i          <= s_axis_in_gen.tvalid & s_axis_in_gen.tdata & s_axis_in_gen.tlast & s_axis_in_gen.tuser;
+
+s_axis_in.tvalid <= s_valid;
+s_axis_in.tdata  <= s_pix_o(10 -1 downto 2);
+s_axis_in.tlast  <= s_pix_o(1);
+s_axis_in.tuser  <= s_pix_o(0);
+
+
+
+stimulus1: process(s_axis_aclk)
+      variable vr_start : std_logic;
    begin
       if rising_edge(s_axis_aclk) then
          if s_axis_arst_n = '0' then
-            i_ready          <= '0';
-            s_axis_in.tdata  <= (others => '0');
-            s_axis_in.tlast  <= '0';
-            s_axis_in.tvalid <= '0';
-            s_axis_in.tuser  <= '0';
-            v_cnt            := (others => '0');
-            v_cnt_pause      := (others => '0');
+            s_axis_in_gen <= t_axis_s_in_rst;
+            i_ready       <= '0';
+            vr_start      := '1';
          else
-            i_ready <= '1';         
 
-            if v_cnt_pause < to_unsigned(10,8) then
-               v_cnt_pause := v_cnt_pause +1;
-            else
-               s_axis_in.tvalid <= '1';           
-               s_axis_in.tdata  <= std_logic_vector(v_cnt);
-               v_cnt            := v_cnt+1;
-               if v_cnt = 10 then
-                  s_axis_in.tlast  <= '1';              
-               elsif v_cnt = 11 then
-                  v_cnt         := (others => '0');
-                  v_cnt_pause   := (others => '0');
-                  s_axis_in.tlast  <= '0';
-                  s_axis_in.tvalid <= '0';
-               end if; 
+            if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then
+ 
+               s_axis_in_gen.tlast <= '0';
+               if to_integer(unsigned(s_axis_in_gen.tdata)) >= 8 then
+                  s_axis_in_gen.tlast <= '1';
+               end if;
+
+               if to_integer(unsigned(s_axis_in_gen.tdata)) >= 9 then
+                 -- s_pix_gen.pos  <= (others => '0');
+                  s_axis_in_gen.tlast <= '0';
+                  s_axis_in_gen <= t_axis_s_in_rst;
+               else
+                  s_axis_in_gen.tdata <= std_logic_vector(unsigned(s_axis_in_gen.tdata) +1);
+               end if;
             end if;
+ 
+            if (s_valid_i  and   s_ready_o) = '1' then
+               vr_start := '1';
+            elsif(s_ready_o = '1' and to_integer(unsigned(s_axis_in_gen.tdata)) <= 20 -1) then
+               s_axis_in_gen.tvalid <= '1';         
+            else
+               s_axis_in_gen.tvalid <= s_axis_in_gen.tvalid;            
+               s_axis_in_gen.tvalid <= '0'; 
+            end if;         
+            i_ready     <=  not(i_ready); --'1'; --
          end if;
       end if;
    end process;
-
-   data0 <= o_pix.pix0;
-   data1 <= o_pix.pix1;
 
 end;

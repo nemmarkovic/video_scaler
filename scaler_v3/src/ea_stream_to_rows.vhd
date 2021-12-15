@@ -98,6 +98,14 @@ architecture Behavioral of stream_to_rows is
    signal r_fifo_reg_ready  : std_logic;
    signal r_reg2_ready  : std_logic;
 
+   signal l_pix_0       : std_logic_vector(7 downto 0);
+   signal l_pix_0_valid : std_logic;
+   signal l_last        : std_logic;
+   signal l_sof         : std_logic;
+   signal l_pix_1       : std_logic_vector(7 downto 0);
+   signal l_pix_1_valid : std_logic;
+
+
    signal s_frame_in_progres  : std_logic;
    signal s_col_cnt      : unsigned(11 -1 downto 0);
 begin
@@ -110,7 +118,7 @@ begin
    s_iREG1_rst   <= not(s_axis_arst_n);
    s_iREG1_data  <= s_axis_in.tdata & s_axis_in.tlast & s_axis_in.tuser;
    s_iREG1_valid <= s_axis_in.tvalid;
-   s_iREG1_ready <= (s_oREG2_ready or (nand(s_col_cnt))) and s_oFIFO_ready;
+   s_iREG1_ready <= (s_oREG2_ready or not(s_frame_in_progres)) and s_oFIFO_ready;
 
 reg1_i : entity work.reg_hs
    generic map(
@@ -125,27 +133,6 @@ reg1_i : entity work.reg_hs
       o_valid => s_oREG1_valid,
       o_data  => s_oREG1_data);
 
-------------------------------------------------------------------------
--- reg instance
--- output register, contains pix1
-------------------------------------------------------------------------
-   s_iREG2_rst   <= not(s_axis_arst_n);
-   s_iREG2_data  <= s_oREG1_data;
-   s_iREG2_valid <= s_oREG1_valid and s_frame_in_progres;
-   s_iREG2_ready <= r_reg2_ready;
-
-reg2_i : entity work.reg_hs
-   generic map(
-      G_DWIDTH => G_PIX_WIDTH +2)
-   port map(
-      i_clk   => s_axis_aclk,
-      i_rst   => s_iREG2_rst,
-      i_data  => s_iREG2_data,
-      i_valid => s_iREG2_valid,
-      o_ready => s_oREG2_ready,
-      i_ready => s_iREG2_ready,
-      o_valid => s_oREG2_valid,
-      o_data  => s_oREG2_data);
 
 ------------------------------------------------------------------------
 -- fifo instance
@@ -160,7 +147,7 @@ reg2_i : entity work.reg_hs
       end if;
    end process;
    s_iFIFO_dvalid <= s_oREG1_valid;
-   s_iFIFO_ready  <= s_oREGF_ready and s_oREG1_valid;
+   s_iFIFO_ready  <= s_oREGF_ready;
 
 fifo_i: entity work.fifo
    generic map(
@@ -186,7 +173,7 @@ fifo_i: entity work.fifo
    s_iREGF_rst   <= not(s_axis_arst_n);
    s_iREGF_data  <= s_oFIFO_data;
    s_iREGF_valid <= s_oFIFO_dvalid;
-   s_iREGF_ready <= r_fifo_reg_ready and s_iREG2_valid;
+   s_iREGF_ready <= r_fifo_reg_ready;
 
 reg_fifo_i : entity work.reg_hs
    generic map(
@@ -202,7 +189,39 @@ reg_fifo_i : entity work.reg_hs
       o_data  => s_oREGF_data);
 
 
+
+------------------------------------------------------------------------
+-- reg instance
+-- output register, contains pix1
+------------------------------------------------------------------------
+   s_iREG2_rst   <= not(s_axis_arst_n);
+   s_iREG2_data  <= s_oREG1_data;
+   s_iREG2_valid <= s_oREG1_valid and s_frame_in_progres;
+   s_iREG2_ready <= r_reg2_ready;
+
+reg2_i : entity work.reg_hs
+   generic map(
+      G_DWIDTH => G_PIX_WIDTH +2)
+   port map(
+      i_clk   => s_axis_aclk,
+      i_rst   => s_iREG2_rst,
+      i_data  => s_iREG2_data,
+      i_valid => s_iREG2_valid,
+      o_ready => s_oREG2_ready,
+      i_ready => s_iREG2_ready,
+      o_valid => s_oREG2_valid,
+      o_data  => s_oREG2_data);
+
+
+
 comb_ready_proc: process(all)
+      variable vr_pix_0       : std_logic_vector(7 downto 0);
+      variable vr_pix_0_valid : std_logic;
+      variable vr_last        : std_logic;
+      variable vr_sof         : std_logic;
+      variable vr_pix_1       : std_logic_vector(7 downto 0);
+      variable vr_pix_1_valid : std_logic;
+
       variable v_start   : std_logic;
    begin
       l_reg2_ready     <= r_reg2_ready;
@@ -212,17 +231,41 @@ comb_ready_proc: process(all)
       l_reg2_ready     <= '0';
       l_fifo_reg_ready <= '0';
 
+--   signal l_pix_0       : std_logic_vector(7 downto 0);
+--   signal l_pix_0_valid : std_logic;
+--   signal l_last        : std_logic;
+--   signal l_sof         : std_logic;
+--   signal l_pix_1       : std_logic_vector(7 downto 0);
+--   signal l_pix_1_valid : std_logic;
+
       if v_start = '1' then
-         if (s_iREGF_valid xor s_iREG2_valid) = '1' then
-            l_reg2_ready     <= '1';
+         if (s_oREG2_valid) = '1' then
+            vr_pix_1_valid := '1';
+            vr_pix_1       := s_oREG2_data(G_PIX_WIDTH +2 -1 downto 2);
+            l_reg2_ready   <= '0';
+         end if;
+         
+         if (s_oREGF_valid) = '1' then
+            vr_pix_0_valid := '1';
+            vr_last        := s_oREGF_data(1);
+            vr_sof         := s_oREGF_data(0);
+            vr_pix_0       := s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
+            l_fifo_reg_ready <= '0';
+         end if;
+   
+         if (vr_pix_0_valid and vr_pix_1_valid) = '1' then
+            vr_pix_0_valid := '0';
+            vr_pix_1_valid := '0';
+            l_pix_0_valid        <= '1';
+            l_pix_1_valid        <= '1';
+            l_last         <= vr_last;
+            l_sof          <= vr_sof;
+            l_pix_0        <= vr_pix_0;
+            l_pix_1        <= vr_pix_1;
             l_fifo_reg_ready <= '1';
-         elsif not(s_iREG2_valid) = '1' then
-            l_reg2_ready     <= '1';
-         elsif not(s_iREGF_valid) = '1' then
-            l_fifo_reg_ready <= '1';
+            l_reg2_ready     <= '1';            
          end if;
       end if;
-
    end process;
 
 reg_ready_proc: process(s_axis_aclk)
@@ -232,12 +275,23 @@ reg_ready_proc: process(s_axis_aclk)
             r_reg2_ready     <= '0';
             r_fifo_reg_ready <= '0';
          else
+
+            if i_ready = '1' then
+               o_pix.valid    <= '0';
+            end if;
+            if (l_pix_1_valid and l_pix_0_valid) = '1' then
+               o_pix.valid    <= '1';
+               o_pix.last     <= l_last;
+               o_pix.sof      <= l_sof;
+               o_pix.pix0     <= l_pix_0;
+               o_pix.pix1     <= l_pix_1;
+            end if;
+
             r_reg2_ready     <= l_reg2_ready;
             r_fifo_reg_ready <= l_fifo_reg_ready;
          end if;
       end if;
    end process;
-
 
 ------------------------------------------------------------------------
 -- output position calculation
@@ -284,12 +338,11 @@ col_cnt_proc: process(s_axis_aclk)
 -- outputs assignment
 ----------------------------------------------------------------
    s_axis_out.tready  <= s_oREG1_ready;
-
+--              o_pix.valid    <= '1';
+--              o_pix.last     <= s_oREGF_data(1);
+--              o_pix.sof      <= s_oREGF_data(0);
+--              o_pix.pix0     <= s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
+--              o_pix.pix1     <= s_oREG2_data(G_PIX_WIDTH +2 -1 downto 2);
    o_pix.pos      <= std_logic_vector(s_col_cnt);
-   o_pix.valid    <= s_oREGF_valid and s_oREG2_valid and or(s_col_cnt);
-   o_pix.last     <= s_oREGF_data(1);
-   o_pix.sof      <= s_oREGF_data(0);
-   o_pix.pix0     <= s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
-   o_pix.pix1     <= s_oREG2_data(G_PIX_WIDTH +2 -1 downto 2);
 
 end Behavioral;
