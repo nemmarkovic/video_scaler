@@ -20,7 +20,6 @@ end tb_video_scaler;
 architecture Behavioral of tb_video_scaler is
    signal i_clk  : std_logic;
    signal i_rst  : std_logic;
-   signal o_ready: std_logic;
 
    signal s_axis_in    : t_axis_s_in;
    signal s_axis_out   : t_axis_s_out;
@@ -50,7 +49,6 @@ video_scaler_i: entity work.video_scaler
    port map (
       i_clk       => i_clk,
       i_rst       => i_rst,
-      o_ready     => o_ready,
 
       s_axis_in   => s_axis_in,
       s_axis_out  => s_axis_out,
@@ -106,6 +104,7 @@ stimulus1: process(i_clk)
       if rising_edge(i_clk) then
          if i_rst = '1' then
             s_axis_in_gen <= t_axis_s_in_rst;
+            s_axis_in_gen.tdata(0) <= '1';
             i_ready       <= '0';
             vr_start      := '1';
          else
@@ -121,6 +120,7 @@ stimulus1: process(i_clk)
                  -- s_pix_gen.pos  <= (others => '0');
                   s_axis_in_gen.tlast <= '0';
                   s_axis_in_gen <= t_axis_s_in_rst;
+                  s_axis_in_gen.tdata(0) <= '1';
                else
                   s_axis_in_gen.tdata <= std_logic_vector(unsigned(s_axis_in_gen.tdata) +1);
                end if;

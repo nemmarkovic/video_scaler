@@ -156,12 +156,21 @@ ipos_ready_proc: process(all)
    end process;
 
    process(i_clk)
+      variable v_start : std_logic;
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
             r_ipos_ready <= '0';
+            v_start      := '0';
          else
-            r_ipos_ready <= l_ipos_ready;
+            if v_start = '0' then
+               r_ipos_ready <= i_ready;
+               if i_ready = '1' then
+                  v_start      := '1';              
+               end if;
+            else
+               r_ipos_ready <= l_ipos_ready;
+            end if;
          end if;
       end if;
    end process;

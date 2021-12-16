@@ -193,7 +193,7 @@ valid_proc: process(i_clk)
 
 reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
 
-   reg_res_pix_i: entity work.reg
+   reg_res_pix_i: entity work.reg_hs
       generic map(
          G_DWIDTH => G_DWIDTH +2)
       port map(

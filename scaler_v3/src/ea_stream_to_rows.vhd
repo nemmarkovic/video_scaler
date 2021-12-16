@@ -251,9 +251,20 @@ comb_ready_proc: process(all)
       l_fifo_reg_ready <= r_fifo_reg_ready;
       v_start          := i_ready and s_frame_in_progres;
 
-      l_reg2_ready     <= '0';
-      l_fifo_reg_ready <= '0';
+      l_pix_0_valid        <= '0';
+      l_pix_1_valid        <= '0';
+      l_last         <= '0';
+      l_sof          <= '0';
+      l_pix_0        <= (others => '0');
+      l_pix_1        <= (others => '0'); 
+      vr_pix_1       := (others => '0'); 
+      vr_pix_0       := (others => '0'); 
 
+      vr_last        := '0';
+      vr_sof         := '0';
+
+      vr_pix_0_valid := '0';
+      vr_pix_1_valid := '0';
       if v_start = '1' then
          if (s_oREG2_valid) = '1' then
             vr_pix_1_valid := '1';
@@ -268,7 +279,7 @@ comb_ready_proc: process(all)
             vr_pix_0       := s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
             l_fifo_reg_ready <= '0';
          end if;
-   
+  
          if (vr_pix_0_valid and vr_pix_1_valid) = '1' then
             vr_pix_0_valid := '0';
             vr_pix_1_valid := '0';
