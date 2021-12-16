@@ -270,9 +270,15 @@ comb_ready_proc: process(all)
       variable v_start   : std_logic;
       variable v_ready   : std_logic;
    begin
+      -- rjesi ready signale - zbog njih je zajeb kada i_readfy padne na nulu
       l_reg2_ready     <= r_reg2_ready;
       l_fifo_reg_ready <= r_fifo_reg_ready;
       v_start          := i_ready and s_frame_in_progres;
+
+      if i_ready = '0' then
+         l_reg2_ready     <= '0';
+         l_fifo_reg_ready <= '0';      
+      end if;
 
       l_pix_0_valid        <= '0';
       l_pix_1_valid        <= '0';
