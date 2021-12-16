@@ -41,6 +41,7 @@ architecture bench of tb_stream_to_rows is
    signal s_valid_i : std_logic;
    signal s_ready_o : std_logic;
    signal s_valid   : std_logic;
+   signal l_ready   : std_logic;
 
 
   constant clk_period : time := 10 ns;
@@ -108,7 +109,7 @@ stimulus1: process(s_axis_aclk)
       if rising_edge(s_axis_aclk) then
          if s_axis_arst_n = '0' then
             s_axis_in_gen <= t_axis_s_in_rst;
-            i_ready       <= '0';
+            i_ready       <= '1';
             vr_start      := '1';
          else
 
@@ -136,7 +137,8 @@ stimulus1: process(s_axis_aclk)
                s_axis_in_gen.tvalid <= s_axis_in_gen.tvalid;
                s_axis_in_gen.tvalid <= '0';
             end if;
-            i_ready     <=  '1'; --not(i_ready); --
+
+            i_ready     <= '1'; 
          end if;
       end if;
    end process;

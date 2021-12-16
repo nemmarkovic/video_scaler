@@ -33,7 +33,7 @@ entity bilinear_flt is
       -- input reset
       i_rst     : in  std_logic;
       -- ready to filter new data pair
-      o_start_pos : out std_logic_vector(11 -1 downto 0);
+--      o_start_pos : out std_logic_vector(11 -1 downto 0);
       o_ready   : out std_logic;
       -- input pixel data
       -- pix0
@@ -86,6 +86,8 @@ architecture Behavioral of bilinear_flt is
    signal i_start_pos_reg       : std_logic_vector(11 -1 downto 0);
 
    signal r_start : std_logic;
+   signal l_start_pos_reg : std_logic_vector(11-1 downto 0);
+   signal r_start_pos_reg : std_logic_vector(11-1 downto 0);
 begin
 
 -----------------------------------------
@@ -108,36 +110,84 @@ reg_start_pos: entity work.reg_hs
       o_valid  => w_strt_reg_valid_o,
       o_data   => w_strt_reg_data_o);
 
-process(i_clk)
-begin
-
-if rising_edge(i_clk) then
-   if i_rst = '1' then
-      r_start <= '0';
-   else 
-      if r_start = '0' and o_ready = '1' then
-         r_start <= '1';
+gen_horis: if G_TYPE = "H" generate
+   process(i_clk)
+   begin
+   
+   if rising_edge(i_clk) then
+      if i_rst = '1' then
+         r_start <= '0';
+      else 
+         if r_start = '0' and o_ready = '1' then
+            r_start <= '1';
+         end if;
       end if;
    end if;
-end if;
-end process;
-
-process(all)
-begin
-   if i_rst = '1' then
-      i_start_pos_reg       <= (others => '0');
-      i_start_pos_valid_reg <= '0';
-   else 
-      if r_start = '0' then
-         i_start_pos_valid_reg <= '1';
+   end process;
+   
+   process(all)
+   begin
+      if i_rst = '1' then
          i_start_pos_reg       <= (others => '0');
-      else
-         i_start_pos_reg       <= w_strt_reg_data_i;
-         i_start_pos_valid_reg <= w_strt_reg_valid_i;
+         i_start_pos_valid_reg <= '0';
+      else 
+         if r_start = '0' then
+            i_start_pos_valid_reg <= '1';
+            i_start_pos_reg       <= (others => '0');
+         else
+            i_start_pos_reg       <= w_strt_reg_data_i;
+            i_start_pos_valid_reg <= w_strt_reg_valid_i;
+         end if;
+      end if;
+   end process;
+
+elsif G_TYPE = "V" generate
+   process(i_clk)
+   begin
+   
+   if rising_edge(i_clk) then
+      if i_rst = '1' then
+         r_start <= '0';
+         r_start_pos_reg <= (others => '0');
+      else 
+         if r_start = '0' and o_ready = '1' then
+            r_start <= '1';
+         end if;
+         r_start_pos_reg <= l_start_pos_reg;
       end if;
    end if;
-end process;
+   end process;
+   
+   process(all)
+      variable v_start_pos     : std_logic_vector(11-1 downto 0);
+   begin
+      l_start_pos_reg <= r_start_pos_reg;
+      if i_rst = '1' then
+         i_start_pos_valid_reg <= '0';
+         i_start_pos_reg       <= (others => '0');
+         v_start_pos           := (others => '0');
+      else 
 
+         if r_start = '0' then
+            i_start_pos_valid_reg <= '1';
+            i_start_pos_reg       <= (others => '0');
+         else
+            if o_ready = '1' then
+               if w_cf_calc_indx_pix_i.pos /= w_cf_calc_indx_pix_o.pos then
+                  l_start_pos_reg <= w_strt_reg_data_i;
+                  v_start_pos     := w_strt_reg_data_i;
+               else
+                  v_start_pos     := l_start_pos_reg;               
+               end if;
+               i_start_pos_reg       <= v_start_pos;
+            else
+               i_start_pos_reg       <= w_strt_reg_data_i;
+            end if;
+            i_start_pos_valid_reg <= w_strt_reg_valid_i;
+         end if;
+      end if;
+   end process;
+end generate;
 -----------------------------------------
 -- coeficient index calculation module
 -----------------------------------------
@@ -177,19 +227,19 @@ cf_indx_calc_i: entity work.cf_indx_calc
 -----------------------------------------
    w_res_pix_calc_cf_i        <= w_cf_calc_indx_cf_o;
    w_res_pix_calc_pix_i       <= w_cf_calc_indx_pix_o;
-   process(i_clk)
-      variable v_start_pos : std_logic_vector(11 -1 downto 0);
-   begin
-      if rising_edge(i_clk) then
-         if i_rst = '1' then
-   o_start_pos  <= (others => '0');
-   v_start_pos  := (others => '0');
-         else
-   o_start_pos  <= v_start_pos;
-   v_start_pos  := w_strt_reg_data_o;
-         end if;
-      end if;
-   end process;
+--   process(i_clk)
+--      variable v_start_pos : std_logic_vector(11 -1 downto 0);
+--   begin
+--      if rising_edge(i_clk) then
+--         if i_rst = '1' then
+--   o_start_pos  <= (others => '0');
+--   v_start_pos  := (others => '0');
+--         else
+--   o_start_pos  <= v_start_pos;
+--   v_start_pos  := w_strt_reg_data_o;
+--         end if;
+--      end if;
+--   end process;
 
 res_pix_calc_i: entity work.res_pix_calc
    generic map(

@@ -105,8 +105,9 @@ architecture Behavioral of stream_to_rows is
    signal l_pix_1       : std_logic_vector(7 downto 0);
    signal l_pix_1_valid : std_logic;
 
-
-   signal last_fe       : std_logic;
+   signal l_iREG2_valid  : std_logic;
+   signal l_iFIFO_dvalid : std_logic;
+   signal l_iREG1_ready  : std_logic;
 
 
    signal s_frame_in_progres  : std_logic;
@@ -156,6 +157,18 @@ pr: process(all)
       end if;
    end process;
 
+--   process(s_axis_aclk)
+--   begin
+--      if rising_edge(s_axis_aclk) then
+----         if not(s_axis_arst_n) = '1' then
+--         
+----         else
+--            s_iREG2_valid  <= l_iREG2_valid;
+--            s_iFIFO_dvalid <= l_iFIFO_dvalid;
+--            s_iREG1_ready  <= l_iREG1_ready;
+----         end if;
+--      end if;
+--   end process;
 ------------------------------------------------------------------------
 -- fifo instance
 -- used to buffer one row of frame
@@ -168,8 +181,7 @@ pr: process(all)
          s_iFIFO_data   <= s_oREG1_data;
       end if;
    end process;
-                 -- !!!!!!!!! Ovdje je greska - sredi!!!!!!!!!!!!!!!!
---   s_iFIFO_dvalid <= s_oREG1_valid and (s_iREG2_ready or not(s_frame_in_progres));
+
    s_iFIFO_ready  <= s_oREGF_ready;
 
 fifo_i: entity work.fifo
@@ -235,7 +247,17 @@ reg2_i : entity work.reg_hs
       o_valid => s_oREG2_valid,
       o_data  => s_oREG2_data);
 
-
+--process(s_axis_aclk)
+--begin
+--   if rising_edge(s_axis_aclk) then
+--      if s_iREG1_rst = '1' then
+--            r_reg2_ready     <= '0';
+--            r_fifo_reg_ready <= '0';
+--      else
+--
+--      end if;
+--   end if;
+--end process;
 
 comb_ready_proc: process(all)
       variable vr_pix_0       : std_logic_vector(7 downto 0);
@@ -246,6 +268,7 @@ comb_ready_proc: process(all)
       variable vr_pix_1_valid : std_logic;
 
       variable v_start   : std_logic;
+      variable v_ready   : std_logic;
    begin
       l_reg2_ready     <= r_reg2_ready;
       l_fifo_reg_ready <= r_fifo_reg_ready;
@@ -289,6 +312,7 @@ comb_ready_proc: process(all)
             l_sof          <= vr_sof;
             l_pix_0        <= vr_pix_0;
             l_pix_1        <= vr_pix_1;
+            v_ready        := '1';
             l_fifo_reg_ready <= '1';
             l_reg2_ready     <= '1';            
          end if;
@@ -339,7 +363,7 @@ col_cnt_proc: process(s_axis_aclk)
             v_reg_last         := (others => '0');
          else
 
-            v_reg_last := v_reg_last(0) & s_oREGF_data(1); 
+            v_reg_last := v_reg_last(0) & o_pix.last; --s_oREGF_data(1); 
             if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
                s_col_cnt          <= s_col_cnt +1; 
             end if;
