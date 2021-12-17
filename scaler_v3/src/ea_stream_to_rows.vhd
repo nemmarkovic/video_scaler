@@ -157,6 +157,26 @@ pr: process(all)
       end if;
    end process;
 
+
+--   s_iREG1_ready  <= (s_oFIFO_ready and not(s_frame_in_progres)) or (s_oREG2_ready and s_oFIFO_dvalid);-- when rising_edge(s_axis_aclk);
+--pr: process(all)
+--   begin
+--      if(not(s_frame_in_progres))= '1' then
+--         s_iREG2_valid  <= '0';
+--         s_iFIFO_dvalid <= s_oREG1_valid;
+--      else 
+--         s_iREG2_valid  <= '0';
+--         s_iFIFO_dvalid <= '0';
+--         if (s_oREG2_ready and s_oFIFO_dvalid) = '1' then
+--            s_iREG2_valid  <= s_oREG1_valid;
+--            s_iFIFO_dvalid <= s_oREG1_valid;
+--         end if;
+--      end if;
+--   end process;
+
+--s_iREG2_valid  <= l_iREG2_valid when rising_edge(s_axis_aclk);
+--s_iFIFO_dvalid <= l_iFIFO_dvalid when rising_edge(s_axis_aclk);
+
 --   process(s_axis_aclk)
 --   begin
 --      if rising_edge(s_axis_aclk) then
@@ -169,6 +189,7 @@ pr: process(all)
 ----         end if;
 --      end if;
 --   end process;
+
 ------------------------------------------------------------------------
 -- fifo instance
 -- used to buffer one row of frame
@@ -246,18 +267,6 @@ reg2_i : entity work.reg_hs
       i_ready => s_iREG2_ready,
       o_valid => s_oREG2_valid,
       o_data  => s_oREG2_data);
-
---process(s_axis_aclk)
---begin
---   if rising_edge(s_axis_aclk) then
---      if s_iREG1_rst = '1' then
---            r_reg2_ready     <= '0';
---            r_fifo_reg_ready <= '0';
---      else
---
---      end if;
---   end if;
---end process;
 
 comb_ready_proc: process(all)
       variable vr_pix_0       : std_logic_vector(7 downto 0);

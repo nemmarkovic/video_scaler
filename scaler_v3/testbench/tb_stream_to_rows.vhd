@@ -138,7 +138,9 @@ stimulus1: process(s_axis_aclk)
                s_axis_in_gen.tvalid <= '0';
             end if;
 
-            i_ready     <= '1'; 
+            --if (o_pix.valid = '1') then
+               i_ready <= '1'; -- <= not(i_ready) ; 
+          --  end if;
          end if;
       end if;
    end process;
