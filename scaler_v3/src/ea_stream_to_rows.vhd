@@ -340,6 +340,14 @@ reg_ready_proc: process(s_axis_aclk)
          if s_iREG1_rst = '1' then
             r_reg2_ready     <= '0';
             r_fifo_reg_ready <= '0';
+--            o_pix            <= t_in_pix_rst;
+
+               o_pix.valid    <= '0';
+               o_pix.last     <= '0';
+               o_pix.sof      <= '0';
+               o_pix.pix0     <= (others => '0');
+               o_pix.pix1     <= (others => '0');
+
          else
 
             if i_ready = '1' then
@@ -378,7 +386,7 @@ col_cnt_proc: process(s_axis_aclk)
             v_reg_last         := (others => '0');
          else
 
-            v_reg_last := v_reg_last(0) & o_pix.last; --s_oREGF_data(1); 
+            v_reg_last := v_reg_last(0) & s_oREGF_data(1);
             if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
                s_col_cnt          <= s_col_cnt +1; 
             end if;

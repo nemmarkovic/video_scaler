@@ -58,9 +58,6 @@ architecture Behavioral of video_scaler is
    
 begin
 
-
-
-
 stream_to_rows_i: entity work.stream_to_rows
    generic map(
       G_PIX_WIDTH    => G_DWIDTH,
@@ -79,9 +76,27 @@ stream_to_rows_i: entity work.stream_to_rows
         -- pixel pair (pix0, pix1)
         o_pix        => w_bfilter_pix_i);
 
+--   w_bfilter_ready_i <= w_fifob_ready_o( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) *G_PHASE_NUM -1 downto (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM);
+   w_fifob_ready_i   <= w_pcsw_ready_o;
+bfilter_ready_proc: process(all)
+   begin
+      if to_integer(unsigned(w_bfilter_bank_sel_o)) = 1 then
+         w_bfilter_ready_i <= w_fifob_ready_o( 2 *G_PHASE_NUM -1 downto G_PHASE_NUM);
+         w_fifob_pix_i( 1) <= w_bfilter_pix_o;
+         gl: for i in 0 to 3 loop--generate
+            w_fifob_valid_i(i              ) <= '0';
+            w_fifob_valid_i(i + G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
+         end loop;--generate;
 
-
-   w_bfilter_ready_i <= w_fifob_ready_o( (to_integer(unsigned(w_bfilter_bank_sel_o)) +1) *G_PHASE_NUM -1 downto (to_integer(unsigned(w_bfilter_bank_sel_o))) *G_PHASE_NUM);
+      else
+         w_bfilter_ready_i <= w_fifob_ready_o(    G_PHASE_NUM -1 downto 0);
+         w_fifob_pix_i(0)  <= w_bfilter_pix_o;
+         gl2: for i in 0 to 3 loop--generate
+            w_fifob_valid_i(i              ) <= w_bfilter_pix_o(i).valid;
+            w_fifob_valid_i(i + G_PHASE_NUM) <= '0';
+         end loop;--generate;
+      end if;
+   end process;
 
 uut_bilinear_flt_i: entity work.bilinear_flt 
    generic map (
@@ -93,23 +108,25 @@ uut_bilinear_flt_i: entity work.bilinear_flt
    port map (
       i_clk       => i_clk,
       i_rst       => i_rst,
-      o_ready     => w_bfilter_ready_o, --o_ready,
-      i_pix       => w_bfilter_pix_i, --i_pix,
+      o_ready     => w_bfilter_ready_o,
+      i_pix       => w_bfilter_pix_i,
       i_ready     => and(w_bfilter_ready_i),
       o_bank_sel  => w_bfilter_bank_sel_o,
-      o_pix       => w_bfilter_pix_o); --: out t_out_pix_array);
+      o_pix       => w_bfilter_pix_o);
 
-process(i_clk)
-begin
-if rising_edge(i_clk) then
-gl: for i in 0 to 3 loop--generate
-   w_fifob_valid_i(i              ) <= w_bfilter_pix_o(i).valid;
-   w_fifob_valid_i(i + G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
-end loop;--generate;
-   w_fifob_pix_i  ( to_integer(unsigned(w_bfilter_bank_sel_o)) ) <= w_bfilter_pix_o;
-   w_fifob_ready_i   <= w_pcsw_ready_o;
-end if;
-end process;   
+
+
+
+--   process(i_clk)
+--   begin
+--      if rising_edge(i_clk) then
+--         gl: for i in 0 to 3 loop--generate
+--            w_fifob_valid_i(i              ) <= w_bfilter_pix_o(i).valid;
+--            w_fifob_valid_i(i + G_PHASE_NUM) <= w_bfilter_pix_o(i).valid;
+--         end loop;--generate;
+--      end if;
+--   end process;   
+
 fifo_bank_i: entity work.fifo_bank
    generic map(
       G_RD_DWIDTH   => G_DWIDTH,
@@ -123,9 +140,9 @@ fifo_bank_i: entity work.fifo_bank
       o_dready       => w_fifob_ready_o,
       i_valid        => w_fifob_valid_i,
       i_din          => w_fifob_pix_i,
-      o_dout         => w_fifob_data_o,--: out t_out_pix_array;
+      o_dout         => w_fifob_data_o,
       o_valid        => w_fifob_valid_o,
-      i_dready       => w_fifob_ready_i);--: in  std_logic_vector(G_PHASE_NUM -1 downto 0));
+      i_dready       => w_fifob_ready_i);
 
 
 

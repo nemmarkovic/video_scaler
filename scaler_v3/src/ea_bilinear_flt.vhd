@@ -177,7 +177,7 @@ elsif G_TYPE = "V" generate
                   l_start_pos_reg <= w_strt_reg_data_i;
                   v_start_pos     := w_strt_reg_data_i;
                else
-                  v_start_pos     := l_start_pos_reg;               
+                  v_start_pos     := w_strt_reg_data_i; --l_start_pos_reg;               
                end if;
                i_start_pos_reg       <= v_start_pos;
             else

@@ -109,14 +109,21 @@ stimulus1: process(i_clk)
             vr_start      := '1';
          else
 
+               if s_axis_in_gen.tlast = '1' and s_ready_o = '1' then
+                  s_axis_in_gen.tlast <= '0';
+                  s_axis_in_gen.tdata <= (others => '0');
+               end if;
+
             if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then
 
+
+
                s_axis_in_gen.tlast <= '0';
-               if to_integer(unsigned(s_axis_in_gen.tdata)) >= 8 then
+               if to_integer(unsigned(s_axis_in_gen.tdata)) >= G_IN_SIZE-1 then
                   s_axis_in_gen.tlast <= '1';
                end if;
 
-               if to_integer(unsigned(s_axis_in_gen.tdata)) >= 9 then
+               if to_integer(unsigned(s_axis_in_gen.tdata)) >= G_IN_SIZE then
                  -- s_pix_gen.pos  <= (others => '0');
                   s_axis_in_gen.tlast <= '0';
                   s_axis_in_gen <= t_axis_s_in_rst;
@@ -124,6 +131,7 @@ stimulus1: process(i_clk)
                else
                   s_axis_in_gen.tdata <= std_logic_vector(unsigned(s_axis_in_gen.tdata) +1);
                end if;
+
             end if;
 
             if (s_valid_i  and   s_ready_o) = '1' then
