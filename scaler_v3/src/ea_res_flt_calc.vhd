@@ -216,20 +216,23 @@ reg_res_pix_gen: for i in 0 to (G_PHASE_NUM -1) generate
 ------------------------------------------------------------
       process(i_clk)
          variable v_do : std_logic;
+         variable vl_bank_sel   : unsigned(11 downto 0);
       begin
          if rising_edge(i_clk) then
             if i_rst = '1' then
-               l_bank_sel <= (others => '0');
+               l_bank_sel  <= (others => '0');
+               vl_bank_sel := (others => '0');
                v_do := '0';
             else
                v_do := '0';
+               vl_bank_sel := l_bank_sel;
                for i in 0 to G_PHASE_NUM -1 loop
                   if o_pix(i).valid = '1' and i_ready = '1' then
                      v_do := '1';
                   end if;
                end loop;
                if v_do = '1' then
-                  l_bank_sel <= (l_bank_sel +1) mod 2; -- 2 je broj banaka potreban (G_OUT/GIN) / G_PHASE_NUM
+                  l_bank_sel <= (vl_bank_sel +1) mod 2; -- 2 je broj banaka potreban (G_OUT/GIN) / G_PHASE_NUM
                end if;
             end if;
          end if;

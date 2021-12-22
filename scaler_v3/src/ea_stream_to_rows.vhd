@@ -271,6 +271,29 @@ reg2_i : entity work.reg_hs
       o_data  => s_oREG2_data);
 
 ------------------------------------------------------------------------
+-- frame in progres signaling
+------------------------------------------------------------------------
+col_cnt_proc: process(s_axis_aclk)
+      variable v_cnt_en  : std_logic;
+   begin
+      if rising_edge(s_axis_aclk) then
+         if s_iREG1_rst = '1' then
+            s_frame_in_progres <= '0';
+            v_cnt_en           := '0';
+         else
+           if s_oREG1_valid = '1' and s_oREG1_data(1) = '1' and s_oREG1_data(0) = '1' then                                         
+              s_frame_in_progres <= '0';                                                    
+              v_cnt_en           := '0'; 
+           elsif s_oREG1_data(1) = '1' and v_cnt_en = '1' then                                                                        
+              s_frame_in_progres <= '1';
+           elsif s_oREG1_data(1) = '1' then                                                 
+              v_cnt_en           := '1';
+           end if;
+         end if;
+      end if;
+   end process;
+
+------------------------------------------------------------------------
 -- read output regs and sync data on the output process
 ------------------------------------------------------------------------
 comb_ready_proc: process(all)
@@ -347,21 +370,15 @@ reg_ready_proc: process(s_axis_aclk)
             r_reg2_ready     <= '0';
             r_fifo_reg_ready <= '0';
             o_pix            <= t_in_pix_rst;
---            s_col_cnt        <= (others => '0');
---               o_pix.valid    <= '0';
---               o_pix.last     <= '0';
---               o_pix.sof      <= '0';
---               o_pix.pix0     <= (others => '0');
---               o_pix.pix1     <= (others => '0');
          else
 
-               if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
-                  o_pix.pos          <=  (others => '0'); 
-               end if;
+            if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
+               o_pix.pos          <=  (others => '0'); 
+            end if;
 
             if i_ready = '1' then
                if o_pix.last = '1' then
-                  o_pix.pos          <= std_logic_vector(unsigned(o_pix.pos) +1); 
+                  o_pix.pos   <= std_logic_vector(unsigned(o_pix.pos) +1); 
                end if;
 
                o_pix.valid    <= '0';
@@ -381,51 +398,6 @@ reg_ready_proc: process(s_axis_aclk)
 
             r_reg2_ready     <= l_reg2_ready;
             r_fifo_reg_ready <= l_fifo_reg_ready;
-         end if;
-      end if;
-   end process;
-
-------------------------------------------------------------------------
--- output position calculation
-------------------------------------------------------------------------
-col_cnt_proc: process(s_axis_aclk)
-      variable v_cnt_en  : std_logic;
-      variable v_cnt_dis : std_logic;
-      variable v_start   : std_logic;
---      variable v_reg_last: std_logic_vector(1 downto 0);
-   begin
-      if rising_edge(s_axis_aclk) then
-         if s_iREG1_rst = '1' then
---            s_col_cnt          <= (others => '0');
-            s_frame_in_progres <= '0';
-            v_cnt_en           := '0';
-            v_cnt_dis          := '0';
-            v_start            := '0';
---            v_reg_last         := (others => '0');
-         else
-
---            v_reg_last := v_reg_last(0) & l_last; --s_oREGF_data(1);
---            if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
---               s_col_cnt          <= s_col_cnt +1; 
---            end if;
---
---            if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
---               s_col_cnt          <= (others => '0'); 
---            end if;
-
-           v_start := '0';
-           if s_oREG1_valid = '1' and s_oREG1_data(1) = '1' and s_oREG1_data(0) = '1' then                                         
-              s_frame_in_progres <= '0';                                                    
-              v_cnt_en           := '0'; 
-              v_start            := '0'; 
-              v_cnt_dis          := '1';                                                   
-           elsif s_oREG1_data(1) = '1' and v_cnt_en = '1' then                                                                        
-              s_frame_in_progres <= '1'; 
-              v_start            := '1';                                                    
-           elsif s_oREG1_data(1) = '1' then                                                 
-              v_cnt_en           := '1';                                                    
-              v_cnt_dis          := '0';
-           end if;
          end if;
       end if;
    end process;

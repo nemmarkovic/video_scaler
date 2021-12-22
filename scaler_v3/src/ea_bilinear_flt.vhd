@@ -227,19 +227,6 @@ cf_indx_calc_i: entity work.cf_indx_calc
 -----------------------------------------
    w_res_pix_calc_cf_i        <= w_cf_calc_indx_cf_o;
    w_res_pix_calc_pix_i       <= w_cf_calc_indx_pix_o;
---   process(i_clk)
---      variable v_start_pos : std_logic_vector(11 -1 downto 0);
---   begin
---      if rising_edge(i_clk) then
---         if i_rst = '1' then
---   o_start_pos  <= (others => '0');
---   v_start_pos  := (others => '0');
---         else
---   o_start_pos  <= v_start_pos;
---   v_start_pos  := w_strt_reg_data_o;
---         end if;
---      end if;
---   end process;
 
 res_pix_calc_i: entity work.res_pix_calc
    generic map(
