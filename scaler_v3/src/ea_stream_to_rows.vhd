@@ -294,8 +294,8 @@ comb_ready_proc: process(all)
          l_fifo_reg_ready <= '0';      
       end if;
 
-      l_pix_0_valid        <= '0';
-      l_pix_1_valid        <= '0';
+      l_pix_0_valid  <= '0';
+      l_pix_1_valid  <= '0';
       l_last         <= '0';
       l_sof          <= '0';
       l_pix_0        <= (others => '0');
@@ -326,8 +326,8 @@ comb_ready_proc: process(all)
          if (vr_pix_0_valid and vr_pix_1_valid) = '1' then
             vr_pix_0_valid := '0';
             vr_pix_1_valid := '0';
-            l_pix_0_valid        <= '1';
-            l_pix_1_valid        <= '1';
+            l_pix_0_valid  <= '1';
+            l_pix_1_valid  <= '1';
             l_last         <= vr_last;
             l_sof          <= vr_sof;
             l_pix_0        <= vr_pix_0;
@@ -340,23 +340,36 @@ comb_ready_proc: process(all)
    end process;
 
 reg_ready_proc: process(s_axis_aclk)
+      variable v_reg_last: std_logic_vector(1 downto 0);
    begin
       if rising_edge(s_axis_aclk) then
          if s_iREG1_rst = '1' then
             r_reg2_ready     <= '0';
             r_fifo_reg_ready <= '0';
---            o_pix            <= t_in_pix_rst;
+            o_pix            <= t_in_pix_rst;
+--            s_col_cnt        <= (others => '0');
+--               o_pix.valid    <= '0';
+--               o_pix.last     <= '0';
+--               o_pix.sof      <= '0';
+--               o_pix.pix0     <= (others => '0');
+--               o_pix.pix1     <= (others => '0');
+         else
 
+               if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
+                  o_pix.pos          <=  (others => '0'); 
+               end if;
+
+            if i_ready = '1' then
+               if o_pix.last = '1' then
+                  o_pix.pos          <= std_logic_vector(unsigned(o_pix.pos) +1); 
+               end if;
+
+               o_pix.valid    <= '0';
                o_pix.valid    <= '0';
                o_pix.last     <= '0';
                o_pix.sof      <= '0';
                o_pix.pix0     <= (others => '0');
                o_pix.pix1     <= (others => '0');
-
-         else
-
-            if i_ready = '1' then
-               o_pix.valid    <= '0';
             end if;
             if (l_pix_1_valid and l_pix_0_valid) = '1' then
                o_pix.valid    <= '1';
@@ -379,26 +392,26 @@ col_cnt_proc: process(s_axis_aclk)
       variable v_cnt_en  : std_logic;
       variable v_cnt_dis : std_logic;
       variable v_start   : std_logic;
-      variable v_reg_last: std_logic_vector(1 downto 0);
+--      variable v_reg_last: std_logic_vector(1 downto 0);
    begin
       if rising_edge(s_axis_aclk) then
          if s_iREG1_rst = '1' then
-            s_col_cnt          <= (others => '0');
+--            s_col_cnt          <= (others => '0');
             s_frame_in_progres <= '0';
             v_cnt_en           := '0';
             v_cnt_dis          := '0';
             v_start            := '0';
-            v_reg_last         := (others => '0');
+--            v_reg_last         := (others => '0');
          else
 
-            v_reg_last := v_reg_last(0) & l_last; --s_oREGF_data(1);
-            if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
-               s_col_cnt          <= s_col_cnt +1; 
-            end if;
-
-            if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
-               s_col_cnt          <= (others => '0'); 
-            end if;
+--            v_reg_last := v_reg_last(0) & l_last; --s_oREGF_data(1);
+--            if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
+--               s_col_cnt          <= s_col_cnt +1; 
+--            end if;
+--
+--            if s_oREGF_data(0) = '1' and (s_oREGF_valid and s_iREGF_ready) = '1' then
+--               s_col_cnt          <= (others => '0'); 
+--            end if;
 
            v_start := '0';
            if s_oREG1_valid = '1' and s_oREG1_data(1) = '1' and s_oREG1_data(0) = '1' then                                         
@@ -427,6 +440,6 @@ col_cnt_proc: process(s_axis_aclk)
 --              o_pix.sof      <= s_oREGF_data(0);
 --              o_pix.pix0     <= s_oREGF_data(G_PIX_WIDTH +2 -1 downto 2);
 --              o_pix.pix1     <= s_oREG2_data(G_PIX_WIDTH +2 -1 downto 2);
-   o_pix.pos      <= std_logic_vector(s_col_cnt);
+--   o_pix.pos      <= std_logic_vector(s_col_cnt);
 
 end Behavioral;

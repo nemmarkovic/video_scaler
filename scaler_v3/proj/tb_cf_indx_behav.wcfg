@@ -6,6 +6,7 @@
       <db_ref path="tb_video_scaler_behav.wdb" id="1">
          <top_modules>
             <top_module name="glbl" />
+            <top_module name="p_axi" />
             <top_module name="p_coeff" />
             <top_module name="p_common" />
             <top_module name="tb_video_scaler" />
@@ -15,12 +16,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="4692850fs"></ZoomEndTime>
-      <Cursor1Time time="825000fs"></Cursor1Time>
+      <ZoomEndTime time="5625047fs"></ZoomEndTime>
+      <Cursor1Time time="1375000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="186"></NameColumnWidth>
-      <ValueColumnWidth column_width="102"></ValueColumnWidth>
+      <NameColumnWidth column_width="346"></NameColumnWidth>
+      <ValueColumnWidth column_width="98"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="2" />
    <wvobject fp_name="group564" type="group">
@@ -60,10 +61,238 @@
       <obj_property name="label">video_scaler</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="group169" type="group">
+         <obj_property name="label">stream_to_rows</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_axis_aclk" type="logic">
+            <obj_property name="ElementShortName">s_axis_aclk</obj_property>
+            <obj_property name="ObjectShortName">s_axis_aclk</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_axis_arst_n" type="logic">
+            <obj_property name="ElementShortName">s_axis_arst_n</obj_property>
+            <obj_property name="ObjectShortName">s_axis_arst_n</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_axis_in" type="array">
+            <obj_property name="ElementShortName">s_axis_in</obj_property>
+            <obj_property name="ObjectShortName">s_axis_in</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_axis_out" type="array">
+            <obj_property name="ElementShortName">s_axis_out</obj_property>
+            <obj_property name="ObjectShortName">s_axis_out</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/i_ready" type="logic">
+            <obj_property name="ElementShortName">i_ready</obj_property>
+            <obj_property name="ObjectShortName">i_ready</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/o_pix" type="array">
+            <obj_property name="ElementShortName">o_pix</obj_property>
+            <obj_property name="ObjectShortName">o_pix</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+         </wvobject>
+         <wvobject fp_name="group170" type="group">
+            <obj_property name="label">signals</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG1_rst" type="logic">
+               <obj_property name="ElementShortName">s_iREG1_rst</obj_property>
+               <obj_property name="ObjectShortName">s_iREG1_rst</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG1_data" type="array">
+               <obj_property name="ElementShortName">s_iREG1_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_iREG1_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREG1_data" type="array">
+               <obj_property name="ElementShortName">s_oREG1_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_oREG1_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG1_valid" type="logic">
+               <obj_property name="ElementShortName">s_iREG1_valid</obj_property>
+               <obj_property name="ObjectShortName">s_iREG1_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREG1_ready" type="logic">
+               <obj_property name="ElementShortName">s_oREG1_ready</obj_property>
+               <obj_property name="ObjectShortName">s_oREG1_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG1_ready" type="logic">
+               <obj_property name="ElementShortName">s_iREG1_ready</obj_property>
+               <obj_property name="ObjectShortName">s_iREG1_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREG1_valid" type="logic">
+               <obj_property name="ElementShortName">s_oREG1_valid</obj_property>
+               <obj_property name="ObjectShortName">s_oREG1_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG2_rst" type="logic">
+               <obj_property name="ElementShortName">s_iREG2_rst</obj_property>
+               <obj_property name="ObjectShortName">s_iREG2_rst</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG2_data" type="array">
+               <obj_property name="ElementShortName">s_iREG2_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_iREG2_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREG2_data" type="array">
+               <obj_property name="ElementShortName">s_oREG2_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_oREG2_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_iREG2_data" type="array">
+               <obj_property name="ElementShortName">l_iREG2_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">l_iREG2_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG2_valid" type="logic">
+               <obj_property name="ElementShortName">s_iREG2_valid</obj_property>
+               <obj_property name="ObjectShortName">s_iREG2_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREG2_ready" type="logic">
+               <obj_property name="ElementShortName">s_oREG2_ready</obj_property>
+               <obj_property name="ObjectShortName">s_oREG2_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREG2_ready" type="logic">
+               <obj_property name="ElementShortName">s_iREG2_ready</obj_property>
+               <obj_property name="ObjectShortName">s_iREG2_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREG2_valid" type="logic">
+               <obj_property name="ElementShortName">s_oREG2_valid</obj_property>
+               <obj_property name="ObjectShortName">s_oREG2_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iFIFO_rst" type="logic">
+               <obj_property name="ElementShortName">s_iFIFO_rst</obj_property>
+               <obj_property name="ObjectShortName">s_iFIFO_rst</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oFIFO_data" type="array">
+               <obj_property name="ElementShortName">s_oFIFO_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_oFIFO_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oFIFO_empty" type="logic">
+               <obj_property name="ElementShortName">s_oFIFO_empty</obj_property>
+               <obj_property name="ObjectShortName">s_oFIFO_empty</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oFIFO_full" type="logic">
+               <obj_property name="ElementShortName">s_oFIFO_full</obj_property>
+               <obj_property name="ObjectShortName">s_oFIFO_full</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iFIFO_data" type="array">
+               <obj_property name="ElementShortName">s_iFIFO_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_iFIFO_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_iFIFO_data" type="array">
+               <obj_property name="ElementShortName">l_iFIFO_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">l_iFIFO_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oFIFO_dvalid" type="logic">
+               <obj_property name="ElementShortName">s_oFIFO_dvalid</obj_property>
+               <obj_property name="ObjectShortName">s_oFIFO_dvalid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iFIFO_dvalid" type="logic">
+               <obj_property name="ElementShortName">s_iFIFO_dvalid</obj_property>
+               <obj_property name="ObjectShortName">s_iFIFO_dvalid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oFIFO_ready" type="logic">
+               <obj_property name="ElementShortName">s_oFIFO_ready</obj_property>
+               <obj_property name="ObjectShortName">s_oFIFO_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iFIFO_ready" type="logic">
+               <obj_property name="ElementShortName">s_iFIFO_ready</obj_property>
+               <obj_property name="ObjectShortName">s_iFIFO_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREGF_rst" type="logic">
+               <obj_property name="ElementShortName">s_iREGF_rst</obj_property>
+               <obj_property name="ObjectShortName">s_iREGF_rst</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREGF_data" type="array">
+               <obj_property name="ElementShortName">s_iREGF_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_iREGF_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREGF_data" type="array">
+               <obj_property name="ElementShortName">s_oREGF_data[9:0]</obj_property>
+               <obj_property name="ObjectShortName">s_oREGF_data[9:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREGF_valid" type="logic">
+               <obj_property name="ElementShortName">s_iREGF_valid</obj_property>
+               <obj_property name="ObjectShortName">s_iREGF_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREGF_ready" type="logic">
+               <obj_property name="ElementShortName">s_oREGF_ready</obj_property>
+               <obj_property name="ObjectShortName">s_oREGF_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_iREGF_ready" type="logic">
+               <obj_property name="ElementShortName">s_iREGF_ready</obj_property>
+               <obj_property name="ObjectShortName">s_iREGF_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_oREGF_valid" type="logic">
+               <obj_property name="ElementShortName">s_oREGF_valid</obj_property>
+               <obj_property name="ObjectShortName">s_oREGF_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_fifo_reg_ready" type="logic">
+               <obj_property name="ElementShortName">l_fifo_reg_ready</obj_property>
+               <obj_property name="ObjectShortName">l_fifo_reg_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_reg2_ready" type="logic">
+               <obj_property name="ElementShortName">l_reg2_ready</obj_property>
+               <obj_property name="ObjectShortName">l_reg2_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/r_fifo_reg_ready" type="logic">
+               <obj_property name="ElementShortName">r_fifo_reg_ready</obj_property>
+               <obj_property name="ObjectShortName">r_fifo_reg_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/r_reg2_ready" type="logic">
+               <obj_property name="ElementShortName">r_reg2_ready</obj_property>
+               <obj_property name="ObjectShortName">r_reg2_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_pix_0" type="array">
+               <obj_property name="ElementShortName">l_pix_0[7:0]</obj_property>
+               <obj_property name="ObjectShortName">l_pix_0[7:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_pix_0_valid" type="logic">
+               <obj_property name="ElementShortName">l_pix_0_valid</obj_property>
+               <obj_property name="ObjectShortName">l_pix_0_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_last" type="logic">
+               <obj_property name="ElementShortName">l_last</obj_property>
+               <obj_property name="ObjectShortName">l_last</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_sof" type="logic">
+               <obj_property name="ElementShortName">l_sof</obj_property>
+               <obj_property name="ObjectShortName">l_sof</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_pix_1" type="array">
+               <obj_property name="ElementShortName">l_pix_1[7:0]</obj_property>
+               <obj_property name="ObjectShortName">l_pix_1[7:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_pix_1_valid" type="logic">
+               <obj_property name="ElementShortName">l_pix_1_valid</obj_property>
+               <obj_property name="ObjectShortName">l_pix_1_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_iREG2_valid" type="logic">
+               <obj_property name="ElementShortName">l_iREG2_valid</obj_property>
+               <obj_property name="ObjectShortName">l_iREG2_valid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_iFIFO_dvalid" type="logic">
+               <obj_property name="ElementShortName">l_iFIFO_dvalid</obj_property>
+               <obj_property name="ObjectShortName">l_iFIFO_dvalid</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/l_iREG1_ready" type="logic">
+               <obj_property name="ElementShortName">l_iREG1_ready</obj_property>
+               <obj_property name="ObjectShortName">l_iREG1_ready</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_frame_in_progres" type="logic">
+               <obj_property name="ElementShortName">s_frame_in_progres</obj_property>
+               <obj_property name="ObjectShortName">s_frame_in_progres</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/s_col_cnt" type="array">
+               <obj_property name="ElementShortName">s_col_cnt[10:0]</obj_property>
+               <obj_property name="ObjectShortName">s_col_cnt[10:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/G_PIX_WIDTH" type="other">
+               <obj_property name="ElementShortName">G_PIX_WIDTH</obj_property>
+               <obj_property name="ObjectShortName">G_PIX_WIDTH</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/stream_to_rows_i/G_MAX_ROW_SIZE" type="other">
+               <obj_property name="ElementShortName">G_MAX_ROW_SIZE</obj_property>
+               <obj_property name="ObjectShortName">G_MAX_ROW_SIZE</obj_property>
+            </wvobject>
+         </wvobject>
+      </wvobject>
       <wvobject fp_name="group603" type="group">
          <obj_property name="label">blf_top</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_clk" type="logic">
             <obj_property name="ElementShortName">i_clk</obj_property>
             <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -71,10 +300,6 @@
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_rst" type="logic">
             <obj_property name="ElementShortName">i_rst</obj_property>
             <obj_property name="ObjectShortName">i_rst</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_start_pos" type="array">
-            <obj_property name="ElementShortName">o_start_pos[10:0]</obj_property>
-            <obj_property name="ObjectShortName">o_start_pos[10:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_ready" type="logic">
             <obj_property name="ElementShortName">o_ready</obj_property>
@@ -95,143 +320,279 @@
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/o_pix" type="array">
             <obj_property name="ElementShortName">o_pix[0:3]</obj_property>
             <obj_property name="ObjectShortName">o_pix[0:3]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
          </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_data_i" type="array">
-            <obj_property name="ElementShortName">w_strt_reg_data_i[10:0]</obj_property>
-            <obj_property name="ObjectShortName">w_strt_reg_data_i[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_valid_i" type="logic">
-            <obj_property name="ElementShortName">w_strt_reg_valid_i</obj_property>
-            <obj_property name="ObjectShortName">w_strt_reg_valid_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_ready_o" type="logic">
-            <obj_property name="ElementShortName">w_strt_reg_ready_o</obj_property>
-            <obj_property name="ObjectShortName">w_strt_reg_ready_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_ready_i" type="logic">
-            <obj_property name="ElementShortName">w_strt_reg_ready_i</obj_property>
-            <obj_property name="ObjectShortName">w_strt_reg_ready_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_valid_o" type="logic">
-            <obj_property name="ElementShortName">w_strt_reg_valid_o</obj_property>
-            <obj_property name="ObjectShortName">w_strt_reg_valid_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_strt_reg_data_o" type="array">
-            <obj_property name="ElementShortName">w_strt_reg_data_o[10:0]</obj_property>
-            <obj_property name="ObjectShortName">w_strt_reg_data_o[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_valid_i" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_valid_i</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_valid_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_ready_o" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_ready_o</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_ready_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_valid_i" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_valid_i</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_valid_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_ready_i" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_ready_i</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_ready_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_pix_i" type="array">
-            <obj_property name="ElementShortName">w_cf_calc_indx_pix_i</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_pix_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_pix_o" type="array">
-            <obj_property name="ElementShortName">w_cf_calc_indx_pix_o</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_pix_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_i" type="array">
-            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_i[10:0]</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_i[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_o" type="array">
-            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_o[10:0]</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_o[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_ipos_ready_o" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_ipos_ready_o</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_ipos_ready_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_valid_o" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_valid_o</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_valid_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_start_pos_ready_o" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_start_pos_ready_o</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_start_pos_ready_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_indx_ready_i" type="logic">
-            <obj_property name="ElementShortName">w_cf_calc_indx_indx_ready_i</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_indx_ready_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_cf_calc_indx_cf_o" type="array">
-            <obj_property name="ElementShortName">w_cf_calc_indx_cf_o[0:3]</obj_property>
-            <obj_property name="ObjectShortName">w_cf_calc_indx_cf_o[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_cf_i" type="array">
-            <obj_property name="ElementShortName">w_res_pix_calc_cf_i[0:3]</obj_property>
-            <obj_property name="ObjectShortName">w_res_pix_calc_cf_i[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_i" type="array">
-            <obj_property name="ElementShortName">w_res_pix_calc_pix_i</obj_property>
-            <obj_property name="ObjectShortName">w_res_pix_calc_pix_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_ready_o" type="logic">
-            <obj_property name="ElementShortName">w_res_pix_calc_ready_o</obj_property>
-            <obj_property name="ObjectShortName">w_res_pix_calc_ready_o</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_valid_i" type="logic">
-            <obj_property name="ElementShortName">w_res_pix_calc_pix_valid_i</obj_property>
-            <obj_property name="ObjectShortName">w_res_pix_calc_pix_valid_i</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_o" type="array">
-            <obj_property name="ElementShortName">w_res_pix_calc_pix_o[0:3]</obj_property>
-            <obj_property name="ObjectShortName">w_res_pix_calc_pix_o[0:3]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_bank_sel_o" type="array">
-            <obj_property name="ElementShortName">w_res_pix_calc_bank_sel_o[11:0]</obj_property>
-            <obj_property name="ObjectShortName">w_res_pix_calc_bank_sel_o[11:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_start_pos_valid_reg" type="logic">
-            <obj_property name="ElementShortName">i_start_pos_valid_reg</obj_property>
-            <obj_property name="ObjectShortName">i_start_pos_valid_reg</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_start_pos_reg" type="array">
-            <obj_property name="ElementShortName">i_start_pos_reg[10:0]</obj_property>
-            <obj_property name="ObjectShortName">i_start_pos_reg[10:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/r_start" type="logic">
-            <obj_property name="ElementShortName">r_start</obj_property>
-            <obj_property name="ObjectShortName">r_start</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_TYPE" type="array">
-            <obj_property name="ElementShortName">G_TYPE[1:1]</obj_property>
-            <obj_property name="ObjectShortName">G_TYPE[1:1]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_IN_SIZE" type="other">
-            <obj_property name="ElementShortName">G_IN_SIZE</obj_property>
-            <obj_property name="ObjectShortName">G_IN_SIZE</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_OUT_SIZE" type="other">
-            <obj_property name="ElementShortName">G_OUT_SIZE</obj_property>
-            <obj_property name="ObjectShortName">G_OUT_SIZE</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_PHASE_NUM" type="other">
-            <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
-            <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
-         </wvobject>
-         <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_DWIDTH" type="other">
-            <obj_property name="ElementShortName">G_DWIDTH</obj_property>
-            <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
+         <wvobject fp_name="group177" type="group">
+            <obj_property name="label">New Group 14</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+            <wvobject fp_name="group184" type="group">
+               <obj_property name="label">start_ovalue_reg</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/i_clk" type="logic">
+                  <obj_property name="ElementShortName">i_clk</obj_property>
+                  <obj_property name="ObjectShortName">i_clk</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/i_rst" type="logic">
+                  <obj_property name="ElementShortName">i_rst</obj_property>
+                  <obj_property name="ObjectShortName">i_rst</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/i_data" type="array">
+                  <obj_property name="ElementShortName">i_data[10:0]</obj_property>
+                  <obj_property name="ObjectShortName">i_data[10:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/i_valid" type="logic">
+                  <obj_property name="ElementShortName">i_valid</obj_property>
+                  <obj_property name="ObjectShortName">i_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/o_ready" type="logic">
+                  <obj_property name="ElementShortName">o_ready</obj_property>
+                  <obj_property name="ObjectShortName">o_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/i_ready" type="logic">
+                  <obj_property name="ElementShortName">i_ready</obj_property>
+                  <obj_property name="ObjectShortName">i_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/o_valid" type="logic">
+                  <obj_property name="ElementShortName">o_valid</obj_property>
+                  <obj_property name="ObjectShortName">o_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/reg_start_pos/o_data" type="array">
+                  <obj_property name="ElementShortName">o_data[10:0]</obj_property>
+                  <obj_property name="ObjectShortName">o_data[10:0]</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject fp_name="group185" type="group">
+               <obj_property name="label">cf_calc_module</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_clk" type="logic">
+                  <obj_property name="ElementShortName">i_clk</obj_property>
+                  <obj_property name="ObjectShortName">i_clk</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_rst" type="logic">
+                  <obj_property name="ElementShortName">i_rst</obj_property>
+                  <obj_property name="ObjectShortName">i_rst</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_pix" type="array">
+                  <obj_property name="ElementShortName">i_pix</obj_property>
+                  <obj_property name="ObjectShortName">i_pix</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/o_ready" type="logic">
+                  <obj_property name="ElementShortName">o_ready</obj_property>
+                  <obj_property name="ObjectShortName">o_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_start_pos_valid" type="logic">
+                  <obj_property name="ElementShortName">i_start_pos_valid</obj_property>
+                  <obj_property name="ObjectShortName">i_start_pos_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/o_start_pos_ready" type="logic">
+                  <obj_property name="ElementShortName">o_start_pos_ready</obj_property>
+                  <obj_property name="ObjectShortName">o_start_pos_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_start_pos" type="array">
+                  <obj_property name="ElementShortName">i_start_pos[10:0]</obj_property>
+                  <obj_property name="ObjectShortName">i_start_pos[10:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_ipix" type="array">
+                  <obj_property name="ElementShortName">r_ipix</obj_property>
+                  <obj_property name="ObjectShortName">r_ipix</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/o_start_pos_valid" type="logic">
+                  <obj_property name="ElementShortName">o_start_pos_valid</obj_property>
+                  <obj_property name="ObjectShortName">o_start_pos_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_start_pos_ready" type="logic">
+                  <obj_property name="ElementShortName">i_start_pos_ready</obj_property>
+                  <obj_property name="ObjectShortName">i_start_pos_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/o_start_pos" type="array">
+                  <obj_property name="ElementShortName">o_start_pos[10:0]</obj_property>
+                  <obj_property name="ObjectShortName">o_start_pos[10:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/i_ready" type="logic">
+                  <obj_property name="ElementShortName">i_ready</obj_property>
+                  <obj_property name="ObjectShortName">i_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/o_pix" type="array">
+                  <obj_property name="ElementShortName">o_pix</obj_property>
+                  <obj_property name="ObjectShortName">o_pix</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/o_cf" type="array">
+                  <obj_property name="ElementShortName">o_cf[0:3]</obj_property>
+                  <obj_property name="ObjectShortName">o_cf[0:3]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_mux_sel" type="array">
+                  <obj_property name="ElementShortName">l_mux_sel[3:0]</obj_property>
+                  <obj_property name="ObjectShortName">l_mux_sel[3:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_ipos_as_expected" type="array">
+                  <obj_property name="ElementShortName">l_ipos_as_expected[0:4]</obj_property>
+                  <obj_property name="ObjectShortName">l_ipos_as_expected[0:4]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_ipos_as_expected" type="array">
+                  <obj_property name="ElementShortName">r_ipos_as_expected[0:4]</obj_property>
+                  <obj_property name="ObjectShortName">r_ipos_as_expected[0:4]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_cf_indx" type="array">
+                  <obj_property name="ElementShortName">l_cf_indx[0:4][1:0]</obj_property>
+                  <obj_property name="ObjectShortName">l_cf_indx[0:4][1:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/w_next_start_pix" type="array">
+                  <obj_property name="ElementShortName">w_next_start_pix[0:4][10:0]</obj_property>
+                  <obj_property name="ObjectShortName">w_next_start_pix[0:4][10:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/w_expected_pos" type="array">
+                  <obj_property name="ElementShortName">w_expected_pos[0:4][10:0]</obj_property>
+                  <obj_property name="ObjectShortName">w_expected_pos[0:4][10:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_ipos_ready" type="logic">
+                  <obj_property name="ElementShortName">l_ipos_ready</obj_property>
+                  <obj_property name="ObjectShortName">l_ipos_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_ipos_ready" type="logic">
+                  <obj_property name="ElementShortName">r_ipos_ready</obj_property>
+                  <obj_property name="ObjectShortName">r_ipos_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_ipos_valid" type="logic">
+                  <obj_property name="ElementShortName">l_ipos_valid</obj_property>
+                  <obj_property name="ObjectShortName">l_ipos_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_ipos_valid" type="logic">
+                  <obj_property name="ElementShortName">r_ipos_valid</obj_property>
+                  <obj_property name="ObjectShortName">r_ipos_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_ipix" type="array">
+                  <obj_property name="ElementShortName">l_ipix</obj_property>
+                  <obj_property name="ObjectShortName">l_ipix</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_ipix" type="array">
+                  <obj_property name="ElementShortName">r_ipix</obj_property>
+                  <obj_property name="ObjectShortName">r_ipix</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_start_pos_ready" type="logic">
+                  <obj_property name="ElementShortName">l_start_pos_ready</obj_property>
+                  <obj_property name="ObjectShortName">l_start_pos_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_start_pos_ready" type="logic">
+                  <obj_property name="ElementShortName">r_start_pos_ready</obj_property>
+                  <obj_property name="ObjectShortName">r_start_pos_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_start_pos_valid" type="logic">
+                  <obj_property name="ElementShortName">l_start_pos_valid</obj_property>
+                  <obj_property name="ObjectShortName">l_start_pos_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_start_pos_valid" type="logic">
+                  <obj_property name="ElementShortName">r_start_pos_valid</obj_property>
+                  <obj_property name="ObjectShortName">r_start_pos_valid</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_start_pos" type="array">
+                  <obj_property name="ElementShortName">l_start_pos[10:0]</obj_property>
+                  <obj_property name="ObjectShortName">l_start_pos[10:0]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/r_indx_ready" type="logic">
+                  <obj_property name="ElementShortName">r_indx_ready</obj_property>
+                  <obj_property name="ObjectShortName">r_indx_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_indx_ready" type="logic">
+                  <obj_property name="ElementShortName">l_indx_ready</obj_property>
+                  <obj_property name="ObjectShortName">l_indx_ready</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/l_indx_valid" type="array">
+                  <obj_property name="ElementShortName">l_indx_valid[0:3]</obj_property>
+                  <obj_property name="ObjectShortName">l_indx_valid[0:3]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/G_IN_SIZE" type="other">
+                  <obj_property name="ElementShortName">G_IN_SIZE</obj_property>
+                  <obj_property name="ObjectShortName">G_IN_SIZE</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/G_OUT_SIZE" type="other">
+                  <obj_property name="ElementShortName">G_OUT_SIZE</obj_property>
+                  <obj_property name="ObjectShortName">G_OUT_SIZE</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/G_PHASE_NUM" type="other">
+                  <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
+                  <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/G_DWIDTH" type="other">
+                  <obj_property name="ElementShortName">G_DWIDTH</obj_property>
+                  <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/c_phase_width" type="other">
+                  <obj_property name="ElementShortName">c_phase_width</obj_property>
+                  <obj_property name="ObjectShortName">c_phase_width</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/cf_indx_calc_i/c_phase_num" type="other">
+                  <obj_property name="ElementShortName">c_phase_num</obj_property>
+                  <obj_property name="ObjectShortName">c_phase_num</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject fp_name="group198" type="group">
+               <obj_property name="label">res_pix_calc</obj_property>
+               <obj_property name="DisplayName">label</obj_property>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_cf_i" type="array">
+                  <obj_property name="ElementShortName">w_res_pix_calc_cf_i[0:3]</obj_property>
+                  <obj_property name="ObjectShortName">w_res_pix_calc_cf_i[0:3]</obj_property>
+                  <obj_property name="isExpanded"></obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_i" type="array">
+                  <obj_property name="ElementShortName">w_res_pix_calc_pix_i</obj_property>
+                  <obj_property name="ObjectShortName">w_res_pix_calc_pix_i</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_ready_o" type="logic">
+                  <obj_property name="ElementShortName">w_res_pix_calc_ready_o</obj_property>
+                  <obj_property name="ObjectShortName">w_res_pix_calc_ready_o</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_valid_i" type="logic">
+                  <obj_property name="ElementShortName">w_res_pix_calc_pix_valid_i</obj_property>
+                  <obj_property name="ObjectShortName">w_res_pix_calc_pix_valid_i</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_pix_o" type="array">
+                  <obj_property name="ElementShortName">w_res_pix_calc_pix_o[0:3]</obj_property>
+                  <obj_property name="ObjectShortName">w_res_pix_calc_pix_o[0:3]</obj_property>
+               </wvobject>
+               <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/w_res_pix_calc_bank_sel_o" type="array">
+                  <obj_property name="ElementShortName">w_res_pix_calc_bank_sel_o[11:0]</obj_property>
+                  <obj_property name="ObjectShortName">w_res_pix_calc_bank_sel_o[11:0]</obj_property>
+               </wvobject>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_start_pos_valid_reg" type="logic">
+               <obj_property name="ElementShortName">i_start_pos_valid_reg</obj_property>
+               <obj_property name="ObjectShortName">i_start_pos_valid_reg</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/i_start_pos_reg" type="array">
+               <obj_property name="ElementShortName">i_start_pos_reg[10:0]</obj_property>
+               <obj_property name="ObjectShortName">i_start_pos_reg[10:0]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/r_start" type="logic">
+               <obj_property name="ElementShortName">r_start</obj_property>
+               <obj_property name="ObjectShortName">r_start</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_TYPE" type="array">
+               <obj_property name="ElementShortName">G_TYPE[1:1]</obj_property>
+               <obj_property name="ObjectShortName">G_TYPE[1:1]</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_IN_SIZE" type="other">
+               <obj_property name="ElementShortName">G_IN_SIZE</obj_property>
+               <obj_property name="ObjectShortName">G_IN_SIZE</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_OUT_SIZE" type="other">
+               <obj_property name="ElementShortName">G_OUT_SIZE</obj_property>
+               <obj_property name="ObjectShortName">G_OUT_SIZE</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_PHASE_NUM" type="other">
+               <obj_property name="ElementShortName">G_PHASE_NUM</obj_property>
+               <obj_property name="ObjectShortName">G_PHASE_NUM</obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/uut_bilinear_flt_i/G_DWIDTH" type="other">
+               <obj_property name="ElementShortName">G_DWIDTH</obj_property>
+               <obj_property name="ObjectShortName">G_DWIDTH</obj_property>
+            </wvobject>
          </wvobject>
       </wvobject>
       <wvobject fp_name="group623" type="group">
          <obj_property name="label">fifo_bank</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_wr_clk" type="logic">
             <obj_property name="ElementShortName">i_wr_clk</obj_property>
             <obj_property name="ObjectShortName">i_wr_clk</obj_property>
@@ -255,10 +616,32 @@
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_din" type="array">
             <obj_property name="ElementShortName">i_din[0:1][0:3]</obj_property>
             <obj_property name="ObjectShortName">i_din[0:1][0:3]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_din[0]" type="array">
+               <obj_property name="ElementShortName">[0][0:3]</obj_property>
+               <obj_property name="ObjectShortName">[0][0:3]</obj_property>
+               <obj_property name="isExpanded"></obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/i_din[1]" type="array">
+               <obj_property name="ElementShortName">[1][0:3]</obj_property>
+               <obj_property name="ObjectShortName">[1][0:3]</obj_property>
+               <obj_property name="isExpanded"></obj_property>
+            </wvobject>
          </wvobject>
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_dout" type="array">
             <obj_property name="ElementShortName">o_dout[0:1][0:3]</obj_property>
             <obj_property name="ObjectShortName">o_dout[0:1][0:3]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_dout[0]" type="array">
+               <obj_property name="ElementShortName">[0][0:3]</obj_property>
+               <obj_property name="ObjectShortName">[0][0:3]</obj_property>
+               <obj_property name="isExpanded"></obj_property>
+            </wvobject>
+            <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_dout[1]" type="array">
+               <obj_property name="ElementShortName">[1][0:3]</obj_property>
+               <obj_property name="ObjectShortName">[1][0:3]</obj_property>
+               <obj_property name="isExpanded"></obj_property>
+            </wvobject>
          </wvobject>
          <wvobject fp_name="/tb_video_scaler/video_scaler_i/fifo_bank_i/o_valid" type="array">
             <obj_property name="ElementShortName">o_valid[7:0]</obj_property>
