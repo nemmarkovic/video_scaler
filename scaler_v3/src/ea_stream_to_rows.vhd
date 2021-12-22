@@ -69,6 +69,7 @@ architecture Behavioral of stream_to_rows is
    signal s_iREG2_rst    : std_logic;
    signal s_iREG2_data   : std_logic_vector(G_PIX_WIDTH +2 -1 downto 0);
    signal s_oREG2_data   : std_logic_vector(G_PIX_WIDTH +2 -1 downto 0);
+   signal l_iREG2_data   : std_logic_vector(G_PIX_WIDTH +2 -1 downto 0);
    signal s_iREG2_valid  : std_logic;
    signal s_oREG2_ready  : std_logic;
    signal s_iREG2_ready  : std_logic;
@@ -80,6 +81,7 @@ architecture Behavioral of stream_to_rows is
    signal s_oFIFO_empty  : std_logic;
    signal s_oFIFO_full   : std_logic;
    signal s_iFIFO_data   : std_logic_vector(G_PIX_WIDTH +2 -1 downto 0); 
+   signal l_iFIFO_data   : std_logic_vector(G_PIX_WIDTH +2 -1 downto 0); 
    signal s_oFIFO_dvalid : std_logic;
    signal s_iFIFO_dvalid : std_logic;
    signal s_oFIFO_ready  : std_logic;
@@ -109,15 +111,19 @@ architecture Behavioral of stream_to_rows is
    signal l_iFIFO_dvalid : std_logic;
    signal l_iREG1_ready  : std_logic;
 
-
    signal s_frame_in_progres  : std_logic;
    signal s_col_cnt      : unsigned(11 -1 downto 0);
 begin
 
 ------------------------------------------------------------------------
 -- reg instance
--- used to catch data from stream and to forward it to the fifo and to the
--- outpt register
+-- used to catch data from stream and forwards it to the fifo and to the
+-- fifo and outpt register  _________________
+--       ______     ________| fifo           |__
+--    D |      |    |       |________________|
+--   ---|reg1  |----|                   ______ 
+--      |______|    |__________________|reg2 |_
+--                                     |_____|
 ------------------------------------------------------------------------
    s_iREG1_rst   <= not(s_axis_arst_n);
    s_iREG1_data  <= s_axis_in.tdata & s_axis_in.tlast & s_axis_in.tuser;
@@ -137,71 +143,67 @@ reg1_i : entity work.reg_hs
       o_valid => s_oREG1_valid,
       o_data  => s_oREG1_data);
 
--------------------------------------------------------------------------
--------------------------------------------------------------------------
-pr: process(all)
+
+------------------------------------------------------------------------
+-- comb proc
+-- updates data and control signal for modules after reg1
+-- * if first frame is sent (r_cnt = '0') data should be written to fifo
+--   but not in reg2
+-- * after, data should be synchroniusly written to the fifo and reg2
+------------------------------------------------------------------------
+comb_post_reg1_proc : process(all)
    begin
-      if(not(s_frame_in_progres))= '1' then
-         s_iREG2_valid  <= '0';
-         s_iFIFO_dvalid <= s_oREG1_valid;
+      l_iFIFO_data   <= s_iFIFO_data;
+      l_iREG2_data   <= s_iREG2_data;
+
+      l_iREG2_valid  <= '0';
+      l_iFIFO_dvalid <= '0';
+      s_iREG1_ready  <= '0';
+
+      if(not(s_frame_in_progres))= '1' and s_oREG1_valid = '1' and s_oFIFO_ready = '1' then
+         l_iREG2_valid  <= '0';
+         l_iFIFO_data   <= s_oREG1_data;
+         l_iFIFO_dvalid <= s_oREG1_valid;
          s_iREG1_ready  <= s_oFIFO_ready;
-      else 
-         s_iREG2_valid  <= '0';
-         s_iFIFO_dvalid <= '0';
-         s_iREG1_ready  <= '0';
-         if (s_oREG2_ready and s_oFIFO_dvalid) = '1' then
-            s_iREG2_valid  <= s_oREG1_valid;
-            s_iFIFO_dvalid <= s_oREG1_valid;
-            s_iREG1_ready  <= '1';
-         end if;
+      elsif (s_oREG2_ready and s_oFIFO_dvalid) = '1' then
+         l_iFIFO_data   <= s_oREG1_data;
+         l_iREG2_data   <= s_oREG1_data;
+         l_iREG2_valid  <= s_oREG1_valid;
+         l_iFIFO_dvalid <= s_oREG1_valid;
+         s_iREG1_ready  <= '1';
       end if;
    end process;
 
 
---   s_iREG1_ready  <= (s_oFIFO_ready and not(s_frame_in_progres)) or (s_oREG2_ready and s_oFIFO_dvalid);-- when rising_edge(s_axis_aclk);
---pr: process(all)
---   begin
---      if(not(s_frame_in_progres))= '1' then
---         s_iREG2_valid  <= '0';
---         s_iFIFO_dvalid <= s_oREG1_valid;
---      else 
---         s_iREG2_valid  <= '0';
---         s_iFIFO_dvalid <= '0';
---         if (s_oREG2_ready and s_oFIFO_dvalid) = '1' then
---            s_iREG2_valid  <= s_oREG1_valid;
---            s_iFIFO_dvalid <= s_oREG1_valid;
---         end if;
---      end if;
---   end process;
-
---s_iREG2_valid  <= l_iREG2_valid when rising_edge(s_axis_aclk);
---s_iFIFO_dvalid <= l_iFIFO_dvalid when rising_edge(s_axis_aclk);
-
---   process(s_axis_aclk)
---   begin
---      if rising_edge(s_axis_aclk) then
-----         if not(s_axis_arst_n) = '1' then
---         
-----         else
---            s_iREG2_valid  <= l_iREG2_valid;
---            s_iFIFO_dvalid <= l_iFIFO_dvalid;
---            s_iREG1_ready  <= l_iREG1_ready;
-----         end if;
---      end if;
---   end process;
+reg_post_reg1_proc : process(s_axis_aclk)
+   begin
+      if rising_edge(s_axis_aclk) then
+         if not(s_axis_arst_n) = '1' then
+            s_iREG2_valid  <= '0';
+            s_iFIFO_dvalid <= '0';     
+            s_iFIFO_data   <= (others => '0');
+            s_iREG2_data   <= (others => '0');       
+         else
+            s_iREG2_valid  <= l_iREG2_valid;
+            s_iFIFO_dvalid <= l_iFIFO_dvalid;     
+            s_iFIFO_data   <= l_iFIFO_data;
+            s_iREG2_data   <= l_iREG2_data;
+         end if;
+      end if;
+   end process;
 
 ------------------------------------------------------------------------
 -- fifo instance
 -- used to buffer one row of frame
 ------------------------------------------------------------------------
    s_iFIFO_rst    <= not(s_axis_arst_n);
-   process(all)
-   begin
-      s_iFIFO_data <= (others => '0');
-      if not(s_oREG1_data(0)) = '1' then
-         s_iFIFO_data   <= s_oREG1_data;
-      end if;
-   end process;
+--   process(all)
+--   begin
+--      s_iFIFO_data <= (others => '0');
+--      if not(s_oREG1_data(0)) = '1' then
+--         s_iFIFO_data   <= s_oREG1_data;
+--      end if;
+--   end process;
 
    s_iFIFO_ready  <= s_oREGF_ready;
 
@@ -223,8 +225,8 @@ fifo_i: entity work.fifo
 
 ------------------------------------------------------------------------
 -- reg instance
--- output used to take data from ffo and sinchronise it with other output
--- reg. Contains pix0
+-- output used to take data from fifo and sinchronise it with other output
+-- reg(reg2). Contains pix0
 ------------------------------------------------------------------------
    s_iREGF_rst   <= not(s_axis_arst_n);
    s_iREGF_data  <= s_oFIFO_data;
@@ -251,7 +253,7 @@ reg_fifo_i : entity work.reg_hs
 -- output register, contains pix1
 ------------------------------------------------------------------------
    s_iREG2_rst   <= not(s_axis_arst_n);
-   s_iREG2_data  <= s_oREG1_data;
+--   s_iREG2_data  <= s_oREG1_data;
 --   s_iREG2_valid <= s_oREG1_valid and s_frame_in_progres;
    s_iREG2_ready <= l_reg2_ready;
 
@@ -268,6 +270,9 @@ reg2_i : entity work.reg_hs
       o_valid => s_oREG2_valid,
       o_data  => s_oREG2_data);
 
+------------------------------------------------------------------------
+-- read output regs and sync data on the output process
+------------------------------------------------------------------------
 comb_ready_proc: process(all)
       variable vr_pix_0       : std_logic_vector(7 downto 0);
       variable vr_pix_0_valid : std_logic;
@@ -386,7 +391,7 @@ col_cnt_proc: process(s_axis_aclk)
             v_reg_last         := (others => '0');
          else
 
-            v_reg_last := v_reg_last(0) & s_oREGF_data(1);
+            v_reg_last := v_reg_last(0) & l_last; --s_oREGF_data(1);
             if v_reg_last(0) = '0' and v_reg_last(1) = '1' then
                s_col_cnt          <= s_col_cnt +1; 
             end if;
