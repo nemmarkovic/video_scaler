@@ -35,13 +35,6 @@ entity cf_indx_calc is
       i_pix       : in  t_in_pix;
       --! ready
       o_ready     : out std_logic;
-      i_start_pos_valid : in  std_logic;
-      o_start_pos_ready : out std_logic;
-      i_start_pos       : in  std_logic_vector(11 -1 downto 0);
-
-      o_start_pos_valid : out std_logic;
-      i_start_pos_ready : in  std_logic;
-      o_start_pos       : out std_logic_vector(11 -1 downto 0);
       -- next module ready to accept filter outputs
       i_ready      : in  std_logic;
       o_pix        : out t_in_pix;
@@ -68,11 +61,9 @@ architecture Behavioral of cf_indx_calc is
    signal l_ipos_ready : std_logic;
    signal r_ipos_ready : std_logic;
 
-   signal l_ipos_valid : std_logic;
-   signal r_ipos_valid : std_logic;
-
    signal l_ipix       : t_in_pix;
    signal r_ipix       : t_in_pix;
+
 
    signal l_start_pos_ready : std_logic;
    signal r_start_pos_ready : std_logic;
@@ -81,19 +72,91 @@ architecture Behavioral of cf_indx_calc is
    signal r_start_pos_valid : std_logic;
 
    signal l_start_pos  : std_logic_vector(11 -1 downto 0);
---   signal r_start_pos  : std_logic_vector(11 -1 downto 0);
+   signal r_start_pos  : std_logic_vector(11 -1 downto 0);
 
    signal r_indx_ready : std_logic;
    signal l_indx_ready : std_logic;
    
    signal l_indx_valid : std_logic_vector(0 to c_phase_num -1);
 --   signal r_indx_valid : std_logic_vector(0 to c_phase_num -1);
-
+   signal l_done_mjau        : std_logic;
+   signal r_done_mjau        : std_logic;
 begin
+----------------------------------------------------
+-- o_ready update process
+-- the module is ready to take a new pix pair if
+-- * i_pix is not as expected on any calc cell and
+-- * the next stage is ready
+-----------------------------------------------------
+ipos_ready_proc: process(all)
+      variable vl_ipos_ready : std_logic;
+    begin
+      vl_ipos_ready    := r_ipos_ready;
+      -- ready for new i_pos(and/or a new pix pair) on the input if
+      if ((nand(r_ipos_as_expected)) and l_start_pos_ready) = '1' then
+         vl_ipos_ready := '1';  
+      elsif not(r_start_pos_ready) = '1' then
+         vl_ipos_ready := '0';
+      end if;
+
+      l_ipos_ready <= vl_ipos_ready;
+   end process;
+
+----------------------------------------------------
+-- register ipos and valid signal
+-----------------------------------------------------
+ipos_valid_comb_proc: process(all)
+      variable vl_ipix       : t_in_pix;
+   begin
+      vl_ipix          := r_ipix;
+
+      -- if i_pos does not fit to any of the cells
+      -- registered pix pair is not valid and the module
+      -- is ready for new one
+      if (nor(l_ipos_as_expected)) = '1' and i_ready = '1' then
+         vl_ipix.valid := '0';
+      end if;
+
+      if r_ipos_ready = '1' then
+         vl_ipix.valid := '0';
+      end if;
+
+      if i_pix.valid = '1' and l_ipos_ready = '1' then
+         vl_ipix       := i_pix;
+      end if;
+
+      l_ipix       <= vl_ipix;
+   end process;
+
+reg_proc: process(i_clk)
+      variable v_start : std_logic;
+   begin
+      if rising_edge(i_clk) then
+         if i_rst = '1' then
+            r_ipos_ready <= '0';
+            v_start      := '0';
+
+            r_ipos_as_expected <= (others => '0');
+            r_ipix             <= t_in_pix_rst;
+         else
+            if v_start = '0' then
+               r_ipos_ready <= i_ready;
+               if i_ready = '1' then
+                  v_start      := '1';              
+               end if;
+            else
+               r_ipos_ready <= l_ipos_ready;
+            end if;
+
+            r_ipos_as_expected <= l_ipos_as_expected;
+            r_ipix       <= l_ipix;
+         end if;
+      end if;
+   end process;
+
 -----------------------------------------
 -- combinational logic between two reg stages
 -----------------------------------------
-
 cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
       type t_cell_num_array is array (0 to c_phase_num) of std_logic_vector(c_phase_width downto 0);
       signal l_cell_num        : t_cell_num_array;
@@ -109,7 +172,7 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
          G_PHASE_NUM      => c_phase_num,
          G_DWIDTH         => G_DWIDTH)
       port map( 
-         i_start_pos       => i_start_pos, --r_start_pos,
+         i_start_pos       => r_start_pos,
          i_cell_num        => l_cell_num(gen_cell_num),
          --output pixel data 
          o_expected_pos    => w_expected_pos(gen_cell_num),
@@ -117,7 +180,7 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
          o_cf_num          => l_cf_indx(gen_cell_num));
 
       --                                             is equal to i_pos
-      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipix.pos) and r_ipos_valid;
+      l_ipos_as_expected(gen_cell_num) <= nor(w_expected_pos(gen_cell_num) xor r_ipix.pos) and r_ipix.valid;
    end generate;
 
 
@@ -135,99 +198,16 @@ cf_calc_cell_gen: for gen_cell_num in 0 to c_phase_num generate
    end process;
 
 ----------------------------------------------------
--- o_ready update process
--- the module is ready to take a new pix pair if
--- * i_pix is not as expected on any calc cell and
--- * the next stage is ready
------------------------------------------------------
-ipos_ready_proc: process(all)
-      variable vl_ipos_ready : std_logic;
-    begin
-      vl_ipos_ready    := r_ipos_ready;
-      -- ready for new i_pos(and/or a new pix pair) on the input if
-
-      if (i_pix.valid and (nand(l_ipos_as_expected)) and l_start_pos_ready) = '1' then
-         vl_ipos_ready := '1';  
-      elsif i_pix.valid = '1' then
-         vl_ipos_ready := '0';
-      end if;
-
-      l_ipos_ready <= vl_ipos_ready;
-   end process;
-
-   process(i_clk)
-      variable v_start : std_logic;
-   begin
-      if rising_edge(i_clk) then
-         if i_rst = '1' then
-            r_ipos_ready <= '0';
-            v_start      := '0';
-         else
-            if v_start = '0' then
-               r_ipos_ready <= i_ready;
-               if i_ready = '1' then
-                  v_start      := '1';              
-               end if;
-            else
-               r_ipos_ready <= l_ipos_ready;
-            end if;
-         end if;
-      end if;
-   end process;
-
-----------------------------------------------------
--- register ipos and valid signal
------------------------------------------------------
-ipos_valid_comb_proc: process(all)
-      variable vl_ipos_valid : std_logic;
-      variable vl_ipix       : t_in_pix;
-   begin
-      vl_ipos_valid    := r_ipos_valid;
-      vl_ipix          := r_ipix;
-
-      if (nor(r_ipos_as_expected)) = '1' then
-         vl_ipos_valid := '0';
-      end if;
-
-      if l_ipos_ready = '1' and r_ipos_valid = '1' then
-         vl_ipos_valid := '0';
-      end if;
-
-      if i_pix.valid = '1' then
-         vl_ipos_valid := '1';
-         vl_ipix       := i_pix;
-      end if;
-
-      l_ipos_valid <= vl_ipos_valid;
-      l_ipix       <= vl_ipix;
-   end process;
-
-ipos_valid_reg_proc: process(i_clk)
-   begin
-      if rising_edge(i_clk) then
-         if i_rst = '1' then
-            r_ipos_as_expected <= (others => '0');
-            r_ipix             <= t_in_pix_rst;
-            r_ipos_valid <= '0';
-         else
-            if i_pix.valid = '1' and l_ipos_ready = '1' then
-                r_ipix       <= l_ipix;
-                r_ipos_valid <= l_ipos_valid;
-            end if;
-            r_ipos_as_expected <= l_ipos_as_expected;
-         end if;
-      end if;
-   end process;
-
-----------------------------------------------------
 -- start pos
 -----------------------------------------------------
 start_pos_valid_comb_proc: process(all)
       variable vl_start_pos_valid : std_logic;
       variable vl_start_pos       : std_logic_vector(11 -1 downto 0);
+      variable v_done_mjau        : std_logic;
    begin
-      vl_start_pos_valid    := i_start_pos_valid;
-      vl_start_pos          := i_start_pos;
+      vl_start_pos_valid    := r_start_pos_valid;
+      vl_start_pos          := r_start_pos;
+               v_done_mjau        := '0';
 
       if (and(l_ipos_as_expected)) = '1' then
          vl_start_pos       := w_next_start_pix(c_phase_num);
@@ -237,15 +217,23 @@ start_pos_valid_comb_proc: process(all)
             if (l_mux_sel(gen_cell_num )) = '1' then
                vl_start_pos       := w_next_start_pix(gen_cell_num +1);
                vl_start_pos_valid := '1';
+               v_done_mjau        := '1';
             end if;
          end loop;
       end if;
 
+      if l_ipix.pos /= r_ipix.pos then
+
+      elsif v_done_mjau = '1' then
+         vl_start_pos       := (others => '0');
+      end if;
+
       l_indx_valid <= (others => '0');
-      if (r_ipos_valid = '1') then
+      if (r_ipix.valid = '1') then
          l_indx_valid <= l_ipos_as_expected(0 to c_phase_num -1);
       end if;
 
+      l_done_mjau       <= v_done_mjau;
       l_start_pos_valid <= vl_start_pos_valid;
       l_start_pos       <= vl_start_pos;
    end process;
@@ -254,16 +242,19 @@ start_pos_valid_reg_proc: process(i_clk)
    begin
       if rising_edge(i_clk) then
          if i_rst = '1' then
+            r_done_mjau <= '0';
             r_start_pos_valid <= '0';
---            r_start_pos       <= (others => '0');
+            r_start_pos       <= (others => '0');
          else
+r_done_mjau <= l_done_mjau;
             r_start_pos_valid <= l_start_pos_valid;
---            if (l_start_pos_ready and i_ready) = '1' then
---               r_start_pos       <= l_start_pos; -- i_start_pos; --   r_next_start_pos;--
---            end if;
+            if (l_start_pos_ready and i_ready) = '1' then
+               r_start_pos       <= l_start_pos;
+            end if;
          end if;
       end if;
    end process;
+
 ------------------------------------------------------------------------
 ------------------------------------------------------------------------
 start_pos_comb_proc: process(all)
@@ -271,7 +262,7 @@ start_pos_comb_proc: process(all)
    begin
       vl_start_pos_ready    := r_start_pos_ready;
 
-      if (i_ready and r_ipos_valid) = '1' then
+      if (i_ready and r_ipix.valid) = '1' then
          vl_start_pos_ready := '1';
       elsif (not(i_ready) and not(r_start_pos_valid)) = '1' then
          vl_start_pos_ready := '1';
@@ -301,9 +292,6 @@ start_pos_reg_proc: process(i_clk)
    o_ready           <= l_ipos_ready; --r_ipos_ready;
    o_pix             <= r_ipix;
 
-   o_start_pos       <= l_start_pos;
-   o_start_pos_valid <= l_start_pos_valid;
-   o_start_pos_ready <= l_start_pos_ready;
 gf: for cell_num_gen in 0 to c_phase_num -1 generate
    o_cf(cell_num_gen).cf_indx       <= l_cf_indx(cell_num_gen);
    o_cf(cell_num_gen).cf_indx_valid <= l_indx_valid(cell_num_gen);

@@ -53,22 +53,10 @@ entity bilinear_flt is
 
 
 architecture Behavioral of bilinear_flt is
-
-   signal w_strt_reg_data_i      : std_logic_vector(11 -1 downto 0);
-   signal w_strt_reg_valid_i     : std_logic;
-   signal w_strt_reg_ready_o     : std_logic;
-   signal w_strt_reg_ready_i     : std_logic;
-   signal w_strt_reg_valid_o     : std_logic;
-   signal w_strt_reg_data_o      : std_logic_vector(11 -1 downto 0);
-
    signal w_cf_calc_indx_valid_i           : std_logic;
    signal w_cf_calc_indx_ready_o           : std_logic;
-   signal w_cf_calc_indx_start_pos_valid_i : std_logic;
-   signal w_cf_calc_indx_start_pos_ready_i : std_logic;
    signal w_cf_calc_indx_pix_i             : t_in_pix;
    signal w_cf_calc_indx_pix_o             : t_in_pix;
-   signal w_cf_calc_indx_start_pos_i       : std_logic_vector(11 -1 downto 0);
-   signal w_cf_calc_indx_start_pos_o       : std_logic_vector(11 -1 downto 0);
    signal w_cf_calc_indx_ipos_ready_o      : std_logic;
    signal w_cf_calc_indx_start_pos_valid_o : std_logic;
    signal w_cf_calc_indx_start_pos_ready_o : std_logic;
@@ -93,110 +81,8 @@ begin
 -----------------------------------------
 -- coeficient index calculation module
 -----------------------------------------
-   w_strt_reg_data_i  <= w_cf_calc_indx_start_pos_o;
-   w_strt_reg_ready_i <= w_cf_calc_indx_start_pos_ready_o;
-   w_strt_reg_valid_i <= w_cf_calc_indx_start_pos_valid_o;
-
-reg_start_pos: entity work.reg_hs
-   generic map(
-      G_DWIDTH => 11)
-   port map(
-      i_clk    => i_clk,
-      i_rst    => i_rst,
-      i_data   => i_start_pos_reg, --w_strt_reg_data_i,
-      i_valid  => i_start_pos_valid_reg, --w_strt_reg_valid_i,
-      o_ready  => w_strt_reg_ready_o,
-      i_ready  => w_strt_reg_ready_i,
-      o_valid  => w_strt_reg_valid_o,
-      o_data   => w_strt_reg_data_o);
-
-gen_horis: if G_TYPE = "H" generate
-   process(i_clk)
-   begin
-   
-   if rising_edge(i_clk) then
-      if i_rst = '1' then
-         r_start <= '0';
-      else 
-         if r_start = '0' and o_ready = '1' then
-            r_start <= '1';
-         end if;
-      end if;
-   end if;
-   end process;
-   
-   process(all)
-   begin
-      if i_rst = '1' then
-         i_start_pos_reg       <= (others => '0');
-         i_start_pos_valid_reg <= '0';
-      else 
-         if r_start = '0' then
-            i_start_pos_valid_reg <= '1';
-            i_start_pos_reg       <= (others => '0');
-         else
-            i_start_pos_reg       <= w_strt_reg_data_i;
-            i_start_pos_valid_reg <= w_strt_reg_valid_i;
-         end if;
-      end if;
-   end process;
-
-elsif G_TYPE = "V" generate
-   process(i_clk)
-   begin
-   
-   if rising_edge(i_clk) then
-      if i_rst = '1' then
-         r_start <= '0';
-         r_start_pos_reg <= (others => '0');
-      else 
-         if r_start = '0' and o_ready = '1' then
-            r_start <= '1';
-         end if;
-         r_start_pos_reg <= l_start_pos_reg;
-      end if;
-   end if;
-   end process;
-   
-   process(all)
-      variable v_start_pos     : std_logic_vector(11-1 downto 0);
-   begin
-      l_start_pos_reg <= r_start_pos_reg;
-      if i_rst = '1' then
-         i_start_pos_valid_reg <= '0';
-         i_start_pos_reg       <= (others => '0');
-         v_start_pos           := (others => '0');
-      else 
-
-         if r_start = '0' then
-            i_start_pos_valid_reg <= '1';
-            i_start_pos_reg       <= (others => '0');
-         else
-            if o_ready = '1' then
-               if w_cf_calc_indx_pix_i.pos /= w_cf_calc_indx_pix_o.pos then
-                  l_start_pos_reg <= w_strt_reg_data_i;
-                  v_start_pos     := w_strt_reg_data_i;
-               else
-                  v_start_pos     := l_start_pos_reg;               
-               end if;
-               i_start_pos_reg       <= v_start_pos;
-            else
-               i_start_pos_reg       <= w_strt_reg_data_i;
-            end if;
-            i_start_pos_valid_reg <= w_strt_reg_valid_i;
-         end if;
-      end if;
-   end process;
-end generate;
------------------------------------------
--- coeficient index calculation module
------------------------------------------
    w_cf_calc_indx_pix_i        <= i_pix;
    w_cf_calc_indx_valid_i      <= i_pix.valid;
-
-   w_cf_calc_indx_start_pos_valid_i <= w_strt_reg_valid_o;
-   w_cf_calc_indx_start_pos_ready_i <= w_strt_reg_ready_o;
-   w_cf_calc_indx_start_pos_i  <= w_strt_reg_data_o;
    w_cf_calc_indx_indx_ready_i <= w_res_pix_calc_ready_o;
 
 cf_indx_calc_i: entity work.cf_indx_calc
@@ -210,14 +96,6 @@ cf_indx_calc_i: entity work.cf_indx_calc
       i_rst             => i_rst,
       o_ready           => w_cf_calc_indx_ready_o,
       i_pix             => w_cf_calc_indx_pix_i,
-      i_start_pos_valid => w_cf_calc_indx_start_pos_valid_i,
-      o_start_pos_ready => w_cf_calc_indx_start_pos_ready_o,
-      i_start_pos       => w_cf_calc_indx_start_pos_i,
-
-      o_start_pos_valid => w_cf_calc_indx_start_pos_valid_o,
-      i_start_pos_ready => w_cf_calc_indx_start_pos_ready_i,
-
-      o_start_pos       => w_cf_calc_indx_start_pos_o,
       i_ready           => w_cf_calc_indx_indx_ready_i,
       o_pix             => w_cf_calc_indx_pix_o,
       o_cf              => w_cf_calc_indx_cf_o);
