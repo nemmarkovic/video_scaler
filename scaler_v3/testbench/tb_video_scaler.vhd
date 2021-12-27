@@ -108,15 +108,12 @@ stimulus1: process(i_clk)
             i_ready       <= '0';
             vr_start      := '1';
          else
-
-               if s_axis_in_gen.tlast = '1' and s_ready_o = '1' then
-                  s_axis_in_gen.tlast <= '0';
-                  s_axis_in_gen.tdata <= (others => '0');
-               end if;
+            if s_axis_in_gen.tlast = '1' and s_ready_o = '1' then
+               s_axis_in_gen.tlast <= '0';
+               s_axis_in_gen.tdata <= (others => '0');
+            end if;
 
             if s_valid_i = '1' and s_ready_o = '1' and vr_start = '1' then
-
-
 
                s_axis_in_gen.tlast <= '0';
                if to_integer(unsigned(s_axis_in_gen.tdata)) >= G_IN_SIZE-1 then
