@@ -152,6 +152,7 @@ reg1_i : entity work.reg_hs
 -- * after, data should be synchroniusly written to the fifo and reg2
 ------------------------------------------------------------------------
 comb_post_reg1_proc : process(all)
+      variable vmjau : std_logic;
    begin
       l_iFIFO_data   <= s_iFIFO_data;
       l_iREG2_data   <= s_iREG2_data;
@@ -160,12 +161,17 @@ comb_post_reg1_proc : process(all)
       l_iFIFO_dvalid <= '0';
       s_iREG1_ready  <= '0';
 
+      if s_oFIFO_dvalid = '1' then
+         vmjau := '1';
+      end if;
+
       if(not(s_frame_in_progres))= '1' and s_oREG1_valid = '1' and s_oFIFO_ready = '1' then
          l_iREG2_valid  <= '0';
          l_iFIFO_data   <= s_oREG1_data;
          l_iFIFO_dvalid <= s_oREG1_valid;
          s_iREG1_ready  <= s_oFIFO_ready;
-      elsif (s_oREG2_ready and s_oFIFO_dvalid) = '1' then
+      elsif (s_oREG2_ready and vmjau) = '1' then
+         vmjau := '0';
          l_iFIFO_data   <= s_oREG1_data;
          l_iREG2_data   <= s_oREG1_data;
          l_iREG2_valid  <= s_oREG1_valid;

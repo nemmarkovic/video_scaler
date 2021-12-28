@@ -137,6 +137,9 @@ architecture Behavioral of cf_indx_calc is
    signal l_start_pos  : std_logic_vector(11 -1 downto 0);
    signal r_start_pos  : std_logic_vector(11 -1 downto 0);
 
+   signal l_start_pos_reg  : std_logic_vector(11 -1 downto 0);
+   signal r_start_pos_reg  : std_logic_vector(11 -1 downto 0);
+
    signal r_indx_ready : std_logic;
    signal l_indx_ready : std_logic;
    
@@ -254,7 +257,8 @@ start_pos_valid_comb_proc: process(all)
       variable v_done_mjau        : std_logic;
    begin
       l_start_pos_valid <= '0';--r_start_pos_valid;
-      l_start_pos       <= (others => '0');  --r_start_pos; --    
+      l_start_pos       <= r_start_pos; --(others => '0');  --
+      l_start_pos_reg   <= r_start_pos_reg;
 
       if (and(l_ipos_as_expected)) = '1' then
          l_start_pos       <= w_next_start_pix(c_phase_num);
@@ -269,7 +273,8 @@ start_pos_valid_comb_proc: process(all)
       end if;
 
       if l_ipix.pos /= r_ipix.pos then
-         l_start_pos       <= (others => '0');
+         l_start_pos_reg <= r_start_pos;
+         l_start_pos     <= r_start_pos;
       end if;
 
       if l_ipos_ready = '1' and l_ipix.valid = '1' then
@@ -289,8 +294,10 @@ start_pos_valid_reg_proc: process(i_clk)
          if i_rst = '1' then
             r_start_pos_valid <= '0';
             r_start_pos       <= (others => '0');
+            r_start_pos_reg   <= (others => '0');
          else
             r_start_pos_valid <= l_start_pos_valid;
+            r_start_pos_reg   <= l_start_pos_reg;
             if (l_start_pos_ready and i_ready) = '1' then
                r_start_pos       <= l_start_pos;
             end if;
