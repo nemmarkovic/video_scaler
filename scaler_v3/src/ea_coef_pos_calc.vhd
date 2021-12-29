@@ -272,13 +272,19 @@ start_pos_valid_comb_proc: process(all)
          end loop;
       end if;
 
-      if l_ipix.pos /= r_ipix.pos then
-         l_start_pos_reg <= r_start_pos;
-         l_start_pos     <= r_start_pos;
-      end if;
+      if G_TYPE = "V" then
+         if nand(l_ipos_as_expected) = '1' then
+--            l_start_pos_reg <= r_start_pos;
+--            l_start_pos     <= r_start_pos;
+            l_start_pos       <= r_start_pos_reg;
+         end if;
 
-      if l_ipos_ready = '1' and l_ipix.valid = '1' then
-         l_start_pos       <= (others => '0');
+         -- if new pix pair from new position is on the input
+         -- next start position
+         if l_ipix.pos /= r_ipix.pos then
+            l_start_pos_reg   <= "00000000101";
+         end if;
+
       end if;
 
       l_indx_valid <= (others => '0');
