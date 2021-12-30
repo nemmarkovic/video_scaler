@@ -155,8 +155,8 @@ begin
 ipos_ready_proc: process(all)
     begin
       l_ipix          <= r_ipix;
-      l_ipos_ready    <= r_ipos_ready;
---      l_ipos_ready    <= '0';
+--      l_ipos_ready    <= r_ipos_ready;
+      l_ipos_ready    <= '0';
       -- ready for new i_pos(and/or a new pix pair)
       -- when l_ipos_as_expected is equal to '1' on all cells, it means 
       -- current pix pair is not exploited - more outputs should be generated than
